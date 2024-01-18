@@ -1,0 +1,30 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/weijian/match_robotics/devel/include/**",
+        "/opt/ros/noetic/include/**",
+        "/home/weijian/liom_ws/src/liom_local_planner/include/**",
+        "/home/weijian/match_robotics/src/match_mobile_robotics/match_gazebo/include/**",
+        "/home/weijian/match_robotics/src/match_mobile_robotics/panda/panda_controllers_extended/include/**",
+        "/home/weijian/traj_tracking/src/hunter/steer_bot_hardware_gazebo/include/**",
+        "/home/weijian/traj_tracking/src/hunter/steer_drive_controller/include/**",
+        "/home/weijian/traj_tracking/src/trajectory_tracking/include/**",
+        "/home/weijian/match_robotics/src/match_mobile_robotics/ur/ur_calibrated_pose_pub/include/**",
+        "/home/weijian/match_robotics/src/match_mobile_robotics/ur/ur_controllers_extended/include/**",
+        "/home/weijian/traj_tracking/src/vel_node/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+
+<launch>
+    <node pkg = "trajectory_tracking" name = "plotter" type = "plotter.py">
+    </node>
+    <node pkg = "trajectory_tracking" name = "mpc" type = "mpc">
+    </node>
+</launch>

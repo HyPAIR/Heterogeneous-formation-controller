@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "/opt/ros/noetic/include/**",
+                "/home/weijian/match_robotics/devel/include/**",
+                "/home/weijian/Heterogeneous_formation/src/liom_local_planner/include/**",
+                "/home/weijian/match_robotics/src/match_mobile_robotics/match_gazebo/include/**",
+                "/home/weijian/match_robotics/src/match_mobile_robotics/panda/panda_controllers_extended/include/**",
+                "/home/weijian/match_robotics/src/match_mobile_robotics/ur/ur_calibrated_pose_pub/include/**",
+                "/home/weijian/match_robotics/src/match_mobile_robotics/ur/ur_controllers_extended/include/**",
+                "/usr/include/**",
+                "/usr/local/include",
+                "${workspaceFolder}/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang-10",
+            "cStandard": "c17",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "linux-clang-x64",
+            "configurationProvider": "ms-vscode.cmake-tools"
+        }
+    ],
+    "version": 4
+}

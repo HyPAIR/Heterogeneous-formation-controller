@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="x_car1" default="-10"/>
+  <arg name="y_car1" default="-2.1"/>
+  <arg name="z_car1" default="0"/>
+  <arg name="roll_car1" default="0"/>
+  <arg name="pitch_car1" default="0"/>
+  <arg name="yaw_car1" default="0"/>
+  <arg name="x_car2" default="10"/>
+  <arg name="y_car2" default="-0.9"/>
+  <arg name="z_car2" default="0"/>
+  <arg name="roll_car2" default="0"/>
+  <arg name="pitch_car2" default="0"/>
+  <arg name="yaw_car2" default="0"/>
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="gui" default="true"/>
+
+  </include>
+  <!-- <include file="$(find hunter2_control)/launch/hunter2_contol.launch" ns="/"/> -->
+
+  <!-- urdf xml robot description loaded on the Parameter Server, converting the xacro into a proper urdf file-->
+  <!-- <param name="robot_description" command="$(find xacro)/xacro '$(find hunter2_gazebo)/xacro/hunter2_base.xacro'" /> -->
+  <group ns = "hunter2_base1">
+  <include file="$(find hunter2_control)/launch/hunter2_v_contol.launch" />
+  <param name="robot_description" command="$(find xacro)/xacro '$(find hunter2_base)/urdf/hunter2_base_gazebo.xacro' bodyframe:=hunter2_base1 ns:=hunter2_base1" />
+  <!-- <param name="robot_description" command="cat $(find hunter2_base)/urdf/hunter2_base.urdf"/> -->
+  <!-- push robot_description to factory and spawn robot in gazebo -->
+  <node name="hunter_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" 
+  args="-urdf -param robot_description -model hunter2_base1 -x $(arg x_car1) -y $(arg y_car1) -z 1.5 -R $(arg roll_car1) -P $(arg pitch_car1) -Y $(arg yaw_car1)"
+    respawn="false" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
+      <param name="publish_frequency" value="50.0"/>
+      <param name="tf_prefix" value="hunter2_base1"/>
+  </node>
+  </group>
+  <group ns = "hunter2_base2">
+  <include file="$(find hunter2_control)/launch/hunter2_v_contol.launch" />
+  <param name="robot_description" command="$(find xacro)/xacro '$(find hunter2_base)/urdf/hunter2_base_gazebo.xacro' bodyframe:=hunter2_base2 ns:=hunter2_base2" />
+  <!-- <param name="robot_description" command="cat $(find hunter2_base)/urdf/hunter2_base.urdf"/> -->
+  <!-- push robot_description to factory and spawn robot in gazebo -->
+  <node name="hunter_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" 
+  args="-urdf -param robot_description -model hunter2_base2 -x $(arg x_car2) -y $(arg y_car2) -z 1.5 -R $(arg roll_car2) -P $(arg pitch_car2) -Y $(arg yaw_car2)"
+    respawn="false" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
+      <param name="publish_frequency" value="50.0"/>
+      <param name="tf_prefix" value="hunter2_base2"/>
+  </node>
+  </group>
+
+  </launch>

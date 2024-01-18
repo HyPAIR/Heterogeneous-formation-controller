@@ -1,0 +1,125 @@
+<launch>
+  <arg name="x_car1" default="-5.9799999999999997"/>
+  <arg name="y_car1" default="-2.1"/>
+  <arg name="z_car1" default="0"/>
+  <arg name="roll_car1" default="0"/>
+  <arg name="pitch_car1" default="0"/>
+  <arg name="yaw_car1" default="0"/>
+  <arg name="x_car2" default="-5.9799999999999997"/>
+  <arg name="y_car2" default="-0.9"/>
+  <arg name="z_car2" default="0"/>
+  <arg name="roll_car2" default="0"/>
+  <arg name="pitch_car2" default="0"/>
+  <arg name="yaw_car2" default="0"/>
+
+  <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+  <arg name="x_pos" default="-5.25"/>
+  <arg name="y_pos" default="-1.5"/>
+  <arg name="YAW" default="0"/>
+
+  <arg name="model1" default="$(env TURTLEBOT3_MODEL)" doc="model1 type [burger, waffle, waffle_pi]"/>
+  <arg name="x_pos1" default="-6.45"/>
+  <arg name="y_pos1" default="-1.5"/>
+  <arg name="YAW1" default="0"/>
+
+  <arg name="namespace" default="/"/>
+  <arg name="cmd_timeout" default="0.5"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="/home/weijian/traj_tracking/src/racebot_gazebo/worlds/test_world.world"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="true"/>
+  </include>
+  
+  <!-- <include file="$(find racebot_control)/launch/racebot_control.launch"/> -->
+  <!-- <node pkg="rviz" type="rviz" name="rviz" args="" />  -->
+  <!--car-like robot 1-->
+  <group ns = "robot1">
+      <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find racebot_description)/urdf/ackermann/racecar.xacro' bodyframe:=robot1 ns:=robot1"/>
+      <!-- 在gazebo中加载机器人模型-->
+      <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+        args="-urdf -model robot1 -param robot_description -x $(arg x_car1) -y $(arg y_car1) -z $(arg z_car1) -R $(arg roll_car1) -P $(arg pitch_car1) -Y $(arg yaw_car1)"/> 
+      <!-- 运行joint_state_publisher节点，发布机器人的关节状态  --> 
+    	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" ></node> 
+      <!-- 运行robot_state_publisher节点，发布tf  -->
+      <node name= "robot_state_publisher" pkg= "robot_state_publisher" type= "robot_state_publisher"> 
+        <param name="publish_frequency" type="double" value="20.0"/>
+        <param name="tf_prefix" value="robot1"/>
+      </node> 
+      <!-- <node pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" name="joint_state_publisher_gui" /> -->
+      <rosparam file="$(find racebot_control)/config/racebot_control.yaml" command="load"/>
+      <!-- load the controllers -->
+      <node name="controller_manager" pkg="controller_manager" type="spawner" respawn="false"
+            output="screen" 
+            args="left_rear_wheel_velocity_controller right_rear_wheel_velocity_controller
+                  left_front_wheel_velocity_controller right_front_wheel_velocity_controller
+                  left_steering_hinge_position_controller right_steering_hinge_position_controller
+                  joint_state_controller"/>
+      <node pkg="racebot_control" type="servo_commands.py" name="servo_commands" output="screen"/> 
+      <!-- ros_control racecar launch file -->
+      <!-- <rosparam command="load" file="$(find racebot_gazebo)/config/keyboard_teleop.yaml" />
+      <node pkg="racebot_gazebo" type="keyboard_teleop.py" name="keyboard_teleop" /> -->
+      <node pkg="racebot_control" type="transform.py" name="transform" output="screen"/> 
+      <node pkg="racebot_control" name="gazebo_odometry_node" type="gazebo_odometry1.py"/> 
+  </group>
+
+    <group ns = "robot2">
+      <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find racebot_description)/urdf/ackermann/racecar.xacro' bodyframe:=robot2 ns:=robot2"/>
+      <!-- 在gazebo中加载机器人模型-->
+      <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+        args="-urdf -model robot2 -param robot_description -x $(arg x_car2) -y $(arg y_car2) -z $(arg z_car2) -R $(arg roll_car2) -P $(arg pitch_car2) -Y $(arg yaw_car2)"/> 
+      <!-- 运行joint_state_publisher节点，发布机器人的关节状态  --> 
+    	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" ></node> 
+      <!-- 运行robot_state_publisher节点，发布tf  -->
+      <node name= "robot_state_publisher" pkg= "robot_state_publisher" type= "robot_state_publisher">
+        <param name="publish_frequency" type="double" value="20.0"/>
+        <param name="tf_prefix" value="robot2"/>
+      </node>
+      <!-- <node pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" name="joint_state_publisher_gui" /> -->
+      <rosparam file="$(find racebot_control)/config/racebot_control.yaml" command="load"/>
+      <!-- load the controllers -->
+      <node name="controller_manager" pkg="controller_manager" type="spawner" respawn="false"
+            output="screen" 
+            args="left_rear_wheel_velocity_controller right_rear_wheel_velocity_controller
+                  left_front_wheel_velocity_controller right_front_wheel_velocity_controller
+                  left_steering_hinge_position_controller right_steering_hinge_position_controller
+                  joint_state_controller"/>
+      <node pkg="racebot_control" type="servo_commands.py" name="servo_commands" output="screen"/> 
+      <!-- ros_control racecar launch file -->
+      <!-- <rosparam command="load" file="$(find racebot_gazebo)/config/keyboard_teleop.yaml" />
+      <node pkg="racebot_gazebo" type="keyboard_teleop.py" name="keyboard_teleop" /> -->
+      <node pkg="racebot_control" type="transform.py" name="transform" output="screen"/> 
+      <node pkg="racebot_control" name="gazebo_odometry_node" type="gazebo_odometry2.py"/> 
+  </group>
+  <group ns = "robot3">
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro ns:=robot3" />
+    <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" output="screen" /> -->
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+      <param name="publish_frequency" type="double" value="50.0" />
+      <param name="tf_prefix" value="robot3"/>
+    </node>
+    
+    <!--transform odom to map-->
+    <node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster"
+     args="0 0 0 0 0 0 /odom /base_footprint 10" />
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf"  args="-urdf -model turtlebot3_$(arg model) -x $(arg x_pos) -y $(arg y_pos) -Y $(arg YAW) -param robot_description" />
+  </group>
+
+    <group ns = "robot4">
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro ns:=robot4" />
+    <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" output="screen" /> -->
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+      <param name="publish_frequency" type="double" value="50.0" />
+      <param name="tf_prefix" value="robot4"/>
+    </node>
+    <!--transform odom to map-->
+    <node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster"
+     args="0 0 0 0 0 0 /odom /base_footprint 10" />
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf1"  args="-urdf -model turtlebot3_$(arg model)_1 -x $(arg x_pos1) -y $(arg y_pos1) -Y $(arg YAW1) -param robot_description" />
+  </group>
+
+
+</launch>

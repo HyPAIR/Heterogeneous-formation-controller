@@ -1,0 +1,32 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+        
+        {
+            "name": "ROS: Launch",
+            "request": "launch",
+            // "target": "/home/weijian/Heterogeneous_formation/src/liom_local_planner/launch/generate_decomp.launch",
+            // "target": "/home/weijian/Heterogeneous_formation/src/liom_local_planner/launch/test_decomp.launch",
+            // "target": "/home/weijian/Heterogeneous_formation/src/liom_local_planner/launch/demo_ta_test.launch",
+            // "target": "/home/weijian/Heterogeneous_formation/src/liom_local_planner/launch/demo_fg_test.launch",
+            // "target": "/home/weijian/Heterogeneous_formation/src/liom_local_planner/launch/traj_tracking/animation_demo.launch",
+            "target": "/home/weijian/Heterogeneous_formation/src/liom_local_planner/launch/animation.launch",
+            // "target": "/home/weijian/Heterogeneous_formation/src/liom_local_planner/launch/demo_test.launch",
+            // "target": "/home/weijian/Heterogeneous_formation/src/liom_local_planner/launch/traj_tracking/control_rectangle_formation.launch",
+            // "target": "/home/weijian/Heterogeneous_formation/src/liom_local_planner/launch/demo_stage.launch",
+            // "target": "/home/weijian/Heterogeneous_formation/src/liom_local_planner/launch/traj_tracking/control_triangular_formation.launch",
+            // "target": "/home/weijian/Heterogeneous_formation/src/liom_local_planner/launch/traj_tracking/fg_test.launch",
+            // "target": "/home/weijian/Heterogeneous_formation/src/liom_local_planner/launch/formation_coordination/fcoord_test.launch",
+            // "target": "/home/weijian/Heterogeneous_formation/src/liom_local_planner/launch/formation_coordination/animation_coord.launch",
+            // "target": "/home/weijian/Heterogeneous_formation/src/liom_local_planner/launch/animation_complete.launch",
+            // "target": "/home/weijian/Heterogeneous_formation/src/liom_local_planner/launch/sara_simulation/load_data.launch",
+            // "target": "/home/weijian/Heterogeneous_formation/src/liom_local_planner/launch/sara_simulation/sara_traj_tracking.launch",
+            "type": "ros",
+        }
+    ]
+
+}

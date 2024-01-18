@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<launch>
+
+    <!-- <node pkg = "trajectory_tracking" name = "cmd_vel_to_ackermann_drive" type = "cmd_vel_to_ackermann_drive.py">
+    </node> -->
+    <node pkg="Heterogeneous-formation-controller" type="animation_coord" name="animation_coord" output="screen" />
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find Heterogeneous-formation-controller)/config/test.rviz" />
+</launch>

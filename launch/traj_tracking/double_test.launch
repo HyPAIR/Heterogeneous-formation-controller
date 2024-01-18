@@ -1,0 +1,63 @@
+<launch>
+  <arg name="x_car1" default="-20"/>
+  <arg name="y_car1" default="-20"/>
+  <arg name="z_car1" default="0"/>
+  <arg name="roll_car1" default="0"/>
+  <arg name="pitch_car1" default="0"/>
+  <arg name="yaw_car1" default="0"/>
+  <arg name="x_car2" default="-20"/>
+  <arg name="y_car2" default="-22.016733665"/>
+  <arg name="z_car2" default="0"/>
+  <arg name="roll_car2" default="0"/>
+  <arg name="pitch_car2" default="0"/>
+  <arg name="yaw_car2" default="0"/>
+
+  <arg name="namespace" default="/"/>
+  <arg name="cmd_timeout" default="0.5"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <!-- <arg name="world_name" value="/home/weijian/traj_tracking/src/racebot_gazebo/worlds/test_world.world"/> -->
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="true"/>
+  </include>
+  
+  <!-- <include file="$(find racebot_control)/launch/racebot_control.launch"/> -->
+  <!-- <node pkg="rviz" type="rviz" name="rviz" args="" />  -->
+  <!--car-like robot 1-->
+  <!-- <include file="$(find hunter2_control)/launch/hunter2_contol.launch" ns="/"/> -->
+
+  <!-- urdf xml robot description loaded on the Parameter Server, converting the xacro into a proper urdf file-->
+  <!-- <param name="robot_description" command="$(find xacro)/xacro '$(find hunter2_gazebo)/xacro/hunter2_base.xacro'" /> -->
+  <group ns = "hunter2_base1">
+    <include file="$(find hunter2_control)/launch/hunter2_v_contol.launch" />
+    <param name="robot_description" command="$(find xacro)/xacro '$(find hunter2_base)/urdf/hunter2_base_gazebo.xacro' bodyframe:=hunter2_base1 ns:=hunter2_base1" />
+    <!-- <param name="robot_description" command="cat $(find hunter2_base)/urdf/hunter2_base.urdf"/> -->
+    <!-- push robot_description to factory and spawn robot in gazebo -->
+    <node name="hunter_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" 
+    args="-urdf -param robot_description -model hunter2_base1 -x $(arg x_car1) -y $(arg y_car1) -z 1.5 -R $(arg roll_car1) -P $(arg pitch_car1) -Y $(arg yaw_car1)"
+        respawn="false" />
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
+        <param name="publish_frequency" value="10.0"/>
+        <param name="tf_prefix" value="hunter2_base1"/>
+    </node>
+    <node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster"
+     args="0 0 0 0 0 0 /odom /base_footprint 10" />
+  </group>
+
+  <group ns = "hunter2_base2">
+    <include file="$(find hunter2_control)/launch/hunter2_v_contol.launch" />
+    <param name="robot_description" command="$(find xacro)/xacro '$(find hunter2_base)/urdf/hunter2_base_gazebo.xacro' bodyframe:=hunter2_base2 ns:=hunter2_base2" />
+    <!-- <param name="robot_description" command="cat $(find hunter2_base)/urdf/hunter2_base.urdf"/> -->
+    <!-- push robot_description to factory and spawn robot in gazebo -->
+    <node name="hunter_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" 
+    args="-urdf -param robot_description -model hunter2_base2 -x $(arg x_car2) -y $(arg y_car2) -z 1.5 -R $(arg roll_car2) -P $(arg pitch_car2) -Y $(arg yaw_car2)"
+        respawn="false" />
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
+        <param name="publish_frequency" value="10.0"/>
+        <param name="tf_prefix" value="hunter2_base2"/>
+    </node>
+  </group>
+</launch>
