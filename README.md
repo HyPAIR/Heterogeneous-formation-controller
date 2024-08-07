@@ -150,7 +150,7 @@ $ catkin_make
 
 ## Citation
 
-If you find this work useful, please cite [	Multi-Formation Planning and Coordination for Object Transportation](https://www.sciencedirect.com/science/article/pii/S092188902400157X) ([pdf]()):
+If you find this work useful, please cite [A decoupled solution to heterogeneous multi-formation planning and coordination for object transportation](https://www.sciencedirect.com/science/article/pii/S092188902400157X) ([pdf]()):
 
 ```bibtex
 @article{zhang2024decoupled,
