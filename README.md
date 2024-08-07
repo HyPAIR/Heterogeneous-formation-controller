@@ -147,6 +147,23 @@ $ catkin_make
   <img src="https://github.com/HyPAIR/Heterogeneous-formation-controller/blob/main/Figures/formation_coordination.png" alt="formation_coordination_demo" width="800" height="400">
 </p>
 
+
+## Citation
+
+If you find this work useful, please cite [	Multi-Formation Planning and Coordination for Object Transportation](https://www.sciencedirect.com/science/article/pii/S092188902400157X) ([pdf]()):
+
+```bibtex
+@article{zhang2024decoupled,
+  title={A decoupled solution to heterogeneous multi-formation planning and coordination for object transportation},
+  author={Zhang, Weijian and Street, Charlie and Mansouri, Masoumeh},
+  journal={Robotics and Autonomous Systems},
+  pages={104773},
+  year={2024},
+  publisher={Elsevier}
+}
+}
+```
+
 ## Video
 
 A simulation video demonstrating our proposed framework can be found at [youtube](https://youtu.be/A_S-e0mkLGY).
