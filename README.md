@@ -161,7 +161,6 @@ If you find this work useful, please cite [	Multi-Formation Planning and Coordin
   year={2024},
   publisher={Elsevier}
 }
-}
 ```
 
 ## Video
