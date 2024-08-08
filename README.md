@@ -19,6 +19,7 @@ A cooperative formation object transportation system for heterogeneous multi-rob
 <p align="center">
   <img src="https://github.com/HyPAIR/Heterogeneous-formation-controller/blob/main/Figures/system_overview.png" alt="system_overview" width="717" height=300">
 </p>
+
  - A comprehensive H-MFPC framework which integrates formation generation, planning, and coordination techniques for heterogeneous formations.
  
  - An efficient formation generation approach for heterogeneous multi-robot systems which synthesizes collision-free and kinematically feasible trajectories in unstructured environments.
