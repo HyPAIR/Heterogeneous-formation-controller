@@ -20,8 +20,11 @@ A cooperative formation object transportation system for heterogeneous multi-rob
   <img src="https://github.com/HyPAIR/Heterogeneous-formation-controller/blob/main/Figures/system_overview.png" alt="system_overview" width="717" height=300">
 </p>
  - A comprehensive H-MFPC framework which integrates formation generation, planning, and coordination techniques for heterogeneous formations.
+ 
  - An efficient formation generation approach for heterogeneous multi-robot systems which synthesizes collision-free and kinematically feasible trajectories in unstructured environments.
+   
  - A cost-optimal formation planning method that maintains rigidity for heterogeneous formations.
+   
  - A loosely-coupled multi-formation coordination algorithm for ensuring deadlock-free and collision-free navigation among formations.
 
 ## Requirements
@@ -147,6 +150,9 @@ $ catkin_make
   <img src="https://github.com/HyPAIR/Heterogeneous-formation-controller/blob/main/Figures/formation_coordination.png" alt="formation_coordination_demo" width="800" height="400">
 </p>
 
+## Video
+
+A simulation video demonstrating our proposed framework can be found at [youtube](https://youtu.be/A_S-e0mkLGY).
 
 ## Citation
 
@@ -162,7 +168,3 @@ If you find this work useful, please cite [A decoupled solution to heterogeneous
   publisher={Elsevier}
 }
 ```
-
-## Video
-
-A simulation video demonstrating our proposed framework can be found at [youtube](https://youtu.be/A_S-e0mkLGY).
