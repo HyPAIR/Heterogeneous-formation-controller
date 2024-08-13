@@ -157,7 +157,7 @@ A simulation video demonstrating our proposed framework can be found at [youtube
 
 ## Citation
 
-If you find this work useful, please cite [A decoupled solution to heterogeneous multi-formation planning and coordination for object transportation](https://www.sciencedirect.com/science/article/pii/S092188902400157X) ([pdf](https://github.com/HyPAIR/Heterogeneous-formation-controller/ras_2024.pdf):
+If you find this work useful, please cite [A decoupled solution to heterogeneous multi-formation planning and coordination for object transportation](https://www.sciencedirect.com/science/article/pii/S092188902400157X) ([pdf](http://SimonZhang1999.github.io/files/ras_2024.pdf)):
 
 ```bibtex
 @article{zhang2024decoupled,
