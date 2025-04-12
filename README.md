@@ -153,7 +153,7 @@ $ catkin_make
 
 ## Video
 
-A simulation video demonstrating our proposed framework can be found at [youtube](https://youtu.be/A_S-e0mkLGY).
+A simulation video demonstrating our proposed framework can be found at [bilibili](https://www.bilibili.com/video/BV1DB421B7bp/?spm_id_from=333.1387.list.card_archive.click&vd_source=bf49c74265570abfae0e3bacc588f839)/[youtube](https://youtu.be/A_S-e0mkLGY).
 
 ## Citation
 
