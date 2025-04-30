@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--This does not replace URDF, and is not an extension of URDF.
+    This is a format for representing semantic information about the robot structure.
+    A URDF file must exist for this robot as well, where the joints and the links that are referenced are defined
+-->
+<robot name="$(arg model_name)"
+        xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:arg name="prefix" default=""/>
+    <!--GROUPS: Representation of a set of joints and links. This can be useful for specifying DOF to plan for, defining arms, end effectors, etc-->
+    <!--LINKS: When a link is specified, the parent joint of that link (if it exists) is automatically included-->
+    <!--JOINTS: When a joint is specified, the child link of that joint (which will always exist) is automatically included-->
+    <!--CHAINS: When a chain is specified, all the links along the chain (including endpoints) are included in the group. Additionally, all the joints that are parents to included links are also included. This means that joints along the chain and the parent joint of the base link are included in the group-->
+    <!--SUBGROUPS: Groups can also be formed by referencing to already defined group names-->
+    <group name="UR_arm">
+        <joint name="$(arg prefix)base_link-base_link_inertia"/>
+        <joint name="$(arg prefix)shoulder_pan_joint"/>
+        <joint name="$(arg prefix)shoulder_lift_joint"/>
+        <joint name="$(arg prefix)elbow_joint"/>
+        <joint name="$(arg prefix)wrist_1_joint"/>
+        <joint name="$(arg prefix)wrist_2_joint"/>
+        <joint name="$(arg prefix)wrist_3_joint"/>
+        <joint name="$(arg prefix)wrist_3-flange"/>
+        <joint name="$(arg prefix)flange-tool0"/>
+    </group>
+    <!--PASSIVE JOINT: Purpose: this element is used to mark joints that are not actuated-->
+    <passive_joint name="bl_caster_rotation_joint" />
+    <passive_joint name="bl_caster_wheel_joint" />
+    <passive_joint name="br_caster_rotation_joint" />
+    <passive_joint name="br_caster_wheel_joint" />
+    <passive_joint name="fl_caster_rotation_joint" />
+    <passive_joint name="fl_caster_wheel_joint" />
+    <passive_joint name="fr_caster_rotation_joint" />
+    <passive_joint name="fr_caster_wheel_joint" />
+    <!--GROUP STATES: Purpose: Define a named state for a particular group, in terms of joint values. This is useful to define states like 'folded arms'-->
+    <group_state name="Home_custom" group="UR_arm">
+        <joint name="$(arg prefix)elbow_joint" value="1.6141"/>
+        <joint name="$(arg prefix)shoulder_lift_joint" value="-1.5621"/>
+        <joint name="$(arg prefix)shoulder_pan_joint" value="-0.0347"/>
+        <joint name="$(arg prefix)wrist_1_joint" value="-1.7009"/>
+        <joint name="$(arg prefix)wrist_2_joint" value="-1.5621"/>
+        <joint name="$(arg prefix)wrist_3_joint" value="0"/>
+    </group_state>
+    <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
+    <end_effector name="hand" parent_link="$(arg prefix)tool0" group="UR_arm"/>
+    <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
+    <disable_collisions link1="$(arg prefix)base_link_inertia" link2="$(arg prefix)shoulder_link" reason="Adjacent"/>
+    <disable_collisions link1="$(arg prefix)base_link_inertia" link2="$(arg prefix)upper_arm_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)base_link_inertia" link2="$(arg prefix)wrist_1_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)base_link_inertia" link2="back_laser_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)base_link_inertia" link2="base_link" reason="Adjacent"/>
+    <disable_collisions link1="$(arg prefix)base_link_inertia" link2="bl_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)base_link_inertia" link2="bl_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)base_link_inertia" link2="br_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)base_link_inertia" link2="br_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)base_link_inertia" link2="camera_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)base_link_inertia" link2="fl_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)base_link_inertia" link2="fl_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)base_link_inertia" link2="fr_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)base_link_inertia" link2="fr_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)base_link_inertia" link2="front_laser_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)base_link_inertia" link2="left_wheel_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)base_link_inertia" link2="right_wheel_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)forearm_link" link2="$(arg prefix)upper_arm_link" reason="Adjacent"/>
+    <disable_collisions link1="$(arg prefix)forearm_link" link2="$(arg prefix)wrist_1_link" reason="Adjacent"/>
+    <disable_collisions link1="$(arg prefix)shoulder_link" link2="$(arg prefix)upper_arm_link" reason="Adjacent"/>
+    <disable_collisions link1="$(arg prefix)shoulder_link" link2="$(arg prefix)wrist_1_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)shoulder_link" link2="back_laser_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)shoulder_link" link2="base_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)shoulder_link" link2="bl_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)shoulder_link" link2="bl_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)shoulder_link" link2="br_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)shoulder_link" link2="br_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)shoulder_link" link2="camera_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)shoulder_link" link2="fl_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)shoulder_link" link2="fl_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)shoulder_link" link2="fr_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)shoulder_link" link2="fr_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)shoulder_link" link2="front_laser_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)shoulder_link" link2="left_wheel_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)shoulder_link" link2="right_wheel_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)upper_arm_link" link2="back_laser_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)upper_arm_link" link2="bl_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)upper_arm_link" link2="bl_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)upper_arm_link" link2="br_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)upper_arm_link" link2="br_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)wrist_1_link" link2="$(arg prefix)wrist_2_link" reason="Adjacent"/>
+    <disable_collisions link1="$(arg prefix)wrist_1_link" link2="$(arg prefix)wrist_3_link" reason="Never"/>
+    <disable_collisions link1="$(arg prefix)wrist_2_link" link2="$(arg prefix)wrist_3_link" reason="Adjacent"/>
+    <disable_collisions link1="$(arg prefix)wrist_3_link" link2="$(arg prefix)gripper" reason="Adjacent"/>
+    <disable_collisions link1="back_laser_link" link2="base_link" reason="Adjacent"/>
+    <disable_collisions link1="back_laser_link" link2="bl_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="back_laser_link" link2="bl_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="back_laser_link" link2="br_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="back_laser_link" link2="br_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="back_laser_link" link2="camera_link" reason="Never"/>
+    <disable_collisions link1="back_laser_link" link2="fl_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="back_laser_link" link2="fl_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="back_laser_link" link2="fr_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="back_laser_link" link2="fr_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="back_laser_link" link2="front_laser_link" reason="Never"/>
+    <disable_collisions link1="back_laser_link" link2="left_wheel_link" reason="Never"/>
+    <disable_collisions link1="back_laser_link" link2="right_wheel_link" reason="Never"/>
+    <disable_collisions link1="base_link" link2="bl_caster_rotation_link" reason="Adjacent"/>
+    <disable_collisions link1="base_link" link2="bl_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="base_link" link2="br_caster_rotation_link" reason="Adjacent"/>
+    <disable_collisions link1="base_link" link2="br_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="base_link" link2="camera_link" reason="Adjacent"/>
+    <disable_collisions link1="base_link" link2="fl_caster_rotation_link" reason="Adjacent"/>
+    <disable_collisions link1="base_link" link2="fl_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="base_link" link2="fr_caster_rotation_link" reason="Adjacent"/>
+    <disable_collisions link1="base_link" link2="fr_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="base_link" link2="front_laser_link" reason="Adjacent"/>
+    <disable_collisions link1="base_link" link2="left_wheel_link" reason="Adjacent"/>
+    <disable_collisions link1="base_link" link2="right_wheel_link" reason="Adjacent"/>
+    <disable_collisions link1="bl_caster_rotation_link" link2="bl_caster_wheel_link" reason="Adjacent"/>
+    <disable_collisions link1="bl_caster_rotation_link" link2="br_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="bl_caster_rotation_link" link2="br_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="bl_caster_rotation_link" link2="camera_link" reason="Never"/>
+    <disable_collisions link1="bl_caster_rotation_link" link2="fl_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="bl_caster_rotation_link" link2="fl_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="bl_caster_rotation_link" link2="fr_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="bl_caster_rotation_link" link2="fr_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="bl_caster_rotation_link" link2="front_laser_link" reason="Never"/>
+    <disable_collisions link1="bl_caster_rotation_link" link2="left_wheel_link" reason="Never"/>
+    <disable_collisions link1="bl_caster_rotation_link" link2="right_wheel_link" reason="Never"/>
+    <disable_collisions link1="bl_caster_wheel_link" link2="br_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="bl_caster_wheel_link" link2="br_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="bl_caster_wheel_link" link2="camera_link" reason="Never"/>
+    <disable_collisions link1="bl_caster_wheel_link" link2="fl_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="bl_caster_wheel_link" link2="fl_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="bl_caster_wheel_link" link2="fr_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="bl_caster_wheel_link" link2="fr_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="bl_caster_wheel_link" link2="front_laser_link" reason="Never"/>
+    <disable_collisions link1="bl_caster_wheel_link" link2="left_wheel_link" reason="Never"/>
+    <disable_collisions link1="bl_caster_wheel_link" link2="right_wheel_link" reason="Never"/>
+    <disable_collisions link1="br_caster_rotation_link" link2="br_caster_wheel_link" reason="Adjacent"/>
+    <disable_collisions link1="br_caster_rotation_link" link2="camera_link" reason="Never"/>
+    <disable_collisions link1="br_caster_rotation_link" link2="fl_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="br_caster_rotation_link" link2="fl_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="br_caster_rotation_link" link2="fr_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="br_caster_rotation_link" link2="fr_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="br_caster_rotation_link" link2="front_laser_link" reason="Never"/>
+    <disable_collisions link1="br_caster_rotation_link" link2="left_wheel_link" reason="Never"/>
+    <disable_collisions link1="br_caster_rotation_link" link2="right_wheel_link" reason="Never"/>
+    <disable_collisions link1="br_caster_wheel_link" link2="camera_link" reason="Never"/>
+    <disable_collisions link1="br_caster_wheel_link" link2="fl_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="br_caster_wheel_link" link2="fl_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="br_caster_wheel_link" link2="fr_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="br_caster_wheel_link" link2="fr_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="br_caster_wheel_link" link2="front_laser_link" reason="Never"/>
+    <disable_collisions link1="br_caster_wheel_link" link2="left_wheel_link" reason="Never"/>
+    <disable_collisions link1="br_caster_wheel_link" link2="right_wheel_link" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="fl_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="fl_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="fr_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="fr_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="front_laser_link" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="left_wheel_link" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="right_wheel_link" reason="Never"/>
+    <disable_collisions link1="fl_caster_rotation_link" link2="fl_caster_wheel_link" reason="Adjacent"/>
+    <disable_collisions link1="fl_caster_rotation_link" link2="fr_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="fl_caster_rotation_link" link2="fr_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="fl_caster_rotation_link" link2="front_laser_link" reason="Never"/>
+    <disable_collisions link1="fl_caster_rotation_link" link2="left_wheel_link" reason="Never"/>
+    <disable_collisions link1="fl_caster_rotation_link" link2="right_wheel_link" reason="Never"/>
+    <disable_collisions link1="fl_caster_wheel_link" link2="fr_caster_rotation_link" reason="Never"/>
+    <disable_collisions link1="fl_caster_wheel_link" link2="fr_caster_wheel_link" reason="Never"/>
+    <disable_collisions link1="fl_caster_wheel_link" link2="front_laser_link" reason="Never"/>
+    <disable_collisions link1="fl_caster_wheel_link" link2="left_wheel_link" reason="Never"/>
+    <disable_collisions link1="fl_caster_wheel_link" link2="right_wheel_link" reason="Never"/>
+    <disable_collisions link1="fr_caster_rotation_link" link2="fr_caster_wheel_link" reason="Adjacent"/>
+    <disable_collisions link1="fr_caster_rotation_link" link2="front_laser_link" reason="Never"/>
+    <disable_collisions link1="fr_caster_rotation_link" link2="left_wheel_link" reason="Never"/>
+    <disable_collisions link1="fr_caster_rotation_link" link2="right_wheel_link" reason="Never"/>
+    <disable_collisions link1="fr_caster_wheel_link" link2="front_laser_link" reason="Never"/>
+    <disable_collisions link1="fr_caster_wheel_link" link2="left_wheel_link" reason="Never"/>
+    <disable_collisions link1="fr_caster_wheel_link" link2="right_wheel_link" reason="Never"/>
+    <disable_collisions link1="front_laser_link" link2="left_wheel_link" reason="Never"/>
+    <disable_collisions link1="front_laser_link" link2="right_wheel_link" reason="Never"/>
+    <disable_collisions link1="left_wheel_link" link2="right_wheel_link" reason="Never"/>
+</robot>

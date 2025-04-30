@@ -1,0 +1,20 @@
+# This list is necessary for the move_base_flex node (not move_base!)
+# The listed controllers must be loaded through a yaml and are then available for move_base_flex to use
+# If this list should be expanded with a default controller please provide a pull request
+# If you wish to add your own controller, please add a config file with the controllers list in your package and load it in the correct namespace
+controllers:
+  - name: 'DWAPlannerROS'
+    type: 'dwa_local_planner/DWAPlannerROS'
+  # - name: 'EBandPlannerROS'
+  #   type: 'eband_local_planner/EBandPlannerROS'
+  - name: 'PoseFollower'
+    type: 'pose_follower/PoseFollower'
+  - name: 'TebLocalPlannerROS'
+    type: 'teb_local_planner/TebLocalPlannerROS'
+  - name: 'TrajectoryPlannerROS'
+    type: 'base_local_planner/TrajectoryPlannerROS'
+  - name: 'LocalPlanFollower'
+    type: 'local_plan_follower/LocalPlanFollower'
+  # No dependency found for this planner 
+  # - name: 'MIRPlannerROS'
+  #   type: 'mirLocalPlanner/MIRPlannerROS'

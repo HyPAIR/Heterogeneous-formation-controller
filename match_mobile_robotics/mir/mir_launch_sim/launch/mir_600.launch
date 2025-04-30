@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<launch>
+	<arg name="tf_prefix"    default="" />
+	<arg name="robot_x"   default="0.0" />
+	<arg name="robot_y"   default="0.0" />
+	<arg name="robot_yaw" default="0.0" />  
+	<arg name="model_name" default=""/>
+    <arg name="robot_urdf_path" default="$(find mir_description)/urdf/mir_600/mir_600.gazebo.urdf"/>
+    <arg name="gazebo_joint_state_controller_config" default="$(find mir_launch_sim)/config/gazebo_joint_state_controller.yaml" />
+
+    <arg name="move_base_selector" default="move_base" />
+	<arg name="global_planner" default="GlobalPlanner" />
+    <arg name="global_planner_config" default="$(find mir_navigation)/config/Planner/GlobalPlanner/$(arg global_planner).yaml" />
+	<arg name="local_planner" default="LocalPlanFollower" />
+    <arg name="local_planner_config" default="$(find mir_navigation)/config/Planner/LocalPlanner/$(arg local_planner).yaml" />
+
+    <include file="$(find mir_launch_sim)/launch/utils/general_mir.launch">
+        <arg name="tf_prefix" value="$(arg tf_prefix)"/>
+        <arg name="robot_x"  value="$(arg robot_x)"/>
+        <arg name="robot_y"  value="$(arg robot_y)"/>
+        <arg name="robot_yaw"  value="$(arg robot_yaw)"/>
+		<arg name="model_name" value="$(arg model_name)"/>
+        <arg name="robot_urdf_path" value="$(arg robot_urdf_path)"/>
+
+        <arg name="move_base_selector" value="$(arg move_base_selector)"/>
+		<arg name="global_planner" value="$(arg global_planner)" />
+        <arg name="global_planner_config" value="$(arg global_planner_config)" />
+		<arg name="local_planner" value="$(arg local_planner)" />
+        <arg name="local_planner_config" value="$(arg local_planner_config)" />
+        <arg name="gazebo_joint_state_controller_config" value="$(arg gazebo_joint_state_controller_config)" />
+    </include>
+</launch>

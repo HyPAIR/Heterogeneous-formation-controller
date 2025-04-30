@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="(empty)"
+	BuildStamp="20240228-2113-Experimental"
+	Name="simon"
+	Generator="ctest-3.16.3"
+	CompilerName="/usr/bin/g++"
+	CompilerVersion="9.4.0"
+	OSName="Linux"
+	Hostname="simon"
+	OSRelease="5.15.0-97-generic"
+	OSVersion="#107~20.04.1-Ubuntu SMP Fri Feb 9 14:20:11 UTC 2024"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="GenuineIntel"
+	VendorID="Intel Corporation"
+	FamilyID="6"
+	ModelID="141"
+	ProcessorCacheSize="24576"
+	NumberOfLogicalCPU="16"
+	NumberOfPhysicalCPU="8"
+	TotalVirtualMemory="9536"
+	TotalPhysicalMemory="15765"
+	LogicalProcessorsPerPhysical="2"
+	ProcessorClockFrequency="2500"
+	>
+	<Testing>
+		<StartDateTime>Feb 28 21:13 GMT</StartDateTime>
+		<StartTestTime>1709154816</StartTestTime>
+		<TestList/>
+		<EndDateTime>Feb 28 21:13 GMT</EndDateTime>
+		<EndTestTime>1709154816</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>

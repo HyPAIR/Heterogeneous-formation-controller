@@ -1,0 +1,24 @@
+uint8 PLAY=0
+uint8 STOP_ALL_SOUNDS=1
+uint8 STOP_SOUNDS_OF_PRIORITY=2
+uint8 STOP_SOUND=3
+uint8 MUTE=4
+uint8 UNMUTE=5
+uint8 MUTEABLE=6
+uint8 action
+
+string sound_guid
+uint32 length
+uint8 volume
+bool loop
+string creator
+
+uint8 WARNING=3
+uint8 USER=2
+uint8 AREA_EVENT=1
+uint8 MISSION=0
+uint8 priority
+bool stack
+---
+bool result
+string error

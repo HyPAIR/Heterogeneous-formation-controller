@@ -1,0 +1,3 @@
+bool move_motor
+---
+mirMsgs/PrecisionDockingStatus status

@@ -1,0 +1,12 @@
+prefix=/home/criss/iris-distro/build
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: mosek
+Description: mosek
+Requires: 
+Version: 7.0.0
+Libs: -L${libdir}  -lmosek64 -L/home/criss/iris-distro/build/lib
+Cflags: -I${includedir}  -I/home/criss/iris-distro/build/include
+classpath=

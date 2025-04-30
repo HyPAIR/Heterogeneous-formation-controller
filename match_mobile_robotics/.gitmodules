@@ -1,0 +1,49 @@
+[submodule "ur/ur_msgs"]
+	path = ur/ur_msgs
+	url = https://github.com/ros-industrial/ur_msgs.git
+	branch = melodic-devel
+[submodule "general_hardware_helper/cartesian_controllers"]
+	path = general_hardware_helper/cartesian_controllers
+	url = https://github.com/fzi-forschungszentrum-informatik/cartesian_controllers.git
+[submodule "panda_hardware_helper/panda_moveit_config"]
+	path = panda/panda_moveit_config
+	url = https://github.com/ros-planning/panda_moveit_config.git
+	branch = melodic-devel
+[submodule "mir/mir_submodules/realsense_gazebo_plugin"]
+	path = mir/mir_submodules/realsense_gazebo_plugin
+	url = https://github.com/pal-robotics/realsense_gazebo_plugin.git
+	branch = melodic-devel
+[submodule "scout_mini/src/rplidar_ros"]
+	path = scout_mini/src/rplidar_ros
+	url = https://github.com/Slamtec/rplidar_ros.git
+[submodule "ur/ur_ros_driver"]
+	path = ur/ur_ros_driver
+	url = https://github.com/match-ROS/Universal_Robots_ROS_Driver.git
+	branch = master
+[submodule "mir/mir_submodules/mir_robot"]
+	path = mir/mir_submodules/mir_robot
+	url = https://github.com/match-ROS/mir_robot.git
+	branch = noetic
+[submodule "ur/robotiq"]
+	path = ur/robotiq
+	url = https://github.com/pumablattlaus/robotiq.git
+[submodule "mir/mir_submodules/ewellix_tlt"]
+	path = mir/mir_submodules/ewellix_tlt
+	url = https://github.com/matchRos/ewellix_tlt.git
+	branch = melodic-devel
+[submodule "submodules/match_path_planning"]
+	path = submodules/match_path_planning
+	url = https://github.com/match-ROS/match_path_planning.git
+	branch = main
+[submodule "ur/universal_robot"]
+	path = ur/universal_robot
+	url = https://github.com/ros-industrial/universal_robot.git
+	branch = melodic-devel
+[submodule "submodules/match_robot_controllers"]
+	path = submodules/match_robot_controllers
+	url = https://github.com/match-ROS/match_robot_controllers.git
+	branch = main
+[submodule "submodules/gazebo_ros_link_attacher"]
+	path = submodules/gazebo_ros_link_attacher
+	url = https://github.com/pal-robotics/gazebo_ros_link_attacher.git
+	branch = melodic-devel

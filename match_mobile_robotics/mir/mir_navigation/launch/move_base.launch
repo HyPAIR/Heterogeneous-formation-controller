@@ -1,0 +1,32 @@
+<launch>
+    <arg name="tf_prefix" default="" doc="Prefix used for robot tf frames" /> <!-- used in the config files -->
+    <arg name="global_planner" default="GlobalPlanner" />
+    <arg name="local_planner" default="DWAPlannerROS" />
+
+    <arg if="$(eval tf_prefix=='')" name="tf_prefix_slashed" value="" /> <!--Important for proper substitution (empty tf_prefix must not lead to leading slashes-->
+    <arg unless="$(eval tf_prefix=='')" name="tf_prefix_slashed" value="$(arg tf_prefix)/" /> <!--Important for proper substitution (empty tf_prefix must not lead to leading slashes-->
+   
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base_node" output="screen" clear_params="true">
+        
+        <!-- general move_base param -->
+        <rosparam file="$(find mir_navigation)/config/Planner/move_base_common_params.yaml" command="load" />
+       
+        <!-- planner params -->
+        <rosparam file="$(find mir_navigation)/config/Planner/GlobalPlanner/$(arg global_planner).yaml" command="load" />
+        <rosparam file="$(find mir_navigation)/config/Planner/LocalPlanner/$(arg local_planner).yaml" command="load" />
+        
+        <!-- global costmap params -->
+        <rosparam file="$(find mir_navigation)/config/Costmap/costmap_common_params.yaml" command="load" ns="global_costmap" subst_value="true" />
+        <rosparam file="$(find mir_navigation)/config/Costmap/costmap_global_params.yaml" command="load" />
+        <!-- <rosparam file="$(find mir_navigation)/config/Costmap/costmap_global_params_plugins.yaml" command="load"/> -->
+
+        <!-- local costmap params -->
+        <rosparam file="$(find mir_navigation)/config/Costmap/costmap_common_params.yaml" command="load" ns="local_costmap" subst_value="true" />
+        <rosparam file="$(find mir_navigation)/config/Costmap/costmap_local_params.yaml" command="load" subst_value="true" />
+        <!-- <rosparam file="$(find mir_navigation)/config/Costmap/MoveBaseLocalCostmap/costmap_local_params_plugins.yaml" command="load"/> -->
+
+        <!-- Remappings -->        
+        <!-- <remap to="cmd_vel" from="mobile_base_controller/cmd_vel"/>
+        <remap from="odom" to="mobile_base_controller/odom"/> -->
+    </node>
+</launch>

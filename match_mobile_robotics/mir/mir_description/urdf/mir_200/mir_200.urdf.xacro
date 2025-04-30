@@ -1,0 +1,182 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+	<xacro:include filename="$(find mir_description)/urdf/general/common_properties.urdf.xacro" />
+	<xacro:include filename="$(find mir_description)/urdf/general/sick_s300.urdf.xacro" />
+	<xacro:include filename="$(find mir_description)/urdf/mir_200/mir_200_wheels.urdf.xacro" />
+	<xacro:include filename="$(find mir_description)/urdf/general/match_logo.urdf.xacro" />
+	<xacro:include filename="$(find mir_description)/urdf/general/_d435.urdf.xacro" />
+	
+	<xacro:property name="deg_to_rad" value="${(1 / 360) * (2 * pi)}" />
+
+	<xacro:property name="mir_200_base_mass" value="58.0" />
+
+	<xacro:property name="mir_200_act_wheel_radius" value="0.0625" />
+	<xacro:property name="mir_200_act_wheel_width" value="0.032" />
+	<xacro:property name="mir_200_act_wheel_mass" value="20.0" />
+	<xacro:property name="mir_200_act_wheel_dx" value="0.037646" />
+	<xacro:property name="mir_200_act_wheel_dy" value="0.222604" />
+
+	<xacro:property name="mir_200_caster_wheel_radius" value="${mir_200_act_wheel_radius}" />
+	<xacro:property name="mir_200_caster_wheel_width" value="${mir_200_act_wheel_width}" />
+	<xacro:property name="mir_200_caster_wheel_mass" value="${mir_200_act_wheel_mass}" />
+	<xacro:property name="mir_200_caster_wheel_dx" value="-0.0382" />
+	<xacro:property name="mir_200_caster_wheel_dy" value="0" />
+	<xacro:property name="mir_200_caster_wheel_dz" value="-0.094" />
+	<xacro:property name="mir_200_front_caster_wheel_base_dx" value="0.341346" />
+	<xacro:property name="mir_200_back_caster_wheel_base_dx" value="-0.270154" />
+	<xacro:property name="mir_200_caster_wheel_base_dy" value="0.203" />
+	<xacro:property name="mir_200_caster_wheel_base_dz" value="${mir_200_caster_wheel_radius-mir_200_caster_wheel_dz}" />
+
+	<xacro:property name="mir_200_match_logo_dx" value="0.0" />
+	<xacro:property name="mir_200_match_logo_dy" value="0.2724435" />
+	<xacro:property name="mir_200_match_logo_dz" value="0.27" />
+
+	<xacro:macro name="mir_200">
+		<link name="base_footprint" />
+
+		<joint name="base_joint" type="fixed">
+			<parent link="base_footprint" />
+			<child link="base_link" />
+			<origin xyz="0 0 0" rpy="0 0 0" />
+		</joint>
+
+		<link name="base_link">
+			<xacro:box_inertial mass="${mir_200_base_mass}" x="0.9" y="0.58" z="0.3">
+				<origin xyz="${mir_200_act_wheel_dx} 0 0.20" rpy="0 0 0" />
+			</xacro:box_inertial>
+			<visual>
+				<origin xyz="${mir_200_act_wheel_dx} 0 0" rpy="0 0 0" />
+				<geometry>
+					<mesh filename="package://mir_description/meshes/visual/mir_200_base.stl" />
+				</geometry>
+				<xacro:insert_block name="material_white" />
+			</visual>
+			<collision>
+				<origin xyz="${mir_200_act_wheel_dx} 0 0" rpy="0 0 0" />
+				<geometry>
+					<mesh filename="package://mir_description/meshes/collision/mir_200_base.stl" />
+				</geometry>
+			</collision>
+		</link>
+		
+		<!-- IMU -->
+		<joint name="base_link_to_imu_joint" type="fixed">
+			<parent link="base_link" />
+			<child link="imu_link" />
+			<origin xyz="0.0 0.0 0.25" rpy="0 0 0" />  <!-- same as real MiR -->
+		</joint>
+
+		<link name="imu_link" />
+
+		<!-- Create an alias for imu_link. This is necessary because the real MiR's
+			TF has imu_link, but the imu_data topic is published in the imu_frame
+			frame. -->
+		<joint name="imu_link_to_imu_frame_joint" type="fixed">
+			<parent link="imu_link" />
+			<child link="imu_frame" />
+			<origin xyz="0 0 0" rpy="0 0 0" />
+		</joint>
+
+		<link name="imu_frame" />
+
+		<!-- Laser scanners -->
+		<joint name="base_link_to_front_laser_joint" type="fixed">
+			<parent link="base_link" />
+			<child link="front_laser_link" />
+			<origin xyz="0.4288 0.2358 0.1914" rpy="0.0 0.0 ${0.25 * pi}" />  <!-- from visually matching up the meshes of the MiR and the laser scanner -->
+		</joint>
+		<xacro:sick_s300 link="front_laser_link" topic="f_scan" />
+
+		<joint name="base_link_to_back_laser_joint" type="fixed">
+			<parent link="base_link" />
+			<child link="back_laser_link" />
+			<origin xyz="-0.3548 -0.2352 0.1914" rpy="0.0 0.0 ${-0.75 * pi}" />  <!-- from visually matching up the meshes of the MiR and the laser scanner -->
+		</joint>
+
+		<xacro:sick_s300 link="back_laser_link" topic="b_scan" />
+
+		<!-- Ultrasound sensors -->
+		<joint name="us_1_joint" type="fixed">   <!-- right ultrasound -->
+			<parent link="base_link" />
+			<child link="us_1_frame" />
+			<origin xyz="0.45 -0.12 0.16 " rpy="0 0 0" />  <!-- from visually matching to the mesh of the MiR -->
+		</joint>
+
+		<link name="us_1_frame" />
+
+		<joint name="us_2_joint" type="fixed">   <!-- left ultrasound -->
+			<parent link="base_link" />
+			<child link="us_2_frame" />
+			<origin xyz="0.45 0.12 0.16 " rpy="0 0 0" />  <!-- from visually matching to the mesh of the MiR -->
+		</joint>
+		
+		<link name="us_2_frame" />
+
+		<!-- wheels -->
+		<xacro:actuated_wheel locationprefix="left" locationright="-1"/>
+		<xacro:actuated_wheel locationprefix="right" locationright="1"/>
+		<xacro:caster_wheel locationprefix="fl" locationright="-1" wheel_base_dx="${mir_200_front_caster_wheel_base_dx}"/>
+		<xacro:caster_wheel locationprefix="fr" locationright="1" wheel_base_dx="${mir_200_front_caster_wheel_base_dx}"/>
+		<xacro:caster_wheel locationprefix="bl" locationright="-1" wheel_base_dx="${mir_200_back_caster_wheel_base_dx}"/>
+		<xacro:caster_wheel locationprefix="br" locationright="1" wheel_base_dx="${mir_200_back_caster_wheel_base_dx}"/>
+
+		<joint name="base_link_surface_joint" type="fixed">
+			<origin xyz="${mir_200_act_wheel_dx} 0 0.352" rpy="0 0 0" />
+			<parent link="base_link" />
+			<child link="surface" />
+			<axis xyz="0 0 1" />
+		</joint>
+
+		<link name="surface"/>
+
+		<!--Realsense_Intel_D435_Camera-->
+		<xacro:sensor_d435 name="camera" parent="base_link" use_nominal_extrinsics="true">
+    		<origin xyz="0.42 0 0.27" rpy="0 0 0" />
+  		</xacro:sensor_d435>
+
+		<!-- Insert a match logo on both sides of the mobile robot -->
+		<xacro:match_logo parent="base_link" locationprefix="left" location_dx="${mir_200_match_logo_dx}" location_dy="${mir_200_match_logo_dy}" location_dz="${mir_200_match_logo_dz}"/>
+		<xacro:match_logo parent="base_link" locationprefix="right" location_dx="${mir_200_match_logo_dx}" location_dy="${-1 * mir_200_match_logo_dy}" location_dz="${mir_200_match_logo_dz}" orientation="${pi}"/>
+
+		<!-- Camera -->
+		<!--link name="camera_link">
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<geometry>
+				<box size="0.1 0.1 0.1"/>
+			</geometry>
+		</collision>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<geometry>
+				<mesh filename="package://mir_description/meshes/visual/realsense.dae" />
+			</geometry>
+		</visual>
+		<inertial>
+			<mass value="1e-5" />
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+		</inertial>
+		</link>
+
+		<joint name="camera_joint" type="fixed">
+			<axis xyz="0 1 0" />
+			<origin xyz="0.42 0 0.27" rpy="0 0.2 0"/--> <!--set the position of the realsense-->
+			<!--parent link="${tf_prefix}base_link"/>
+			<child link="camera_link"/>
+		</joint-->
+
+		<!-- generate an optical frame http://www.ros.org/reps/rep-0103.html#suffix-frames
+			so that ros and opencv can operate on the camera frame correctly -->
+		<!--joint name="camera_optical_joint" type="fixed"-->
+			<!-- these values have to be these values otherwise the gazebo camera image
+				won't be aligned properly with the frame it is supposedly originating from -->
+			<!--origin xyz="0 0 0" rpy="-1.5708 0 -1.5708"/>
+			<parent link="camera_link"/>
+			<child link="camera_link_optical"/>
+		</joint>
+
+		<link name="camera_link_optical"-->
+		<!--/link-->
+	</xacro:macro>
+</robot>

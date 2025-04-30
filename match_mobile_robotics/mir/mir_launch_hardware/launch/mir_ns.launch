@@ -1,0 +1,10 @@
+<launch>
+  <arg name="tf_prefix" default=""/>
+  <arg name="move_base" default="true"/>
+  <arg name="ns" default="mir1"/>
+  <arg name="mir_type" doc="This variable selects the robot that is loaded. Default: mir_200. Options: mir_100, mir_200" default="mir_200"/>
+
+  <include file="$(find mir_launch_hardware)/launch/$(arg mir_type).launch" ns="$(arg ns)" pass_all_args="true">
+    <arg name="tf_prefix"   default="$(arg tf_prefix)" /> 
+  </include>
+</launch>

@@ -1,0 +1,6 @@
+<launch>
+    <arg name="robot_name" default="miranda"/>        
+    <include file="$(find miranda_hardware_helper)/launch/miranda_common.launch" ns="$(arg robot_name)" pass_all_args="true">
+        <arg name="tf_prefix" value="$(arg robot_name)"/>
+    </include>
+</launch>

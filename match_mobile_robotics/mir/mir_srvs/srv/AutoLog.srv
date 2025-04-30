@@ -1,0 +1,12 @@
+string error_description
+int32 error_code
+string error_module
+time error_timestamp
+bool exclude_rosbag
+bool exclude_db
+bool extended_cam_info
+string[] extra_files
+---
+bool success
+int32 id
+string error_msg

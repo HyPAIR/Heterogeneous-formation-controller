@@ -1,0 +1,7 @@
+virtual_follower_node:
+  rate: 100
+  set_pose_topic: set_pose    
+  follower_vel_topic: follower_vel
+  follower_pose_topic: mir_pose_stamped_simple
+  cmd_vel_topic: cmd_vel
+  cmd_vel_timeout: 0.5

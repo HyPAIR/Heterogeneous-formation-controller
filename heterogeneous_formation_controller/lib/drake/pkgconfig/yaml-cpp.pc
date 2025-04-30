@@ -1,0 +1,11 @@
+prefix=/home/criss/drake/build/install
+exec_prefix=/home/criss/drake/build/install
+libdir=${prefix}//home/criss/drake/build/install/lib
+includedir=${prefix}//home/criss/drake/build/install/include
+
+Name: Yaml-cpp
+Description: A YAML parser and emitter for C++
+Version: 0.5.3
+Requires:
+Libs: -L${libdir} -lyaml-cpp
+Cflags: -I${includedir}

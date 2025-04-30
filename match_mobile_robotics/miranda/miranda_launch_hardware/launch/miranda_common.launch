@@ -1,0 +1,18 @@
+<launch>
+    <!-- Defining arguments for the panda launch -->    
+    <arg name="tf_prefix" default="miranda"/>
+   
+   
+    <!-- Bringup   the miranda base  -->
+    <include file="$(find miranda_hardware_helper)/launch/miranda_base_common.launch" pass_all_args="true"/>
+   
+    <!-- Bringup the panda and configure it for working in combination with mir -->
+    <include file="$(find panda_hardware_helper)/launch/panda.launch" ns="panda" pass_all_args="true">        
+        <arg name="tf_prefix" value="$(arg tf_prefix)/panda"/>        
+    </include>
+
+    <!-- For MoveIt -->
+    <include file="$(find miranda_moveit)/launch/move_group.launch">
+    </include>
+    
+</launch>

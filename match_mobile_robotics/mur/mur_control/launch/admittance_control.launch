@@ -1,0 +1,29 @@
+<launch>
+
+    <group ns="mur620/UR10_l">
+        <arg name="target_wrench_topic" default="/mur620/UR10_l/wrench"/>
+        <arg name="actual_wrench_topic" default="/target_wrench"/>
+        <arg name="target_pose_topic" default="target_pose"/>
+        <arg name="actual_pose_topic" default="/mur620/UR10_l/tcp_pose"/>
+        <arg name="cartesian_ff_velocity_topic" default="/cartesian_ff_velocity_topic"/>
+        <arg name="joint_group_vel_topic" default="/mur620/joint_group_vel_controller_l/unsafe/command"/>
+        <arg name="ur_prefix" default="UR10_l/"/>
+        <arg name="joint_states_topic" default="/mur620/joint_states"/>
+        
+
+        <rosparam file="$(find mur_control)/config/admittance_control.yaml" command="load" subst_value="true"/> 
+
+        <node name="admittance_control" pkg="mur_control" type="admittance_control.py" output="screen">
+            <param name="actual_wrench_topic" value="$(arg actual_wrench_topic)" />
+            <param name="target_wrench_topic" value="$(arg target_wrench_topic)" />
+            <param name="target_pose_topic" value="$(arg target_pose_topic)" />
+            <param name="actual_pose_topic" value="$(arg actual_pose_topic)" />
+            <param name="cartesian_ff_velocity_topic" value="$(arg cartesian_ff_velocity_topic)" />
+            <param name="joint_group_vel_topic" value="$(arg joint_group_vel_topic)" />
+            <param name="ur_prefix" value="$(arg ur_prefix)" />
+            <param name="joint_states_topic" value="$(arg joint_states_topic)" />
+            
+        </node>
+    </group>
+
+</launch>

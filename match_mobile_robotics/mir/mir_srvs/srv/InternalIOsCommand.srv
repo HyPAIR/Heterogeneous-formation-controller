@@ -1,0 +1,11 @@
+uint8 GET_STATUS=0
+uint8 GET_INPUT_STATE=1
+uint8 GET_OUTPUT_STATE=2
+uint8 SET_OUTPUT_STATE=3
+uint8 action
+uint16 channel
+bool value
+int64 timeout
+---
+bool result
+mirMsgs/IOs status

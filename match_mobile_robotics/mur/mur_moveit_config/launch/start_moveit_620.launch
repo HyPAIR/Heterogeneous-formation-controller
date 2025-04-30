@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="model_name"/>
+    <arg name="mur_ns" default="$(arg model_name)"/>
+    <arg name="prefix"/>
+    <arg name="set_global_robot_description" default="false"/>
+
+    <!-- Launch of the moveit package for the robot arm -->
+
+    <remap from="/follow_joint_trajectory" to="/arm_controller/follow_joint_trajectory"/>
+    <!-- <remap to="/$(arg mur_ns)/joint_states" from="/$(arg mur_ns)/$(arg prefix)joint_states" /> -->
+
+    <include file="$(find mur_moveit_config)/launch/move_group.launch">
+        <arg name="allow_trajectory_execution" value="true"/>
+        <arg name="fake_execution" value="false"/>
+        <arg name="model_name" value="$(arg model_name)"/>
+        <arg name="mur_ns" value="$(arg mur_ns)"/>
+        <arg name="prefix" value="$(arg prefix)"/>
+        <arg name="set_global_robot_description" value="$(arg set_global_robot_description)"/>
+    </include>
+
+    <!-- Run Rviz and load the default config to see the state of the move_group node -->
+    <!-- <include file="$(find mur_moveit_config)/launch/moveit_rviz.launch">
+        <arg name="rviz_config" value="$(find mur_moveit_config)/launch/moveit.rviz"/>
+    </include> -->
+</launch>

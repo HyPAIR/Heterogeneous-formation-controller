@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="miranda" >
+
+	<xacro:arg name="robot_namespace" default=''/>
+	<xacro:arg name="tf_prefix" default=''/>
+
+	<xacro:arg name="robot_arm_name" default="panda"/>
+	<xacro:arg name="load_gazebo" default="true"/>
+	<xacro:arg name="load_gripper" default="true"/>
+	<!-- Set use_gazebo_control to false for panda_transmission as this would start a second libgazebo_ros_control service that is not in the correct namespace-->
+	<xacro:arg name="use_gazebo_control" default="false"/>
+
+	<!-- MiR200 base -->
+	<xacro:include filename="$(find mir_description)/urdf/mir_200/mir_200.urdf.xacro" />
+	<!-- Franka Panda robot arm -->
+	<xacro:include filename="$(find franka_panda_description)/robots/panda_arm.xacro"/>
+		
+	<!-- Init the MiR200 marco that is also used for the hardware -->
+	<xacro:mir_200 />
+	
+	<xacro:panda_arm connected_to="base_link" xyz="0.215 0.1 0.35" rpy="0 0 0" in_gazebo="true"/>
+
+	<!-- Attach gripper to the Panda robot arm -->
+	<xacro:if value="$(arg load_gripper)">
+		<xacro:include filename="$(find franka_panda_description)/robots/hand.xacro"/>
+		<xacro:hand ns="panda" rpy="0 0 ${-pi/4}" connected_to="panda_link8"/>
+  	</xacro:if>
+
+	<!-- If the robot will be used in a simulation more infos have to loaded -->
+	<xacro:if value="$(arg load_gazebo)">  
+		<xacro:include filename="$(find franka_panda_description)/robots/panda.gazebo.xacro"/>
+		<xacro:include filename="$(find franka_panda_description)/robots/panda.transmission.xacro"/>
+		<xacro:include filename="$(find mir_description)/urdf/mir_200/mir_200.gazebo.xacro" />
+
+	  	<!-- Include plugin xacros -->
+		<xacro:include filename="$(find mir_description)/urdf/general/plugins.gazebo.xacro" />
+		<xacro:controller_plugin_gazebo robot_namespace="$(arg robot_namespace)"/>
+
+	  	<!-- Init the MiR200 macro that includes all infos that Gazebo need to function -->
+		<xacro:mir_200_gazebo tf_prefix="$(arg tf_prefix)" robot_namespace="$(arg robot_namespace)"/>
+
+		<xacro:panda_gazebo robot_name="$(arg robot_arm_name)" load_gripper="$(arg load_gripper)"/>
+		<xacro:panda_transmission robot_name="$(arg robot_arm_name)" load_gripper="true" use_gazebo_control="$(arg use_gazebo_control)"/>
+	</xacro:if>
+</robot>

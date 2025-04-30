@@ -1,0 +1,8 @@
+<launch>
+	<!-- Basic launch file for one robot in the match_world_common map-->
+	<include file="$(find match_gazebo)/launch/match_world_common.launch"/>
+
+	<include file="$(find miranda_launch_sim)/launch/miranda_200.launch"/>
+
+	<node type="rviz" name="rviz" pkg="rviz" args="-d $(find miranda_examples)/rviz/single_miranda_visualization.rviz" />
+</launch>

@@ -1,0 +1,11 @@
+controller_list:
+  - name: arm_controller
+    action_ns: "follow_joint_trajectory"
+    type: FollowJointTrajectory
+    joints:
+      - $(arg prefix)shoulder_pan_joint
+      - $(arg prefix)shoulder_lift_joint
+      - $(arg prefix)elbow_joint
+      - $(arg prefix)wrist_1_joint
+      - $(arg prefix)wrist_2_joint
+      - $(arg prefix)wrist_3_joint

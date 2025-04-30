@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="mir_100" >
+	<!-- Include xacro:macro for MiR100 base -->
+	<xacro:include filename="$(find mir_description)/urdf/mir_100/mir_100.urdf.xacro" />
+
+	<!-- Call the macro to be existent -->
+	<xacro:mir_100 />
+</robot>

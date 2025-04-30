@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: ecbs
+Description: Description of ecbs
+Version: 0.0.1
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: rospy std_msgs sensor_msgs

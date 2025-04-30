@@ -1,0 +1,1 @@
+/usr/bin/g++ -fPIC -g  -shared -Wl,-soname,libgtest_maind.so -o ../lib/libgtest_maind.so CMakeFiles/gtest_main.dir/src/gtest_main.cc.o  -Wl,-rpath,/home/weijian/Heterogeneous_formation/src/heterogeneous_formation_controller/build/gtest/lib ../lib/libgtestd.so -lpthread 

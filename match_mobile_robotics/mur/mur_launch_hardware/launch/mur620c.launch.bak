@@ -1,0 +1,97 @@
+<launch>
+    <!-- Defining arguments for the mur launch --> 
+    <arg name="launch_mir" default="true"/>
+    <arg name="launch_ur_l" default="false"/>
+    <arg name="launch_ur_r" default="true"/>
+    <arg name="controllers_started" default="joint_group_vel_controller joint_state_controller"/>
+    <arg name="controllers_stopped" default="empty"/>  <!--Must not be empty-->
+    <arg name="pose_filename" default="$(find mur_launch_hardware)/poses/my_poses.yaml"/>
+    <arg name="tf_prefix" default="mur620c"/>
+    <arg name="mur_ns" default=""/>
+    <arg name="left_arm_group_name" default="UR10_l"/>
+    <arg name="right_arm_group_name" default="UR10_r"/>
+   
+    <!-- Bringup the base of the mur -->
+
+    <group if="$(eval arg('launch_mir') ==true)">
+        <group ns="$(arg tf_prefix)/mir">
+        <param name="robot_state_publisher/tf_prefix" value="$(arg tf_prefix)/mir"/>  
+        <include file="$(find mur_launch_hardware)/launch/mur_base.launch"> 
+            <arg name="mir_type" value="mir_600"/>
+            <arg name="tf_prefix" value="$(arg tf_prefix)"/>
+        </include>
+        </group>     
+    </group>
+
+    <!-- Bringup the left UR -->   
+    <group if="$(eval arg('launch_ur_l') ==true)"> 
+
+        <group ns= "$(arg tf_prefix)/$(arg left_arm_group_name)"> 
+            <param name="robot_state_publisher/tf_prefix" value="$(arg tf_prefix)/$(arg left_arm_group_name)"/>   <!-- Fixing missing tf_prefix forwarding to the ur packages -->
+
+            <node pkg="tf" type="static_transform_publisher" name="lift_top_to_ur_base" args="0 0 0.55 0 0 0 $(arg tf_prefix)/mir/left_lift_top $(arg tf_prefix)/$(arg left_arm_group_name)/base_link 1" />
+
+            <include file="$(find ur_launch_hardware)/launch/dual_ur.launch">
+                <arg name="ur_version" value="ur10e"/>
+                <arg name="robot_ip" value="$(arg left_arm_group_name)"/>
+                <arg name="kinematics_config" value="$(find ur_launch_hardware)/calibration/calibration_UR16e_09.yaml"/>
+                <arg name="controllers" value="$(arg controllers_started)"/>
+                <arg name="stopped_controllers" value="$(arg controllers_stopped)"/>
+                <arg name="reverse_port" value="50005"/>
+                <arg name="script_sender_port" value="50006"/>
+                <arg name="trajectory_port" value="50007"/>
+                <arg name="script_command_port" value="50008"/>
+            </include> 
+
+            <!-- enable ur -->
+            <node name="ewellix_tlt_node" pkg="ewellix_tlt" type="ewellix_tlt_node" output="screen" respawn="true" >
+                <param name="/ewellix/port" value="/dev/ttyUSB0" />
+            </node>
+
+            <node name="lift_tf_broadcaster" pkg="ur_utilities" type="lift_tf_broadcaster.py" output="screen" respawn="true" >
+                <param name="lift_height_topic" value="ewellix_tlt_node/joint_states" />
+                <param name="lift_base_name" value="$(arg tf_prefix)/mir/left_lift_bottom" />
+                <param name="lift_link_name" value="$(arg tf_prefix)/mir/left_lift_top" />
+            </node>
+        </group>
+    </group>
+
+
+    <!-- Bringup the right UR -->   
+    <group if="$(eval arg('launch_ur_r') ==true)"> 
+
+        <group ns= "$(arg tf_prefix)/$(arg right_arm_group_name)"> 
+            <param name="robot_state_publisher/tf_prefix" value="$(arg tf_prefix)/$(arg right_arm_group_name)"/>  
+             <node pkg="tf" type="static_transform_publisher" name="lift_top_to_ur_base" args="0 0 0.55 3.1415 0 0 $(arg tf_prefix)/mir/right_lift_top $(arg tf_prefix)/$(arg right_arm_group_name)/base_link 1" />
+
+
+            <include file="$(find ur_launch_hardware)/launch/dual_ur.launch">
+                <arg name="ur_version" value="ur10e"/>
+                <arg name="robot_ip" value="$(arg right_arm_group_name)"/>
+                <arg name="kinematics_config" value="$(find ur_launch_hardware)/calibration/calibration_UR16e_18.yaml"/>
+                <arg name="controllers" value="$(arg controllers_started)"/>
+                <arg name="stopped_controllers" value="$(arg controllers_stopped)"/>
+                <arg name="UR_prefix" value="$(arg tf_prefix)/$(arg right_arm_group_name)"/>
+            </include> 
+
+            <node name="ewellix_tlt_node" pkg="ewellix_tlt" type="ewellix_tlt_node" output="screen" respawn="true" >
+                <param name="/ewellix/port" value="/dev/ttyUSB2" />
+            </node>
+
+
+
+            <node name="UR_enable" pkg="ur_utilities" type="UR_enable.py" output="screen" respawn="false" >
+                <param name="set_mode_topic" value="/$(arg tf_prefix)/$(arg right_arm_group_name)/ur_hardware_interface/set_mode" />
+            </node>
+
+            <node name="lift_tf_broadcaster" pkg="ewellix_tlt" type="lift_tf_broadcaster.py" output="screen" respawn="true" >
+                <param name="lift_height_topic" value="ewellix_tlt_node/joint_states" />
+                <param name="lift_base_name" value="$(arg tf_prefix)/mir/right_lift_bottom" />
+                <param name="lift_link_name" value="$(arg tf_prefix)/mir/right_lift_top" />
+            </node>
+        </group>
+
+    </group>
+
+
+</launch>

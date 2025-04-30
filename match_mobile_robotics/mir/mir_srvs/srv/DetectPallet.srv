@@ -1,0 +1,9 @@
+geometry_msgs/Pose marker # Position of the marker with respect to global coordinates
+---
+bool result
+uint8 ERROR = 0 # The depth stream from the camera didn't register any frames
+uint8 NO_FRAMES = 1 # The depth stream from the camera didn't register any frames
+uint8 OCCUPIED = 2 # The latest pointcloud shows obstacles
+uint8 FREE = 3 # The latest pointcloud doesn't show any relevant obstacles
+uint8 SKIP_FRAME = 4 # an empty frame arrived due to zero-padding
+uint8 status

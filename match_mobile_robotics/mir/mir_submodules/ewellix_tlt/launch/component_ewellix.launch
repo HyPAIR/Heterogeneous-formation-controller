@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="port" default="/dev/ttyUSB0" />
+    <arg name="tf_prefix" default="" />
+
+    <param name="robot_description" command="$(find xacro)/xacro '$(find ewellix_tlt)/urdf/ewellix_lift_std.urdf.xacro' --inorder cut_model:=true  ewellix_lift_model:=lift_500mm" />
+
+    <!-- Publish tfs -->
+    <node name="robot_state_publisher_ewellix" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" ns="ewellix_tlt_node">
+        <param name="tf_prefix" value="$(arg tf_prefix)" />
+    </node>
+    <!-- Show in Rviz   -->
+    <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find ewellix_tlt)/rviz/view_lift.rviz" /> -->
+
+    <!-- Ewellix ROS Node   -->
+    <node name="ewellix_tlt_node" pkg="ewellix_tlt" type="ewellix_tlt_node" output="screen" respawn="true" >
+        <param name="/ewellix/port" value="$(arg port)" />
+    </node>
+
+</launch>
+

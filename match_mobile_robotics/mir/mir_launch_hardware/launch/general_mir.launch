@@ -1,0 +1,66 @@
+<launch>
+    <arg name="tf_prefix" default=""/>
+    <arg name="move_base" default="true"/>
+    <arg name="move_base_selector" default="move_base" doc="move_base or move_base_flex"/>
+    <arg name="global_planner" default="GlobalPlanner" doc="Name of the global planner that should be used by the navigation stack" />
+    <arg name="global_planner_config" doc="Path to the global config file." />
+    <arg name="local_planner" default="DWAPlannerROS" doc="Name of the local planner that should be used by the navigation stack"/>
+    <arg name="local_planner_config" doc="Path to the local config file." />
+    <arg name="start_move_base_simple" default="false" doc="If set to true this will launch the move_base_simple_relay node which controls the more complex move_base_flex action interface with a single goal topic" />
+
+    <arg name="robot_description" doc="The path to load the robot_description param" />
+    <arg name="localization_type" default="mocap" />
+    <arg name="localization_mode" default="0" />
+    <arg name="mocap_frame_id" default="(arg tf_prefix)" />
+    <arg name="external_localization" default="False"/>
+    <arg name="localization_topic" default="/qualisys/mur620a/pose"/>
+
+    <include file="$(find mir_driver)/launch/mir.launch">
+        <arg name="tf_prefix" value="$(arg tf_prefix)"/>
+        <arg name="robot_description" value="$(arg robot_description)"/>
+        <arg name="external_localization" value="$(arg external_localization)"/>
+    </include>
+
+    <group if="$(eval move_base)">
+        <remap from="move_base/cmd_vel" to="cmd_vel"/>
+
+        <!-- Start of move base or move base flex -->
+        <group if="$(eval move_base_selector=='move_base')">
+            <include file="$(find mir_navigation)/launch/move_base.launch" pass_all_args="true">
+                <arg name="global_planner" value="$(arg global_planner)"/>
+                <arg name="local_planner" value="$(arg local_planner)"/>
+            </include>
+        </group>
+        <group if="$(eval move_base_selector=='move_base_flex')">
+            <include file="$(find mir_navigation)/launch/move_base_flex.launch" >
+                <arg name="global_planner" value="$(arg global_planner)"/>
+                <arg name="global_planner_config" value="$(arg global_planner_config)" />
+                <arg name="local_planner" value="$(arg local_planner)"/>
+                <arg name="local_planner_config" value="$(arg local_planner_config)" />
+                <arg name="tf_prefix" value="$(arg tf_prefix)"/>
+                <arg name="start_move_base_simple" value="$(arg start_move_base_simple)"/> 
+            </include>
+        </group>
+    </group>
+
+    <node name="mir_pose_simple" pkg="mir_navigation" type="mir_pose_simple.py" output="screen">
+		<param name="localization_type" value="$(arg localization_type)"/>
+		<param name="odom_topic" value="mobile_base_controller/odom"/>
+		<param name="robot_pose_topic" value="robot_pose"/>
+		<param name="mocap_topic" value="/qualisys/$(arg mocap_frame_id)/pose"/>
+	</node>
+
+    <node name="rgb_control" pkg="mir_launch_hardware" type="rgb_control.py" output="screen">
+	</node>
+
+    <group if="$(arg external_localization)">
+        <node pkg="mir_launch_hardware" type="external_localization_broadcaster.py" name="external_localization_broadcaster">
+            <param name="tf_prefix" value="$(arg tf_prefix)"/>
+            <param name="localization_topic" value="$(arg localization_topic)"/>
+        </node>
+
+        <!-- static transform publisher to fake the odom frame -->
+        <node pkg="tf2_ros" type="static_transform_publisher" name="odom_transformer" args="0 0 0 0 0 0 map $(arg tf_prefix)/odom"/>
+    </group>
+
+</launch>

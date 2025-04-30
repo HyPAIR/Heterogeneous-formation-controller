@@ -1,0 +1,60 @@
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: &loop_hz 500
+
+pos_joint_traj_controller:
+  type: position_controllers/JointTrajectoryController
+  joints: &robot_joints
+    - $(arg prefix)shoulder_pan_joint
+    - $(arg prefix)shoulder_lift_joint
+    - $(arg prefix)elbow_joint
+    - $(arg prefix)wrist_1_joint
+    - $(arg prefix)wrist_2_joint
+    - $(arg prefix)wrist_3_joint
+  constraints:
+    goal_time: 0.6
+    stopped_velocity_tolerance: 0.05
+    shoulder_pan_joint: {trajectory: 0.1, goal: 0.1}
+    shoulder_lift_joint: {trajectory: 0.1, goal: 0.1}
+    elbow_joint: {trajectory: 0.1, goal: 0.1}
+    wrist_1_joint: {trajectory: 0.1, goal: 0.1}
+    wrist_2_joint: {trajectory: 0.1, goal: 0.1}
+    wrist_3_joint: {trajectory: 0.1, goal: 0.1}
+  stop_trajectory_duration: 0.5
+  state_publish_rate: *loop_hz
+  action_monitor_rate: 10
+
+joint_group_pos_controller:
+  type: position_controllers/JointGroupPositionController
+  joints: 
+    - $(arg prefix)shoulder_pan_joint
+    - $(arg prefix)shoulder_lift_joint
+    - $(arg prefix)elbow_joint
+    - $(arg prefix)wrist_1_joint
+    - $(arg prefix)wrist_2_joint
+    - $(arg prefix)wrist_3_joint
+
+joint_group_vel_controller:
+  type: velocity_controllers/JointGroupVelocityController
+  joints: 
+    - $(arg prefix)shoulder_pan_joint
+    - $(arg prefix)shoulder_lift_joint
+    - $(arg prefix)elbow_joint
+    - $(arg prefix)wrist_1_joint
+    - $(arg prefix)wrist_2_joint
+    - $(arg prefix)wrist_3_joint
+
+
+move_group/controller_list:
+ - name: arm_controller
+   action_ns: follow_joint_trajectory
+   type: FollowJointTrajectory
+   default: True
+   joints:
+    - $(arg prefix)shoulder_pan_joint
+    - $(arg prefix)shoulder_lift_joint
+    - $(arg prefix)elbow_joint
+    - $(arg prefix)wrist_1_joint
+    - $(arg prefix)wrist_2_joint
+    - $(arg prefix)wrist_3_joint
+

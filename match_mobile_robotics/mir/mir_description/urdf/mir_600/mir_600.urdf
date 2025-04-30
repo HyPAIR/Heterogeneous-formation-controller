@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="mir_600" >
+
+	<xacro:arg name="tf_prefix" default=''/>
+
+	<!-- MiR600 base -->
+	<xacro:include filename="$(find mir_description)/urdf/mir_600/mir_600.urdf.xacro" />
+
+	<xacro:mir_600/>
+</robot>

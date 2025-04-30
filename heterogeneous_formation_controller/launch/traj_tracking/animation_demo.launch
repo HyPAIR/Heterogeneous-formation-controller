@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- <node pkg = "trajectory_tracking" name = "plotter" type = "plotter.py">
+    </node> -->
+    <node pkg = "heterogeneous_formation_controller" name = "animation_demo_sim" type = "animation_demo_sim">
+    </node>
+</launch>

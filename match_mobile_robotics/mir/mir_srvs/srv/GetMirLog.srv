@@ -1,0 +1,3 @@
+int32 num
+---
+rosgraph_msgs/Log[] log_entries

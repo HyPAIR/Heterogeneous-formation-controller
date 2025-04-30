@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="mur205" >
+
+	<xacro:arg name="robot_namespace" default=''/>
+	<xacro:arg name="tf_prefix" default=''/>
+
+	<!-- MiR200 base -->
+	<xacro:include filename="$(find mir_description)/urdf/mir_200/mir_200.urdf.xacro" />
+	<xacro:include filename="$(find mir_description)/urdf/mir_200/mir_200.gazebo.xacro" />
+	<!-- UR5 robot arm -->
+  	<xacro:include filename="$(find ur_description)/urdf/inc/ur5_macro.xacro"/>
+	<!-- Include plugin xacros -->
+	<xacro:include filename="$(find mir_description)/urdf/general/plugins.gazebo.xacro" />
+
+	<!-- Init the MiR200 marco that is also used for the hardware -->
+	<xacro:mir_200 />
+	<!-- Init the MiR200 macro that includes all infos that Gazebo need to function -->
+	<xacro:mir_200_gazebo tf_prefix="$(arg tf_prefix)" robot_namespace="$(arg robot_namespace)"/>
+
+	<!-- Init the UR5 robot arm macro -->
+	<xacro:ur5_robot prefix="UR5/"/>
+	
+	<!-- Init the plugins that run the MiR in Gazebo -->
+	<xacro:controller_plugin_gazebo robot_namespace="$(arg robot_namespace)"/>
+
+	<joint name="plattform_manipulator_joint" type="fixed">
+			<parent link="base_link" />
+			<child link="UR5/base_link" />
+			<origin xyz="0.215 0.1 0.35" rpy="0 0 0" />
+	</joint>
+
+	<!-- <gazebo>
+		<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">		
+			<robotNamespace>mir</robotNamespace>
+			<robotParam>mir/robot_description</robotParam>
+			<controlPeriod>0.001</controlPeriod>
+			<legacyModeNS>true</legacyModeNS>
+		</plugin>
+	</gazebo>
+	 -->
+	<!-- <joint name="plattform_manipulator_joint" type="fixed">
+			<parent link="mir/base_link" />
+			<child link="ur/base_link" />
+			<origin xyz="0.215 0.1 0.35" rpy="0 0 0" />
+	</joint> -->
+
+	<!-- UR5 -->
+	<!-- <xacro:arg name="transmission_hw_interface" default="hardware_interface/PositionJointInterface"/> -->
+
+	<!-- ur5 -->
+	<!-- <xacro:include filename="$(find ur_description)/urdf/ur5.urdf.xacro" /> -->
+
+	<!-- arm -->
+	<!--xacro:arg name="kinematics_config" default="$(find ur_description)/config/ur5_default.yaml"/>
+	<xacro:ur5_robot prefix="ur/" joint_limited="false"
+		transmission_hw_interface="$(arg transmission_hw_interface)"
+		kinematics_file="${load_yaml('$(arg kinematics_config)')}"
+	/> -->
+
+
+	<!-- <gazebo>
+		<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">		
+			<robotNamespace>ur</robotNamespace>
+			<robotParam>ur/robot_description</robotParam>
+			<controlPeriod>0.001</controlPeriod>
+			<legacyModeNS>true</legacyModeNS>
+		</plugin>
+	</gazebo> -->
+</robot>

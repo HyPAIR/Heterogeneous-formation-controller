@@ -1,0 +1,54 @@
+obstacle1:
+  vx1: -30.5
+  vy1: -30
+  vx2: -30.5
+  vy2: 30
+  vx3: -30
+  vy3: 30
+  vx4: -30
+  vy4: -30
+obstacle2:
+  vx1: -30
+  vy1: 30
+  vx2: -30
+  vy2: 30.5
+  vx3: 30
+  vy3: 30.5
+  vx4: 30
+  vy4: 30
+obstacle3:
+  vx1: 30
+  vy1: 30
+  vx2: 30.5
+  vy2: 30
+  vx3: 30.5
+  vy3: -30
+  vx4: 30
+  vy4: -30
+obstacle4:
+  vx1: -30
+  vy1: -30
+  vx2: -30
+  vy2: -30.5
+  vx3: 30
+  vy3: -30.5
+  vx4: 30
+  vy4: -30
+obstacle5:
+  vx1: -5
+  vy1: 3.5
+  vx2: 5
+  vy2: 3.5
+  vx3: 5
+  vy3: 30.5
+  vx4: -5
+  vy4: 30.5
+obstacle6:
+  vx1: -5
+  vy1: -30.5
+  vx2: 5
+  vy2: -30.5
+  vx3: 5
+  vy3: -3.5
+  vx4: -5
+  vy4: -3.5

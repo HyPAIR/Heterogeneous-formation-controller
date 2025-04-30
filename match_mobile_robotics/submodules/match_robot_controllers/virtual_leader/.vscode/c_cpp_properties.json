@@ -1,0 +1,32 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/rosmatch/catkin_ws/devel/include/**",
+        "/opt/ros/noetic/include/**",
+        "/home/rosmatch/catkin_ws/src/match_mobile_robotics/mir/mir_submodules/ewellix_tlt/include/**",
+        "/home/rosmatch/catkin_ws/src/match_mobile_robotics/submodules/gazebo_ros_link_attacher/include/**",
+        "/home/rosmatch/catkin_ws/src/match_mobile_robotics/submodules/match_path_planning/local_plan_follower/include/**",
+        "/home/rosmatch/catkin_ws/src/match_mobile_robotics/match_gazebo/include/**",
+        "/home/rosmatch/catkin_ws/src/match_mobile_robotics/ur/robotiq/robotiq_gazebo/include/**",
+        "/home/rosmatch/catkin_ws/src/match_mobile_robotics/submodules/match_path_planning/splined_voronoi/splined_voronoi/include/**",
+        "/home/rosmatch/catkin_ws/src/match_mobile_robotics/ur/ur_calibrated_pose_pub/include/**",
+        "/home/rosmatch/catkin_ws/src/match_mobile_robotics/ur/ur_ros_driver/ur_calibration/include/**",
+        "/home/rosmatch/catkin_ws/src/match_mobile_robotics/ur/ur_controllers_extended/include/**",
+        "/home/rosmatch/catkin_ws/src/match_mobile_robotics/ur/universal_robot/ur_kinematics/include/**",
+        "/home/rosmatch/catkin_ws/src/match_mobile_robotics/ur/ur_ros_driver/ur_robot_driver/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

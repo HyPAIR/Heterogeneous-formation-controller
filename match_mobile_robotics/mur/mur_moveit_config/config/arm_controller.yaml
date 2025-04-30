@@ -1,0 +1,74 @@
+# MoveIt-specific simulation settings
+# moveit_sim_hw_interface:
+#   joint_model_group: controllers_initial_group_
+#   joint_model_group_pose: controllers_initial_pose_
+# Settings for ros_control control loop
+# generic_hw_control_loop:
+#   loop_hz: 300
+#   cycle_time_error_threshold: 0.01
+# Settings for ros_control hardware interface
+# hardware_interface:
+#   joints:
+#     # - bl_caster_rotation_joint
+#     # - bl_caster_wheel_joint
+#     # - br_caster_rotation_joint
+#     # - br_caster_wheel_joint
+#     # - fl_caster_rotation_joint
+#     # - fl_caster_wheel_joint
+#     # - fr_caster_rotation_joint
+#     # - fr_caster_wheel_joint
+#     # - left_wheel_joint
+#     # - right_wheel_joint
+#     - shoulder_pan_joint
+#     - shoulder_lift_joint
+#     - elbow_joint
+#     - wrist_1_joint
+#     - wrist_2_joint
+#     - wrist_3_joint
+#   sim_control_mode: 1  # 0: position, 1: velocity
+# Publish all joint states
+# Creates the /joint_states topic necessary in ROS
+# joint_state_controller:
+#   type: joint_state_controller/JointStateController
+#   publish_rate: 50
+
+# controller_list:
+#   []
+
+arm_controller:
+  type: velocity_controllers/JointTrajectoryController
+  joints:
+    - $(arg prefix)shoulder_pan_joint
+    - $(arg prefix)shoulder_lift_joint
+    - $(arg prefix)elbow_joint
+    - $(arg prefix)wrist_1_joint
+    - $(arg prefix)wrist_2_joint
+    - $(arg prefix)wrist_3_joint
+  # gains:
+  #   /mur216/arm_controller/gains/UR16/shoulder_pan_joint: {p: 1000,  d: 1, i: 1, i_clamp: 1}
+  #   /mur216/arm_controller/gains/UR16/shoulder_lift_joint: {p: 1000,  d: 1, i: 1, i_clamp: 1}
+  #   /mur216/arm_controller/gains/UR16/elbow_joint: {p: 1000,  d: 1, i: 1, i_clamp: 1}
+  #   /mur216/arm_controller/gains/UR16/wrist_1_joint: {p: 1000,  d: 1, i: 1, i_clamp: 1}
+  #   /mur216/arm_controller/gains/UR16/wrist_2_joint: {p: 1000,  d: 1, i: 1, i_clamp: 1}
+  #   /mur216/arm_controller/gains/UR16/wrist_3_joint: {p: 1000,  d: 1, i: 1, i_clamp: 1}
+  gains:
+    #!!These values have not been optimized!!
+    /mur216/arm_controller/gains/UR16/shoulder_pan_joint: {p: 5.0,  i: 0.05, d: 0.1, i_clamp: 1}
+    /mur216/arm_controller/gains/UR16/shoulder_lift_joint: {p: 5.0,  i: 0.05, d: 0.1, i_clamp: 1}
+    /mur216/arm_controller/gains/UR16/elbow_joint: {p: 5.0,  i: 0.05, d: 0.1, i_clamp: 1}
+    /mur216/arm_controller/gains/UR16/wrist_1_joint: {p: 5.0,  i: 0.05, d: 0.1, i_clamp: 1}
+    /mur216/arm_controller/gains/UR16/wrist_2_joint: {p: 5.0,  i: 0.05, d: 0.1, i_clamp: 1}
+    /mur216/arm_controller/gains/UR16/wrist_3_joint: {p: 5.0,  i: 0.05, d: 0.1, i_clamp: 1}
+  constraints:
+    goal_time: 0.6
+    stopped_velocity_tolerance: 0.05
+    shoulder_pan_joint: {trajectory: 0.1, goal: 0.1}
+    shoulder_lift_joint: {trajectory: 0.1, goal: 0.1}
+    elbow_joint: {trajectory: 0.1, goal: 0.1}
+    wrist_1_joint: {trajectory: 0.1, goal: 0.1}
+    wrist_2_joint: {trajectory: 0.1, goal: 0.1}
+    wrist_3_joint: {trajectory: 0.1, goal: 0.1}
+  stop_trajectory_duration: 0.5
+  state_publish_rate:  25
+  action_monitor_rate: 10
+

@@ -1,0 +1,6 @@
+dual_arm_collision_avoidance:
+  joint_names: ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint', 'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
+  rate: 25
+  collision_objects_per_link: 2
+  safety_dist_threshold: 0.2
+  warning_dist_threshold: 0.3

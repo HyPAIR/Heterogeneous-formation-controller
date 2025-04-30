@@ -1,0 +1,33 @@
+<launch>
+    <arg name="tf_prefix" default=""/>
+    <arg name="ur_version" default="ur5"/>
+    <arg name="kinematics_config" default="$(find ur_launch_hardware)/config/calibration.yaml"/>
+    <arg name="moveit_config_pkg" value="$(arg ur_version)_moveit_config"/>
+    <arg name="robot_ip" default="ur"/>
+
+    <!-- Bringup the enabeling procdeure for the ur -->
+    <node name="UR_enable" pkg="ur_utilities" type="UR_enable.py" output="screen" respawn="false" >
+                <param name="set_mode_topic" value="/$(arg tf_prefix)/ur_hardware_interface/set_mode" />
+    </node>
+     
+    <!-- Interface for gripper abstraction -->
+    <node name="gripper_interface" type="grip_service_interface.py" pkg="ur_launch_hardware"/>
+
+    <!-- Bringup the ur driver within proper namespaces -->
+    <remap from="/robot_description" to="robot_description"/>
+    <rosparam file="$(find ur_launch_hardware)/config/controllers.yaml" command="load" subst_value="true"/>
+    <include file="$(find ur_robot_driver)/launch/$(arg ur_version)_bringup.launch" pass_all_args="true">
+        <arg name="controllers" value="joint_state_controller"/>
+        <arg name="stopped_controllers" value="position_joint_controller"/>      
+        <arg name="kinematics_config" value="$(arg kinematics_config)"/>
+        <arg name="robot_ip" value="$(arg robot_ip)"/>    
+    </include>
+
+    <include file="$(eval find(moveit_config_pkg)+'/launch/move_group.launch')"/>
+
+
+    <!-- <node name="ur_controller_spawner" pkg="controller_manager" type="spawner" output="screen"
+        args="arm_controller">
+    </node> -->
+
+</launch>

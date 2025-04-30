@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<robot name="ewellix_lift_std" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:arg name="robot_id" default="/" />  
+    <xacro:arg name="prefix" default="" />  
+    <xacro:arg name="base_frame" default="world" />
+    <xacro:arg name="cut_model" default="flase" />
+    <xacro:arg name="ewellix_lift_model" default="lift_500mm" />
+    <xacro:property name="lift_selector" default="$(arg ewellix_lift_model)" />
+
+    <xacro:include filename="$(find ewellix_tlt)/urdf/ewellix_$(arg ewellix_lift_model).urdf.xacro" />
+
+    <gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType> 
+        <legacyModeNS>false</legacyModeNS> 
+        </plugin>
+    </gazebo>
+
+
+    <link name="world"/>
+
+    <xacro:if value="${lift_selector == 'lift_500mm'}">
+
+        <xacro:ewellix_lift_500mm prefix="$(arg prefix)" parent ="$(arg base_frame)" cut_model = "$(arg cut_model)" >
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:ewellix_lift_500mm>
+    
+    </xacro:if>
+
+    <xacro:if value="${lift_selector == 'lift_900mm'}">
+
+        <xacro:ewellix_lift_900mm prefix="$(arg prefix)" parent ="$(arg base_frame)" cut_model = "$(arg cut_model)" >
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:ewellix_lift_900mm>
+
+    </xacro:if>
+
+    <xacro:if value="${lift_selector == 'lift_700mm'}">
+
+        <xacro:ewellix_lift_700mm prefix="$(arg prefix)" parent ="$(arg base_frame)" cut_model = "$(arg cut_model)" >
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:ewellix_lift_700mm>
+    
+    </xacro:if>
+
+
+
+</robot>

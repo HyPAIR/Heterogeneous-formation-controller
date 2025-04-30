@@ -1,0 +1,25 @@
+<launch>
+    <arg name="tf_prefix" default=""/>
+    <arg name="move_base" default="true"/>
+    <arg name="move_base_selector" default="move_base" doc="move_base or move_base_flex"/>
+    <arg name="start_move_base_simple" default="false" doc="If set to true this will launch the move_base_simple_relay node which controls the more complex move_base_flex action interface with a single goal topic" />
+    <arg name="global_planner" default="GlobalPlanner" doc="Name of the global planner that should be used by the navigation stack" />
+    <arg name="global_planner_config" default="(find mir_navigation)/config/Planner/GlobalPlanner/GlobalPlanner.yaml" doc="Path to the global config file." />
+    <arg name="local_planner" default="DWAPlannerROS" doc="Name of the local planner that should be used by the navigation stack"/>
+    <arg name="local_planner_config" default="(find mir_navigation)/config/Planner/LocalPlanner/DWAPlannerROS.yaml" doc="Path to the local config file." />
+    <arg name="robot_description" default="$(find mir_description)/urdf/mir_200/mir_200.urdf" doc="The path to load the robot_description param" />
+
+    <include file="$(find mir_launch_hardware)/launch/general_mir.launch">
+        <arg name="tf_prefix" value="$(arg tf_prefix)"/>
+        <arg name="move_base" value="$(arg move_base)"/>
+        <arg name="move_base_selector" value="$(arg move_base_selector)" />
+        <arg name="start_move_base_simple" value="$(arg start_move_base_simple)" />
+        <arg name="global_planner" value="$(arg global_planner)" />
+        <arg name="global_planner_config" value="$(arg global_planner_config)" />
+        <arg name="local_planner" value="$(arg local_planner)" />
+        <arg name="local_planner_config" value="$(arg local_planner_config)" />
+
+        <!-- This launch file will pass the MiR100 files to the mir_driver.launch-->
+        <arg name="robot_description" value="$(arg robot_description)"/>
+    </include>
+</launch>

@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<launch>
+    <arg name="robot_names" default='["mir1", "mir2", "mir3"]'/>
+    <arg name="relative_positions_x" default="[0.0, 2, 2]"/>
+    <arg name="relative_positions_y" default="[0.0, 1.0, -1.0]"/>
+
+    <rosparam file="$(find formation_controller)/config/formation_controller_config.yaml" command="load" subst_value="true"/>
+
+	<node name="state_machine" pkg="formation_controller" type="state_machine.py" output="screen">
+		<rosparam param="relative_positions_x" subst_value="True">$(arg relative_positions_x) </rosparam>
+		<rosparam param="relative_positions_y" subst_value="True">$(arg relative_positions_y) </rosparam>
+		<rosparam param="robot_names" subst_value="True">$(arg robot_names) </rosparam>
+	</node>
+
+</launch>

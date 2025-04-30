@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">	
+	<xacro:macro name="actuated_wheel_gazebo" params="locationprefix">
+		<gazebo reference="${locationprefix}_wheel_link">
+			<material>Gazebo/DarkGrey</material>
+		</gazebo>
+	</xacro:macro>
+
+	<xacro:macro name="caster_wheel_gazebo" params="locationprefix">
+		<gazebo reference="${locationprefix}_caster_rotation_link">
+			<material>Gazebo/Grey</material>
+		</gazebo>
+
+		<gazebo reference="${locationprefix}_caster_wheel_link">
+			<material>Gazebo/DarkGrey</material>
+		</gazebo>
+	</xacro:macro>
+
+	<xacro:macro name="mir_600_wheel_transmission" params="locationprefix">
+		<transmission name="${locationprefix}_wheel_trans">
+		<type>transmission_interface/SimpleTransmission</type>
+		<joint name="${locationprefix}_wheel_joint">
+			<hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+		</joint>
+		<actuator name="${locationprefix}_wheel_motor">
+			<hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+		</transmission>
+	</xacro:macro>
+
+	<xacro:macro name="mir_600_wheel_transmissions" params="">
+		<xacro:mir_600_wheel_transmission locationprefix="left"/>
+		<xacro:mir_600_wheel_transmission locationprefix="right"/>
+	</xacro:macro>
+</robot>

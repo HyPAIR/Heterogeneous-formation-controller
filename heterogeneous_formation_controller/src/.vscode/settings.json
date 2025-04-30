@@ -1,0 +1,14 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/weijian/Heterogeneous_formation/devel/lib/python3/dist-packages",
+        "/home/weijian/CPDOT/devel/lib/python3/dist-packages",
+        "/home/weijian/VisFormation/devel/lib/python3/dist-packages",
+        "/opt/ros/noetic/lib/python3/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/weijian/Heterogeneous_formation/devel/lib/python3/dist-packages",
+        "/home/weijian/CPDOT/devel/lib/python3/dist-packages",
+        "/home/weijian/VisFormation/devel/lib/python3/dist-packages",
+        "/opt/ros/noetic/lib/python3/dist-packages"
+    ]
+}

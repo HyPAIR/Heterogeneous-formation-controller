@@ -1,0 +1,10 @@
+string command 		# The light command wanted or cancel command
+string color1 		# first color (in format "ffffff")
+string color2 		# second color (in format "ffffff")
+string leds 		# The LEDs we want to change in "1,2,3-5,7" format or "all"
+string token		# Set the desired token - if a command with this token exists it is removed - also used for cancel command
+float64 timeout 	# if zero or below the message never times out
+uint16 priority 	# Priority of the command in range 0 - 1000
+---
+string token 		# A token is return which can be used to cancel the light command
+bool success		# Was the command accepted?

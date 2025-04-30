@@ -1,0 +1,24 @@
+
+<launch>
+<arg name="tf_prefix" default="mur620c"/>
+<arg name="mur_ns" default="$(arg tf_prefix)"/>
+<arg name="model_name" default="mur620"/>   <!-- "For MoveIt" -->
+
+
+<!-- arm_controller has to be started -->
+<!-- For this: call service to stop Ur and then service play again after mur launch -->
+
+<group ns="$(arg tf_prefix)">
+        <arg name="prefix" value="UR10"/>
+
+    	<!-- Start all necessary moveit files -->
+		<include file="$(find mur_moveit_config)/launch/start_moveit_620.launch">
+			<arg name="model_name" value="$(arg model_name)"/>
+			<arg name="mur_ns" value="$(arg mur_ns)"/>
+			<arg name="prefix" value="$(arg prefix)"/>
+			<arg name="set_global_robot_description" value="true"/>
+		</include>
+        
+    </group>
+
+</launch>

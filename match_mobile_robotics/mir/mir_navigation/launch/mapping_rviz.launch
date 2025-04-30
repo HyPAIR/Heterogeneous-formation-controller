@@ -1,0 +1,8 @@
+<launch>
+  <!-- include run file from the buttom to top. So the first file will be excuted at the first-->
+  
+  <include file="$(find mir_navigation)/launch/mapping.launch" />
+
+  <node type="rviz" name="rviz" pkg="rviz" args="-d $(find mir_navigation)/rviz/navigation_mapping.rviz" />
+  
+</launch>

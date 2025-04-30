@@ -1,0 +1,54 @@
+<launch>
+  <!-- By default we do not overwrite the URDF. Change the following to true to change the default behavior -->
+  <arg name="load_robot_description" default="false"/>
+
+  <!-- The name of the parameter under which the URDF is loaded -->
+  <arg name="robot_description" default="robot_description"/>
+  <arg name="model_name" default="model_name"/>
+  <arg name="set_global_robot_description" default="false"/>
+
+  <arg name="prefix"/>
+
+  <!-- Load universal robot description format (URDF) -->
+  <!-- <param if="$(arg load_robot_description)" name="$(arg robot_description)" command="xacro '$(find mur_description)/urdf/mur_216.gazebo.xacro'"/> -->
+
+  <!-- The semantic description that corresponds to the URDF -->
+  <group unless="$(eval arg('model_name') == 'mur620')">
+	<param name="$(arg robot_description)_semantic" command="$(find xacro)/xacro $(find mur_moveit_config)/config/mur.srdf.xacro prefix:=$(arg prefix) model_name:=$(arg model_name)"/> 
+  	<param name="$(arg prefix)$(arg robot_description)_semantic" command="$(find xacro)/xacro $(find mur_moveit_config)/config/mur.srdf.xacro prefix:=$(arg prefix) model_name:=$(arg model_name)"/> 
+  	<group if="$(arg set_global_robot_description)">
+    	<param name="$(arg robot_description)_semantic" command="$(find xacro)/xacro $(find mur_moveit_config)/config/mur.srdf.xacro prefix:=$(arg prefix) model_name:=$(arg model_name)"/> 
+  	</group>
+
+	<!-- Load updated joint limits (override information from URDF) -->
+	<group ns="$(arg robot_description)_planning">
+		<rosparam command="load" file="$(find mur_moveit_config)/config/joint_limits.yaml" subst_value="true"/>
+	</group>
+
+	<!-- Load default settings for kinematics; these settings are overridden by settings in a node's namespace -->
+	<group ns="$(arg robot_description)_kinematics">
+		<rosparam command="load" file="$(find mur_moveit_config)/config/kinematics.yaml"/>
+	</group>
+  </group>
+
+  <!-- MUR620: -->
+  <group if="$(eval arg('model_name') == 'mur620')">
+	<param name="$(arg robot_description)_semantic" command="$(find xacro)/xacro $(find mur_moveit_config)/config/mur620.srdf.xacro prefix:=$(arg prefix) model_name:=$(arg model_name)"/> 
+  	<param name="$(arg prefix)_l/$(arg robot_description)_semantic" command="$(find xacro)/xacro $(find mur_moveit_config)/config/mur620.srdf.xacro prefix:=$(arg prefix) model_name:=$(arg model_name)"/> 
+	<param name="$(arg prefix)_r/$(arg robot_description)_semantic" command="$(find xacro)/xacro $(find mur_moveit_config)/config/mur620.srdf.xacro prefix:=$(arg prefix) model_name:=$(arg model_name)"/> 
+  	<group if="$(arg set_global_robot_description)">
+    	<param name="$(arg robot_description)_semantic" command="$(find xacro)/xacro $(find mur_moveit_config)/config/mur620.srdf.xacro prefix:=$(arg prefix) model_name:=$(arg model_name)"/> 
+  	</group>
+
+	<!-- Load updated joint limits (override information from URDF) -->
+	<group ns="$(arg robot_description)_planning">
+		<rosparam command="load" file="$(find mur_moveit_config)/config/joint_limits620.yaml" subst_value="true"/>
+	</group>
+
+	<!-- Load default settings for kinematics; these settings are overridden by settings in a node's namespace -->
+	<group ns="$(arg robot_description)_kinematics">
+		<rosparam command="load" file="$(find mur_moveit_config)/config/kinematics620.yaml"/>
+	</group>
+  </group>
+
+</launch>

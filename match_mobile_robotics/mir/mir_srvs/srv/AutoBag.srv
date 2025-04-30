@@ -1,0 +1,5 @@
+string path
+# OR provide filename if the target should be used as is.
+string filename
+---
+bool success

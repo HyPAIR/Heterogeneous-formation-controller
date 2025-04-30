@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="mir100" >
+
+	<xacro:arg name="robot_namespace" default=''/>
+	<xacro:arg name="tf_prefix" default=''/>
+
+	<!-- MiR100 base -->
+	<xacro:include filename="$(find mir_description)/urdf/mir_100/mir_100.urdf.xacro" />
+	<xacro:include filename="$(find mir_description)/urdf/mir_100/mir_100.gazebo.xacro" />
+
+	<!-- Include plugin xacros -->
+	<xacro:include filename="$(find mir_description)/urdf/general/plugins.gazebo.xacro" />
+
+	<!-- Init the MiR100 marco that is also used for the hardware -->
+	<xacro:mir_100 />
+	<!-- Init the MiR100 macro that includes all infos that Gazebo need to function -->
+	<xacro:mir_100_gazebo tf_prefix="$(arg tf_prefix)" robot_namespace="$(arg robot_namespace)"/>
+	<!-- Init the plugins that run the MiR in Gazebo -->
+	<xacro:controller_plugin_gazebo robot_namespace="$(arg robot_namespace)"/>
+	<xacro:p3d_base_controller robot_namespace="$(arg robot_namespace)"/>
+</robot>

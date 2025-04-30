@@ -1,0 +1,48 @@
+<launch>
+	<arg name="tf_prefix"    default="mur205" />
+	<arg name="robot_x"   default="2.0" />
+	<arg name="robot_y"   default="0.0" />
+	<arg name="robot_yaw" default="0.0" />
+	<arg name="model_name" default="mur205"/>
+	<arg name="move_base_selector" default="move_base" />
+	<arg name="global_planner" default="GlobalPlanner" />
+	<arg name="local_planner" default="DWAPlannerROS" />
+	<arg name="robot_urdf_path" value="$(find mur_description)/urdf/mur_205.gazebo.xacro"/>
+	<arg name="prefix" value="UR5/" doc="Prefix for the UR16 links"/>
+
+	<group ns = "$(arg model_name)">
+		<rosparam file="$(find mur_moveit_config)/config/arm_controller.yaml" command="load" subst_value="true"/> 
+		<rosparam file="$(find mur_control)/config/mur216e_controllers.yaml" command="load" subst_value="true"/> 
+	
+	
+		<include file="$(find mir_launch_sim)/launch/utils/general_mir.launch">
+			<arg name="tf_prefix" value="$(arg tf_prefix)"/>
+			<arg name="robot_x"  value="$(arg robot_x)"/>
+			<arg name="robot_y"  value="$(arg robot_y)"/>
+			<arg name="robot_yaw"  value="$(arg robot_yaw)"/>
+			<arg name="model_name" value="$(arg model_name)"/>
+			<arg name="robot_urdf_path" value="$(arg robot_urdf_path)"/>
+
+			<arg name="move_base_selector" value="$(arg move_base_selector)"/>
+			<arg name="global_planner" value="$(arg global_planner)" />
+			<arg name="local_planner" value="$(arg local_planner)" />
+		</include>
+	
+
+			<!-- Start all necessary moveit files -->
+		<include file="$(find mur_moveit_config)/launch/start_moveit.launch">
+			<arg name="model_name" value="$(arg model_name)"/>
+			<arg name="prefix" value="$(arg prefix)"/>
+		</include>
+
+		<node name="ur_controller_spawner" pkg="controller_manager" type="spawner" output="screen"
+			args="arm_controller">
+		</node>
+
+		<node name="ur_controller_stopped_spawner" pkg="controller_manager" type="spawner" output="screen"
+			args="--stopped joint_group_vel_controller">
+		</node>
+		
+	</group> 
+
+</launch>

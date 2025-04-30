@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <!-- Arguments for individual robot setup -->
+  <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+  <arg name="cmd_vel_topic" default="cmd_vel" />
+  <arg name="odom_topic" default="odom" />
+  <arg name="move_forward_only" default="false"/>
+  <arg name="tf_prefix"    default="" />
+  <arg name="robot_name" default="robot0"/>
+  <arg name="robot_model" default="burger"/>
+  <arg name="initial_pose_x" default="0.0"/>
+  <arg name="initial_pose_y" default="0.0"/>
+  <arg name="initial_pose_a" default="0.0"/>
+  <arg name="adjusted_pose_x" value="$(eval float(initial_pose_x) - 1)"/>
+  <arg name="adjusted_pose_y" value="$(eval float(initial_pose_y) - 1)"/>
+  <!-- Namespacing-->
+
+
+
+    <!-- Use $(eval ...) to subtract 1 from arguments -->
+
+
+    <!-- Spawn the robot in Gazebo -->
+
+    <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_map_to_odom_$(arg robot_name)" 
+          args="$(arg initial_pose_x) $(arg initial_pose_y) 0 0 0 0 map $(arg robot_name)/odom" /> -->
+    <!-- Static transform from odom to base_footprint -->
+    <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_odom_to_base_footprint_$(arg robot_name)"
+          args="0 0 0 0 0 0 $(arg robot_name)/odom $(arg robot_name)/base_footprint" /> -->
+    <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_odom_to_base_footprint_$(arg robot_name)"
+          args="0 0 0 0 0 0 odom" /> -->
+    <!-- AMCL for localization -->
+  <group>
+    <include file="$(find turtlebot3_navigation)/launch/amcl.launch">
+      <arg name="tf_prefix" value="$(arg tf_prefix)"/>
+      <arg name="initial_pose_x"  value="$(arg initial_pose_x)"/>
+      <arg name="initial_pose_y"  value="$(arg initial_pose_y)"/>
+      <arg name="initial_pose_a"  value="$(arg initial_pose_a)"/>
+    </include>
+    </group>
+    <!-- <remap to="$(arg tf_prefix)/cmd_vel" from="cmd_vel" />
+  	<remap from="odom" to="$(arg tf_prefix)/odom"/> -->
+    <!-- Move base for navigation -->
+    <!-- <group> -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+    <rosparam file="$(find turtlebot3_navigation)/param/costmap_common_params_$(arg model).yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find turtlebot3_navigation)/param/costmap_common_params_$(arg model).yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find turtlebot3_navigation)/param/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find turtlebot3_navigation)/param/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find turtlebot3_navigation)/param/move_base_params.yaml" command="load" />
+    <rosparam file="$(find turtlebot3_navigation)/param/dwa_local_planner_params_$(arg model).yaml" command="load" />
+
+    <!-- Global Costmap Parameters -->
+    <!-- <param name="global_costmap/observation_sources" value="$(arg tf_prefix)/scan" /> -->
+    <param name="global_costmap/robot_base_frame" value="$(arg tf_prefix)/base_footprint" />
+    <param name="global_costmap/scan/sensor_frame" value="$(arg tf_prefix)/base_scan" />
+    <param name="global_costmap/scan/topic" value="$(arg tf_prefix)/scan" />
+    
+    <!-- Local Costmap Parameters -->
+    <param name="local_costmap/global_frame" value="$(arg tf_prefix)/odom" />
+    <!-- <param name="local_costmap/observation_sources" value="$(arg tf_prefix)/scan" /> -->
+    <param name="local_costmap/robot_base_frame" value="$(arg tf_prefix)/base_footprint" />
+    <param name="local_costmap/scan/sensor_frame" value="$(arg tf_prefix)/base_scan" />
+    <param name="local_costmap/scan/topic" value="$(arg tf_prefix)/scan" />
+    <remap from="/robot1/map" to="/map"/>
+    <remap from="/robot2/map" to="/map"/>
+    <remap from="/robot3/map" to="/map"/>
+  </node>
+    <!-- </group> -->
+
+    <!-- Launch the 2D Pose Estimation automatically -->
+    <!--node name="Localiser" pkg="prm_planner" type="Localiser_multi.py" output="screen">
+      <param name="x" value="$(arg initial_pose_x)"/>
+      <param name="y" value="$(arg initial_pose_y)"/>
+      <param name="yaw" value="$(arg initial_pose_a)"/>
+    </node--> 
+  <!-- <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" 
+        args="-urdf -model $(arg robot_name) -param robot_description 
+              -x $(arg adjusted_pose_x) -y $(arg adjusted_pose_y) -z 0 -Y 0">
+  </node> -->
+</launch>

@@ -1,0 +1,165 @@
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: &loop_hz 500
+
+pos_joint_traj_controller:
+  type: position_controllers/JointTrajectoryController
+  joints: &robot_joints
+    - $(arg prefix)shoulder_pan_joint
+    - $(arg prefix)shoulder_lift_joint
+    - $(arg prefix)elbow_joint
+    - $(arg prefix)wrist_1_joint
+    - $(arg prefix)wrist_2_joint
+    - $(arg prefix)wrist_3_joint
+  constraints:
+    goal_time: 0.6
+    stopped_velocity_tolerance: 0.05
+    shoulder_pan_joint: {trajectory: 0.1, goal: 0.1}
+    shoulder_lift_joint: {trajectory: 0.1, goal: 0.1}
+    elbow_joint: {trajectory: 0.1, goal: 0.1}
+    wrist_1_joint: {trajectory: 0.1, goal: 0.1}
+    wrist_2_joint: {trajectory: 0.1, goal: 0.1}
+    wrist_3_joint: {trajectory: 0.1, goal: 0.1}
+  stop_trajectory_duration: 0.5
+  state_publish_rate: *loop_hz
+  action_monitor_rate: 10
+
+joint_group_pos_controller:
+  type: position_controllers/JointGroupPositionController
+  joints: 
+    - $(arg prefix)shoulder_pan_joint
+    - $(arg prefix)shoulder_lift_joint
+    - $(arg prefix)elbow_joint
+    - $(arg prefix)wrist_1_joint
+    - $(arg prefix)wrist_2_joint
+    - $(arg prefix)wrist_3_joint
+
+joint_group_vel_controller_l/unsafe:
+  type: velocity_controllers/JointGroupVelocityController
+  joints: 
+    - $(arg prefix)_l/shoulder_pan_joint
+    - $(arg prefix)_l/shoulder_lift_joint
+    - $(arg prefix)_l/elbow_joint
+    - $(arg prefix)_l/wrist_1_joint
+    - $(arg prefix)_l/wrist_2_joint
+    - $(arg prefix)_l/wrist_3_joint
+
+joint_group_vel_controller_r/unsafe:
+  type: velocity_controllers/JointGroupVelocityController
+  joints: 
+    - $(arg prefix)_r/shoulder_pan_joint
+    - $(arg prefix)_r/shoulder_lift_joint
+    - $(arg prefix)_r/elbow_joint
+    - $(arg prefix)_r/wrist_1_joint
+    - $(arg prefix)_r/wrist_2_joint
+    - $(arg prefix)_r/wrist_3_joint
+
+
+gains:
+
+  /$(arg mur_ns)/$(arg prefix)_l/arm_controller/gains/UR10_l/shoulder_pan_joint: {p: 5.0,  i: 0.05, d: 0.1, i_clamp: 1}
+  /$(arg mur_ns)/$(arg prefix)_l/arm_controller/gains/UR10_l/shoulder_lift_joint: {p: 5.0,  i: 0.05, d: 0.1, i_clamp: 1}
+  /$(arg mur_ns)/$(arg prefix)_l/arm_controller/gains/UR10_l/elbow_joint: {p: 5.0,  i: 0.05, d: 0.1, i_clamp: 1}
+  /$(arg mur_ns)/$(arg prefix)_l/arm_controller/gains/UR10_l/wrist_1_joint: {p: 5.0,  i: 0.05, d: 0.1, i_clamp: 1}
+  /$(arg mur_ns)/$(arg prefix)_l/arm_controller/gains/UR10_l/wrist_2_joint: {p: 5.0,  i: 0.05, d: 0.1, i_clamp: 1}
+  /$(arg mur_ns)/$(arg prefix)_l/arm_controller/gains/UR10_l/wrist_3_joint: {p: 5.0,  i: 0.05, d: 0.1, i_clamp: 1}
+
+  /$(arg mur_ns)/$(arg prefix)_r/arm_controller/gains/UR10_r/shoulder_pan_joint: {p: 5.0,  i: 0.05, d: 0.1, i_clamp: 1}
+  /$(arg mur_ns)/$(arg prefix)_r/arm_controller/gains/UR10_r/shoulder_lift_joint: {p: 5.0,  i: 0.05, d: 0.1, i_clamp: 1}
+  /$(arg mur_ns)/$(arg prefix)_r/arm_controller/gains/UR10_r/elbow_joint: {p: 5.0,  i: 0.05, d: 0.1, i_clamp: 1}
+  /$(arg mur_ns)/$(arg prefix)_r/arm_controller/gains/UR10_r/wrist_1_joint: {p: 5.0,  i: 0.05, d: 0.1, i_clamp: 1}
+  /$(arg mur_ns)/$(arg prefix)_r/arm_controller/gains/UR10_r/wrist_2_joint: {p: 5.0,  i: 0.05, d: 0.1, i_clamp: 1}
+  /$(arg mur_ns)/$(arg prefix)_r/arm_controller/gains/UR10_r/wrist_3_joint: {p: 5.0,  i: 0.05, d: 0.1, i_clamp: 1}
+
+  /$(arg mur_ns)/gazebo_ros_control/pid_gains/right_lift_joint: {p: 10000.0,  i: 0.05, d: 0.1, i_clamp: 1} # P = 10000
+  /$(arg mur_ns)/gazebo_ros_control/pid_gains/left_lift_joint: {p: 10000.0,  i: 0.05, d: 0.1, i_clamp: 1}
+
+  /$(arg mur_ns)/$(arg prefix)_l/lift_controller/gains/left_lift_joint: {p: 5.0,  i: 0.05, d: 0.1, i_clamp: 1}
+  /$(arg mur_ns)/$(arg prefix)_r/lift_controller/gains/right_lift_joint: {p: 5.0,  i: 0.05, d: 0.1, i_clamp: 1}
+
+
+lift_controller_r: 
+  type: velocity_controllers/JointVelocityController
+  joint: right_lift_joint
+  pid:
+    p: 5.0
+    i: 20.0
+    i_clamp: 100.0
+
+
+lift_controller_l: 
+  type: velocity_controllers/JointVelocityController
+  joint: left_lift_joint
+  pid:
+    p: 5.0
+    i: 20.0
+    i_clamp: 100.0
+
+
+$(arg prefix)_l/arm_controller:
+  type: velocity_controllers/JointTrajectoryController
+  joints:
+    - $(arg prefix)_l/shoulder_pan_joint
+    - $(arg prefix)_l/shoulder_lift_joint
+    - $(arg prefix)_l/elbow_joint
+    - $(arg prefix)_l/wrist_1_joint
+    - $(arg prefix)_l/wrist_2_joint
+    - $(arg prefix)_l/wrist_3_joint
+  constraints:
+    goal_time: 0.6
+    stopped_velocity_tolerance: 0.05
+    shoulder_pan_joint: {trajectory: 0.1, goal: 0.1}
+    shoulder_lift_joint: {trajectory: 0.1, goal: 0.1}
+    elbow_joint: {trajectory: 0.1, goal: 0.1}
+    wrist_1_joint: {trajectory: 0.1, goal: 0.1}
+    wrist_2_joint: {trajectory: 0.1, goal: 0.1}
+    wrist_3_joint: {trajectory: 0.1, goal: 0.1}
+  stop_trajectory_duration: 0.5
+  state_publish_rate:  25
+  action_monitor_rate: 10
+
+$(arg prefix)_r/arm_controller:
+  type: velocity_controllers/JointTrajectoryController
+  joints:
+    - $(arg prefix)_r/shoulder_pan_joint
+    - $(arg prefix)_r/shoulder_lift_joint
+    - $(arg prefix)_r/elbow_joint
+    - $(arg prefix)_r/wrist_1_joint
+    - $(arg prefix)_r/wrist_2_joint
+    - $(arg prefix)_r/wrist_3_joint
+  constraints:
+    goal_time: 0.6
+    stopped_velocity_tolerance: 0.05
+    shoulder_pan_joint: {trajectory: 0.1, goal: 0.1}
+    shoulder_lift_joint: {trajectory: 0.1, goal: 0.1}
+    elbow_joint: {trajectory: 0.1, goal: 0.1}
+    wrist_1_joint: {trajectory: 0.1, goal: 0.1}
+    wrist_2_joint: {trajectory: 0.1, goal: 0.1}
+    wrist_3_joint: {trajectory: 0.1, goal: 0.1}
+  stop_trajectory_duration: 0.5
+  state_publish_rate:  25
+  action_monitor_rate: 10
+
+$(arg prefix)_l/lift_controller: 
+  type: velocity_controllers/JointTrajectoryController
+  joints:
+    - left_lift_joint
+  constraints:
+    goal_time: 0.6
+    stopped_velocity_tolerance: 0.05
+    left_lift_joint: {trajectory: 0.1, goal: 0.1}
+  stop_trajectory_duration: 0.5
+  state_publish_rate:  25
+  action_monitor_rate: 10
+
+$(arg prefix)_r/lift_controller:
+  type: velocity_controllers/JointTrajectoryController
+  joints:
+    - right_lift_joint
+  constraints:
+    goal_time: 0.6
+    stopped_velocity_tolerance: 0.05
+    right_lift_joint: {trajectory: 0.1, goal: 0.1}
+  stop_trajectory_duration: 0.5
+  state_publish_rate:  25
+  action_monitor_rate: 10

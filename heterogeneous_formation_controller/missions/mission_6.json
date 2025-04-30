@@ -1,0 +1,19 @@
+{
+    "robots": {
+      "robot": { "radius": 1, "speed": 1.0 },
+      "default": { "radius": 1, "speed": 1.0 },
+      "seed": {"seed": [0]}
+    },
+  
+    "agents": [
+      {"name": "robot", "start": [-12.0, 10.0, 1.0], "goal": [18.0, 0.0083668324999979227, 1.0], "radius": 1, "speed": 1.0, "type": 0 },
+      {"name": "robot", "start": [5.0, 0.0, 1.0], "goal": [-10.991633167500002, -8, 1.0], "radius": 1, "speed": 1.0, "type": 0 },
+      {"name": "robot", "start": [20.0, 3.0, 1.0], "goal": [20, -1, 1.0], "radius": 1, "speed": 1.0, "type": 1 },
+      {"name": "robot", "start": [15.0, 10.0, 1.0], "goal": [20.0, 1.0167336649999998, 1.0], "radius": 1, "speed": 1.0, "type": 1 },
+      {"name": "robot", "start": [-20.0, -4.0, 1.0], "goal": [-12, -10, 1.0], "radius": 1, "speed": 1.0, "type": 1},
+      {"name": "robot", "start": [-24.0, -15.0, 1.0], "goal": [-9.9832663349999997, -10, 1.0], "radius": 1, "speed": 1.0, "type": 1}
+      
+    ]
+  }
+  
+  

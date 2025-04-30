@@ -1,0 +1,167 @@
+<launch>
+    <!-- Defining arguments for the mur launch --> 
+    <arg name="launch_mir" default="true"/>
+    <arg name="launch_ur_l" default="true"/>
+    <arg name="launch_ur_r" default="true"/>
+    <arg name="controllers_started" default="arm_controller joint_state_controller"/>
+    <arg name="controllers_stopped" default="joint_group_vel_controller"/>  <!--Must not be empty-->
+    <arg name="pose_filename" default="$(find mur_launch_hardware)/poses/my_poses.yaml"/>
+    <arg name="tf_prefix" default="mur620"/>
+    <arg name="mur_ns" default="$(arg tf_prefix)"/>
+    <arg name="model_name" default="mur620"/>   <!-- "For MoveIt" -->
+    <arg name="left_arm_group_name" default="UR10_l"/>
+    <arg name="right_arm_group_name" default="UR10_r"/>
+    <arg name="use_lift" default="true"/>
+    <arg name="external_localization" default="false"/>
+    <arg name="kinematic_config_l" default="$(find ur_launch_hardware)/calibration/calibration_UR10_18.yaml"/>
+    <arg name="kinematic_config_r" default="$(find ur_launch_hardware)/calibration/calibration_UR10_12.yaml"/>
+    <arg name="ur_l_xyz" default="0.0 0.0 0.0"/>
+    <arg name="ur_l_rpy" default="0.0 0.0 0.0"/>
+    <arg name="ur_r_xyz" default="0.0 0.0 0.0"/>
+    <arg name="ur_r_rpy" default="0.0 0.0 3.141596"/>
+    <arg name="cmplt_robot_descr" default="$(find mur_description)/urdf/mur_620.gazebo.xacro use_lift:=$(arg use_lift) sim:=false ur_l_rpy:='$(arg ur_l_rpy)' ur_r_rpy:='$(arg ur_r_rpy)' ur_l_xyz:='$(arg ur_l_xyz)' ur_r_xyz:='$(arg ur_r_xyz)'" /> <!-- Complete robot description -->
+    <arg name="localization_type" default="mocap" />
+   
+    <!-- Bringup the base of the mur -->
+
+    <!-- TODO: disable robot_state_publisher of mir if joint states are used by other publisher. else: remap robot_description? -->
+    <group ns="$(arg tf_prefix)">
+        <!-- Load robot description -->
+        <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg cmplt_robot_descr)"/>
+
+        <group unless="$(eval arg('launch_mir') ==true)">
+            <!-- if mir is not launched, state publisher is not launched. Therefore: -->
+            <node name="robot_state_publisher_urs" pkg="robot_state_publisher" type="robot_state_publisher"/>
+            <param name="robot_state_publisher_urs/tf_prefix" value="$(arg tf_prefix)"/>
+        </group> 
+
+        <group if="$(eval arg('launch_mir') ==true)">
+            <param name="robot_state_publisher/tf_prefix" value="$(arg tf_prefix)"/>  
+            <include file="$(find mur_launch_hardware)/launch/mur_base.launch"> 
+                <arg name="mir_type" value="mir_600"/>
+                <arg name="tf_prefix" value="$(arg tf_prefix)"/>
+                <arg name="robot_description" value="$(arg cmplt_robot_descr)"/>
+                <arg name="external_localization" value="$(arg external_localization)"/>
+                <arg name="localization_type" value="$(arg localization_type)"/>
+            </include>
+
+            <!-- Joints of mir: -->
+             <!-- <node name="joint_state_publisher_mir_zeros" pkg="joint_state_publisher" type="joint_state_publisher">
+                <param name="source_list" value="[/mur620c/joint_states]"/>
+                <param name="robot_description" value=""/>
+                <param name="zeros" value="{bl_caster_rotation_joint:0.0, bl_caster_wheel_joint:0.0, br_caster_rotation_joint:0.0, br_caster_wheel_joint:0.0, fl_caster_rotation_joint:0.0, fl_caster_wheel_joint:0.0, fr_caster_rotation_joint:0.0, fr_caster_wheel_joint:0.0, left_wheel_joint:0.0, right_wheel_joint:0.0}"/>
+             </node> -->
+        </group>
+
+    </group>
+    
+    <!-- Bringup the left UR -->
+    <group if="$(eval arg('launch_ur_l') ==true)"> 
+        <remap from="/$(arg tf_prefix)/$(arg left_arm_group_name)/joint_states" to="/$(arg tf_prefix)/joint_states"/>
+
+        <group ns= "$(arg tf_prefix)/$(arg left_arm_group_name)">
+            <!-- use defined overall mur-description: -->
+            <!-- <remap from="robot_description" to="/$(arg tf_prefix)/robot_description"/>  -->
+            
+            <param name="robot_state_publisher/tf_prefix" value="$(arg tf_prefix)"/>   <!-- Fixing missing tf_prefix forwarding to the ur packages -->
+
+            <include file="$(find ur_launch_hardware)/launch/dual_ur.launch">
+                <arg name="ur_version" value="ur10e"/>
+                <arg name="robot_ip" value="$(arg left_arm_group_name)"/>
+                <arg name="kinematics_config" value="$(arg kinematic_config_l)"/>
+                <arg name="controllers" value="$(arg controllers_started)"/>
+                <arg name="stopped_controllers" value="$(arg controllers_stopped)"/>
+                <arg name="controller_config_file" value="$(find ur_launch_hardware)/config/ur10e_controllers_left.yaml"/>
+                <arg name="reverse_port" value="50005"/>
+                <arg name="script_sender_port" value="50006"/>
+                <arg name="trajectory_port" value="50007"/>
+                <arg name="script_command_port" value="50008"/>
+                <arg name="UR_prefix" value="$(arg left_arm_group_name)/"/>
+                <arg name="tf_prefix" value="$(arg tf_prefix)"/>
+                <arg name="use_state_publisher" value="$(eval not arg('launch_mir'))"/> <!-- robot_state_pub is run by mir -->
+            </include>
+
+            <node name="$(arg left_arm_group_name)_enable" pkg="ur_utilities" type="UR_enable.py" output="screen" respawn="false">
+                <param name="set_mode_topic" value="/$(arg tf_prefix)/$(arg left_arm_group_name)/ur_hardware_interface/set_mode" />
+            </node>
+
+            <!-- Lift module -->
+            <group if="$(eval arg('use_lift') ==true)">
+                <remap from="ewellix_tlt_node_l/joint_states" to="/$(arg tf_prefix)/joint_states"/>
+                <node name="ewellix_tlt_node_l" pkg="ewellix_tlt" type="ewellix_tlt_node" output="screen" respawn="true" >
+                    <param name="ewellix/port" value="/dev/ttyUSB0" />
+                    <param name="ewellix/joint_name" value="left_lift_joint" />
+                </node>
+
+                <!-- <node name="lift_tf_broadcaster_l" pkg="ewellix_tlt" type="lift_tf_broadcaster.py" output="screen" respawn="true" >
+                    <param name="lift_height_topic" value="ewellix_tlt_node_l/joint_states" />
+                    <param name="lift_base_name" value="$(arg tf_prefix)/left_lift_bottom" />
+                    <param name="lift_link_name" value="$(arg tf_prefix)/left_lift_top" />
+                </node> -->
+            </group>
+
+
+        </group>
+    </group>
+
+
+    <!-- Bringup the right UR -->   
+    <group if="$(eval arg('launch_ur_r') ==true)">
+
+        <remap from="/$(arg tf_prefix)/$(arg right_arm_group_name)/joint_states" to="/$(arg tf_prefix)/joint_states"/>
+
+        <group ns= "$(arg tf_prefix)/$(arg right_arm_group_name)"> 
+            <param name="robot_state_publisher/tf_prefix" value="$(arg tf_prefix)/$(arg right_arm_group_name)"/>  
+
+
+            <include file="$(find ur_launch_hardware)/launch/dual_ur.launch">
+                <arg name="ur_version" value="ur10e"/>
+                <arg name="robot_ip" value="$(arg right_arm_group_name)"/>
+                <arg name="kinematics_config" value="$(arg kinematic_config_r)"/>
+                <arg name="controllers" value="$(arg controllers_started)"/>
+                <arg name="stopped_controllers" value="$(arg controllers_stopped)"/>
+                <arg name="controller_config_file" value="$(find ur_launch_hardware)/config/ur10e_controllers_right.yaml"/>
+                <arg name="UR_prefix" value="$(arg right_arm_group_name)/"/>
+                <arg name="tf_prefix" value="$(arg tf_prefix)"/>
+                <arg name="use_state_publisher" value="$(eval not arg('launch_mir'))"/> <!-- robot_state_pub is run by mir -->
+            </include> 
+
+
+            <node name="$(arg right_arm_group_name)_enable" pkg="ur_utilities" type="UR_enable.py" output="screen" respawn="false" >
+                <param name="set_mode_topic" value="/$(arg tf_prefix)/$(arg right_arm_group_name)/ur_hardware_interface/set_mode" />
+            </node>
+
+             <!-- Lift module -->
+            <group if="$(eval arg('use_lift') ==true)"> 
+                <remap from="ewellix_tlt_node_r/joint_states" to="/$(arg tf_prefix)/joint_states"/>
+                <node name="ewellix_tlt_node_r" pkg="ewellix_tlt" type="ewellix_tlt_node" output="screen" respawn="true" >
+                    <param name="ewellix/port" value="/dev/ttyUSB1" />
+                    <param name="ewellix/joint_name" value="right_lift_joint" />
+                </node>
+
+                <!-- <node name="lift_tf_broadcaster_r" pkg="ewellix_tlt" type="lift_tf_broadcaster.py" output="screen" respawn="true" >
+                    <param name="lift_height_topic" value="ewellix_tlt_node_r/joint_states" />
+                    <param name="lift_base_name" value="$(arg tf_prefix)/right_lift_bottom" />
+                    <param name="lift_link_name" value="$(arg tf_prefix)/right_lift_top" />
+                </node> -->
+            </group>
+
+        </group>
+
+    </group>
+
+    <group ns="$(arg tf_prefix)">
+        <arg name="prefix" value="UR10"/>
+        
+        <!-- arm_controllers have to be running -->
+    	<!-- Start all necessary moveit files -->
+		<include file="$(find mur_moveit_config)/launch/start_moveit_620.launch">
+			<arg name="model_name" value="$(arg model_name)"/>
+			<arg name="mur_ns" value="$(arg mur_ns)"/>
+			<arg name="prefix" value="$(arg prefix)"/>
+			<arg name="set_global_robot_description" value="true"/>
+		</include>
+        
+    </group>
+
+</launch>

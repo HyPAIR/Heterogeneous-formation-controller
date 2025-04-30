@@ -1,0 +1,17 @@
+<launch>
+<!-- launch this file on mir100 and launch ur_ac.launch on rosmaster -->
+    <!-- Defining arguments for the mur launch --> 
+    <arg name="controllers_started" default="joint_state_controller"/>
+    <arg name="controllers_stopped" default="empty"/>  <!--Must not be empty-->
+    <arg name="pose_filename" default="$(find mur_launch_hardware)/poses/my_poses.yaml"/>
+    <arg name="tf_prefix" default="mur"/>
+ 
+   
+    <!-- Bringup the base of the mur -->
+    <include file="$(find mur_launch_hardware)/launch/mur_base.launch" pass_all_args="true">
+        <arg name="mir_type" value="mir_100"/>
+        <arg name="tf_mir_ur" value="0.35 0.15 0.35 0, 0, 0, 1"/>
+    </include>
+
+
+</launch>

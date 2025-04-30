@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<launch>
+    <arg name="tf_prefix" default="tf_prefix"/>
+    <arg name="leader_pose_topic" default='/virtual_leader/leader_pose'/>
+    <arg name="leader_velocity_topic" default='/virtual_leader/leader_vel'/>
+    <arg name="actual_pose_topic" default='/mur620c/mir_pose_stamped_simple'/>
+    <arg name="follower_cmd_vel_topic" default='/mur620c/cmd_vel'/>
+    <arg name="relative_position" default="[0.0, 1.0, 0.0]"/>
+    <arg name="drive_backwards"   default="False" />
+    
+
+    <rosparam file="$(find formation_controller)/config/decentralized_leader_follower_control.yaml" command="load" subst_value="true"/>
+
+	<node name="decentralized_leader_follower_control" pkg="formation_controller" type="decentralized_leader_follower_control.py" output="screen">
+		<rosparam param="relative_position" subst_value="True">$(arg relative_position) </rosparam>
+		<param name="leader_pose_topic" value="$(arg leader_pose_topic)"/>
+        <param name="leader_velocity_topic" value="$(arg leader_velocity_topic)"/>
+        <param name="actual_pose_topic" value="$(arg actual_pose_topic)"/>
+        <param name="follower_cmd_vel_topic" value="$(arg follower_cmd_vel_topic)"/>
+        <param name="tf_prefix" value="$(arg tf_prefix)"/>
+        <param name="drive_backwards" value="$(arg drive_backwards)"/>
+	</node>
+
+</launch>

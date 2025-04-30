@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<launch>
+
+    <!-- <node pkg = "trajectory_tracking" name = "cmd_vel_to_ackermann_drive" type = "cmd_vel_to_ackermann_drive.py">
+    </node> -->
+    <!-- <node pkg = "heterogeneous_formation_controller" name = "fg_test_r1" type = "fg_test_r1"></node> -->
+    <!-- <node pkg = "heterogeneous_formation_controller" name = "fg_test_r2" type = "fg_test_r2"></node>
+    <node pkg = "heterogeneous_formation_controller" name = "fg_test_r3" type = "fg_test_r3"></node>
+    <node pkg = "heterogeneous_formation_controller" name = "fg_test_r4" type = "fg_test_r4"></node>
+    <node pkg = "heterogeneous_formation_controller" name = "fg_test_r5" type = "fg_test_r5"></node>
+    <node pkg = "heterogeneous_formation_controller" name = "fg_test_r6" type = "fg_test_r6"></node>
+    <node pkg = "heterogeneous_formation_controller" name = "fg_test_r7" type = "fg_test_r7"></node>
+    <node pkg = "heterogeneous_formation_controller" name = "fg_test_r8" type = "fg_test_r8"></node> -->
+    <node pkg = "heterogeneous_formation_controller" name = "fg_test_r9" type = "fg_test_r9"></node>
+    <!-- <node pkg = "heterogeneous_formation_controller" name = "fg_test_r10" type = "fg_test_r10"></node> -->
+
+</launch>
+
+<!-- gsettings set org.gnome.settings-daemon.plugins.media-keys max-screencast-length 300 -->

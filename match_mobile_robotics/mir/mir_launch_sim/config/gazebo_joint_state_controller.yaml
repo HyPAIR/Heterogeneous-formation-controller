@@ -1,0 +1,13 @@
+# Publish all joint states -----------------------------------
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50
+  extra_joints:
+    - name:     'fl_caster_rotation_joint'
+    - name:     'fr_caster_rotation_joint'
+    - name:     'bl_caster_rotation_joint'
+    - name:     'br_caster_rotation_joint'
+    - name:     'fl_caster_wheel_joint'
+    - name:     'fr_caster_wheel_joint'
+    - name:     'bl_caster_wheel_joint'
+    - name:     'br_caster_wheel_joint'

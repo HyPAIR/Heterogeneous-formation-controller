@@ -1,0 +1,113 @@
+<launch>
+	<arg name="tf_prefix"    default="mur620" />
+	<arg name="robot_x"   default="0.0" />
+	<arg name="robot_y"   default="0.0" />
+	<arg name="robot_yaw" default="0.0" />
+	<arg name="model_name" default="mur620"/>
+	<arg name="mur_ns" default="$(arg tf_prefix)"/>	 <!-- mur620 -->
+	<arg name="move_base_selector" default="move_base" />
+	<arg name="global_planner" default="GlobalPlanner" />
+	<arg name="local_planner" default="DWAPlannerROS" />
+	<arg name="lift" default="true" doc="if prismatic lift joint is used"/>
+	<arg name="robot_urdf_path" value="$(find mur_description)/urdf/mur_620.gazebo.xacro use_lift:=$(arg lift)"/>
+	<arg name="gazebo_joint_state_controller_config" default="$(find mur_control)/config/gazebo_joint_state_controller.yaml" />
+	<arg name="prefix" value="UR10" doc="Prefix for the UR16 links"/>
+	<arg name="enable_dual_collison_avoidance" default="true" doc="if dual arm collision avoidance should be enabled"/>
+
+	<!-- if an object should be grasped configure its model and joint names here -->
+	<arg name="object_name" default="object01" />
+	<arg name="object_link" default="link01" />
+
+	<group ns = "$(arg mur_ns)">
+		<!-- <rosparam file="$(find mur_moveit_config)/config/arm_controller.yaml" command="load" subst_value="true"/>  -->
+		<rosparam file="$(find mur_control)/config/mur620e_controllers.yaml" command="load" subst_value="true"/> 
+	
+	
+		<include file="$(find mir_launch_sim)/launch/mir_600.launch">
+			<arg name="tf_prefix" value="$(arg tf_prefix)"/>
+			<arg name="robot_x"  value="$(arg robot_x)"/>
+			<arg name="robot_y"  value="$(arg robot_y)"/>
+			<arg name="robot_yaw"  value="$(arg robot_yaw)"/>
+			<arg name="model_name" value="$(arg mur_ns)"/>
+			<arg name="robot_urdf_path" value="$(arg robot_urdf_path)"/>
+			<arg name="gazebo_joint_state_controller_config" value="$(arg gazebo_joint_state_controller_config)" />
+
+			<arg name="move_base_selector" value="$(arg move_base_selector)"/>
+			<arg name="global_planner" value="$(arg global_planner)" />
+			<arg name="local_planner" value="$(arg local_planner)" />
+		</include>
+	
+
+			<!-- Start all necessary moveit files -->
+		<include file="$(find mur_moveit_config)/launch/start_moveit.launch">
+			<arg name="model_name" value="$(arg model_name)"/>
+			<arg name="mur_ns" value="$(arg mur_ns)"/>
+			<arg name="prefix" value="$(arg prefix)"/>
+			<arg name="set_global_robot_description" value="true"/> <!-- the semantic robot description should only be set once -->
+		</include>
+
+
+		<node name="ur_controller_spawner_r" pkg="controller_manager" type="spawner" output="screen"
+				args="$(arg prefix)_r/arm_controller $(arg prefix)_l/arm_controller">
+		</node>
+		
+		<node name="ur_controller_spawner_lift" pkg="controller_manager" type="spawner" output="screen"
+				args="$(arg prefix)_l/lift_controller $(arg prefix)_r/lift_controller">
+		</node>
+
+		<!-- <node name="ur_controller_spawner" pkg="controller_manager" type="spawner" output="screen"
+			args="lift_controller_l lift_controller_r   ">
+		</node> -->
+
+		<node name="ur_controller_stopped_spawner" pkg="controller_manager" type="spawner" output="screen"
+			args="--stopped joint_group_vel_controller_l/unsafe joint_group_vel_controller_r/unsafe">
+		</node>
+
+		<node name="copy_robot_description" pkg="mur_description" type="copy_robot_description.py" output="screen">
+			<param name="mur_ns" value="$(arg mur_ns)"/>
+			<param name="ur_prefix" value="$(arg prefix)"/>
+		</node>
+
+		<include file="$(find mur_control)/launch/dual_arm_collision_avoidance.launch" if="$(arg enable_dual_collison_avoidance)">
+			<arg name="ur_prefix_l" value="$(arg prefix)_l/"/>
+			<arg name="ur_prefix_r" value="$(arg prefix)_r/"/>
+			<arg name="tf_prefix" value="$(arg tf_prefix)"/>
+		</include>
+
+
+		<include file="$(find mur_control)/launch/move_to_home_pose.launch">
+			<arg name="mur_ns" value="$(arg mur_ns)"/>
+			<arg name="ur_prefix" value="$(arg prefix)_l"/>
+		</include>
+
+		<group ns = "$(arg prefix)_l">
+			<node name="grasp_server" pkg="schunk_emh_rp_45" type="grasp_server.py" output="screen">
+				<param name="object_name" value="$(arg object_name)" />
+				<param name="object_link" value="$(arg object_link)" />
+				<param name="robot_name" value="$(arg mur_ns)" />
+				<param name="gripper_link" value="$(arg prefix)_l/tcp" />
+			</node>
+			<node name="direct_kinematics_publisher" pkg="ur_controllers_match" type="direct_kinematics_publisher.py" output="screen">
+				<param name="ur_prefix" value="$(arg prefix)_l/" />
+				<remap from="joint_states" to="/$(arg mur_ns)/joint_states" />
+			</node>
+		</group>
+
+		
+		<group ns = "$(arg prefix)_r">
+			<node name="grasp_server" pkg="schunk_emh_rp_45" type="grasp_server.py" output="screen">
+				<param name="object_name" value="$(arg object_name)" />
+				<param name="object_link" value="$(arg object_link)" />
+				<param name="robot_name" value="$(arg mur_ns)" />
+				<param name="gripper_link" value="$(arg prefix)_r/tcp" />
+			</node>
+			<node name="direct_kinematics_publisher" pkg="ur_controllers_match" type="direct_kinematics_publisher.py" output="screen">
+				<param name="ur_prefix" value="$(arg prefix)_r/" />
+				<remap from="joint_states" to="/$(arg mur_ns)/joint_states" />
+			</node>
+		</group>
+
+	
+	</group> 
+
+</launch>

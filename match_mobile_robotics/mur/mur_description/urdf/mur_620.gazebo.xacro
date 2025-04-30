@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="mur620" >
+
+	<xacro:arg name="robot_namespace" default=''/>
+	<xacro:arg name="tf_prefix" default=''/>
+	<xacro:arg name="use_lift" default='true'/>
+	<xacro:property name="use_lift" value="$(arg use_lift)"/>
+	<xacro:arg name="sim" default='true'/>
+	<xacro:property name="sim" value="$(arg sim)"/>
+	<xacro:arg name="ur_l_xyz" default='0 0 0'/>
+	<xacro:arg name="ur_l_rpy" default='0 0 0'/>
+	<xacro:property name="ur_l_xyz" value="$(arg ur_l_xyz)"/>
+	<xacro:property name="ur_l_rpy" value="$(arg ur_l_rpy)"/>
+	<xacro:arg name="ur_r_xyz" default='0 0 0'/>
+	<xacro:arg name="ur_r_rpy" default='0 0 3.14159265359'/>
+	<xacro:property name="ur_r_xyz" value="$(arg ur_r_xyz)"/>
+	<xacro:property name="ur_r_rpy" value="$(arg ur_r_rpy)"/>
+
+	<!-- MiR200 base -->
+	<xacro:include filename="$(find mir_description)/urdf/mir_600/mir_600.urdf.xacro" />
+	<xacro:include filename="$(find mir_description)/urdf/mir_600/mir_600.gazebo.xacro" />
+	<!-- UR5 robot arm -->
+  	<xacro:include filename="$(find ur_description)/urdf/inc/ur16e_macro.xacro"/>
+	<xacro:include filename="$(find ur_description)/urdf/inc/ur10e_macro.xacro"/>
+	<!-- Lift modules -->
+	<xacro:include filename="$(find mir_description)/urdf/mir_600/mir_600_top_lift.urdf.xacro" />
+	<!-- Include plugin xacros -->
+	<xacro:include filename="$(find mir_description)/urdf/general/plugins.gazebo.xacro" />
+	<xacro:p3d_base_controller robot_namespace="$(arg robot_namespace)"/>
+	<!-- include gripper -->
+	<xacro:if value="${sim}">
+		<xacro:include filename="$(find schunk_emh_rp_45)/urdf/schunk_emh_rp_045.urdf.xacro"/>
+	</xacro:if>
+	<!-- Init the MiR200 marco that is also used for the hardware -->
+	<xacro:mir_600 />
+	<!-- Init the MiR200 macro that includes all infos that Gazebo need to function -->
+	<xacro:mir_600_gazebo tf_prefix="$(arg tf_prefix)" robot_namespace="$(arg robot_namespace)"/>
+
+	<!-- Init the UR5 robot arm macro -->
+	<xacro:ur10e_robot prefix="UR10_l/" transmission_hw_interface="hardware_interface/VelocityJointInterface"/>
+	<xacro:ur10e_robot prefix="UR10_r/" transmission_hw_interface="hardware_interface/VelocityJointInterface"/>
+	<!-- <xacro:ur10e_robot prefix="UR10_l/" transmission_hw_interface="hardware_interface/PositionJointInterface"/>
+	<xacro:ur10e_robot prefix="UR10_r/" transmission_hw_interface="hardware_interface/PositionJointInterface"/> -->
+	<!-- Init the plugins that run the MiR in Gazebo -->
+	<xacro:controller_plugin_gazebo robot_namespace="$(arg robot_namespace)"/>
+
+	<!-- virtual link rotated to show in same direction like mir  -->
+	<link name="UR10_l/base_ideal" />
+	<link name="UR10_r/base_ideal" />
+
+	<!-- Init the lift macro -->
+	<xacro:if value="${use_lift}">
+		<xacro:top_lift/>
+
+		<joint name="plattform_manipulator_joint_l" type="fixed">
+				<parent link="left_lift_top" />
+				<child link="UR10_l/base_ideal" />
+				<origin xyz="0.0 0.0 0.555" rpy="0 0 0" />
+		</joint>
+
+		<joint name="plattform_manipulator_joint_r" type="fixed">
+				<parent link="right_lift_top" />
+				<child link="UR10_r/base_ideal" />
+				<origin xyz="0.0 0.0 0.555" rpy="0 0 0" />
+		</joint>
+	</xacro:if>
+
+	<xacro:unless value="${use_lift}">
+		<joint name="plattform_manipulator_joint_l" type="fixed">
+			<parent link="left_lift_bottom" />
+			<child link="UR10_l/base_ideal" />
+			<origin xyz="0.0 0.0 0.555" rpy="0 0 0" />
+		</joint>
+
+		<joint name="plattform_manipulator_joint_r" type="fixed">
+			<parent link="right_lift_bottom" />
+			<child link="UR10_r/base_ideal" />
+			<origin xyz="0.0 0.0 0.555" rpy="0 0 0" />
+		</joint>
+
+	</xacro:unless>
+
+	<!-- Because one arm is mounted backwards. TODO: use calibrated pose -->
+	<joint name="plattform_ur_calibration_joint_l" type="fixed">
+			<parent link="UR10_l/base_ideal" />
+			<child link="UR10_l/base_link" />
+			<origin xyz="${ur_l_xyz}" rpy="${ur_l_rpy}" /> <!-- 0 0 0" -->
+	</joint>
+
+	<joint name="plattform_ur_calibration_joint_r" type="fixed">
+			<parent link="UR10_r/base_ideal" />
+			<child link="UR10_r/base_link" />
+			<origin xyz="${ur_r_xyz}" rpy="${ur_r_rpy}" /> <!-- 0 0 3.14159265" -->
+	</joint>
+
+	<xacro:if value="${sim}">
+		<xacro:schunk_emh_rp_045 tf_prefix="UR10_r"	tool_link="UR10_r/flange"/>
+		<xacro:schunk_emh_rp_045 tf_prefix="UR10_l"	tool_link="UR10_l/flange"/>
+	</xacro:if>
+	<!-- <gazebo>
+		<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">		
+			<robotNamespace>mir</robotNamespace>
+			<robotParam>mir/robot_description</robotParam>
+			<controlPeriod>0.001</controlPeriod>
+			<legacyModeNS>true</legacyModeNS>
+		</plugin>
+	</gazebo>
+	 -->
+	<!-- <joint name="plattform_manipulator_joint" type="fixed">
+			<parent link="mir/base_link" />
+			<child link="ur/base_link" />
+			<origin xyz="0.215 0.1 0.35" rpy="0 0 0" />
+	</joint> -->
+
+	<!-- UR5 -->
+	<!-- <xacro:arg name="transmission_hw_interface" default="hardware_interface/PositionJointInterface"/> -->
+
+	<!-- ur5 -->
+	<!-- <xacro:include filename="$(find ur_description)/urdf/ur5.urdf.xacro" /> -->
+
+	<!-- arm -->
+	<!--xacro:arg name="kinematics_config" default="$(find ur_description)/config/ur5_default.yaml"/>
+	<xacro:ur5_robot prefix="ur/" joint_limited="false"
+		transmission_hw_interface="$(arg transmission_hw_interface)"
+		kinematics_file="${load_yaml('$(arg kinematics_config)')}"
+	/> -->
+
+
+	<!-- <gazebo>
+		<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">		
+			<robotNamespace>ur</robotNamespace>
+			<robotParam>ur/robot_description</robotParam>
+			<controlPeriod>0.001</controlPeriod>
+			<legacyModeNS>true</legacyModeNS>
+		</plugin>
+	</gazebo> -->
+</robot>

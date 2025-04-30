@@ -1,0 +1,53 @@
+<launch>
+  <!-- Basic launch file for one robot in the match_world_common map-->
+
+  <include file="$(find match_gazebo)/launch/scale.launch">
+  </include>
+
+  <arg name="robot1_name"  default="mir1"/>
+  <arg name="robot2_name"  default="mir2"/>
+  <arg name="robot3_name"  default="mir3"/>
+  <arg name="relative_positions_x" value="[0.0, 4.0, -4.0]" />
+  <arg name="relative_positions_y" value="[0.0, 4.0, -4.0]" />
+  
+  <!-- Choose group for creating a namespace environment if you want to add multiple nodes/includes to that namespace easily -->
+  <group ns="$(arg robot1_name)">
+    <include file="$(find mir_launch_sim)/launch/mir_200.launch">
+        <arg name="robot_x"     default="-70.0" />
+        <arg name="robot_y"     default="44.0" />
+        <arg name="robot_yaw"   default="0.0" /> 
+        <arg name="tf_prefix"   default="$(arg robot1_name)" />       
+        <arg name="model_name"  default="$(arg robot1_name)"/>
+        <arg name="local_planner" default="LocalPlanFollower" />
+    </include>
+  </group> 
+
+  <!-- Just add the ns parameter to the tag to insert this one node/include in the namespace -->
+  <include file="$(find mir_launch_sim)/launch/mir_200.launch" ns="$(arg robot2_name)">
+      <arg name="robot_x"     default="-70.0" />
+      <arg name="robot_y"     default="42.0" />
+      <arg name="robot_yaw"   default="0.0" /> 
+      <arg name="tf_prefix"   default="$(arg robot2_name)" />       
+      <arg name="model_name"  default="$(arg robot2_name)"/>
+      <arg name="local_planner" default="LocalPlanFollower" />
+  </include>
+
+  <!-- Just add the ns parameter to the tag to insert this one node/include in the namespace -->
+  <include file="$(find mir_launch_sim)/launch/mir_200.launch" ns="$(arg robot3_name)">
+      <arg name="robot_x"     default="-70.0" />
+      <arg name="robot_y"     default="46" />
+      <arg name="robot_yaw"   default="0.0" /> 
+      <arg name="tf_prefix"   default="$(arg robot3_name)" />       
+      <arg name="model_name"  default="$(arg robot3_name)"/>
+      <arg name="local_planner" default="LocalPlanFollower" />
+  </include>
+  
+  <node type="rviz" name="rviz" pkg="rviz" args="-d $(find mir_examples)/rviz/formation_path_planning_visualization.rviz" /><!--2D Navigation-->
+
+   <include file="$(find formation_controller)/launch/formation_controller_complete.launch">
+      <arg name="robot_names" value="[$(arg robot1_name), $(arg robot2_name), $(arg robot3_name)]" />
+      <arg name="relative_positions_x" value="$(arg relative_positions_x)" />
+      <arg name="relative_positions_y" value="$(arg relative_positions_y)" />
+  </include>
+
+</launch>

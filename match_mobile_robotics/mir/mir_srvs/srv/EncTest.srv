@@ -1,0 +1,12 @@
+string test_cmd
+string wheel
+---
+int8 IDLE = 0
+int8 RUNNING = 1
+int8 WAITING_FOR_INPUT = 2
+int8 FAILED = 3
+int8 DONE = 4
+int8 state
+string feedback
+string result
+mirMsgs/EncoderTestEntry[] test_result

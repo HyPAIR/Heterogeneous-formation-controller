@@ -1,0 +1,11 @@
+prefix=/home/criss/drake/build/install
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: bot2-lcmgl-client
+Description: bot2-lcmgl-client
+Requires:  glib-2.0 lcm lcmtypes_bot2-lcmgl
+Version: 0.0.1
+Libs: -L${libdir}  -lbot2-lcmgl-client
+Cflags: -I${includedir} 

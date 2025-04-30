@@ -1,0 +1,12 @@
+prefix=/home/criss/drake/build/install
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=/home/criss/drake/build/install/include/ipopt/coin
+
+Name: IPOPT
+Description: Interior Point Optimizer
+URL: https://projects.coin-or.org/Ipopt
+Version: 3.12
+Libs: -L${libdir} -lipopt -lm  -ldl
+Cflags: -I${includedir}
+Requires: coinmumps coinlapack coinblas 

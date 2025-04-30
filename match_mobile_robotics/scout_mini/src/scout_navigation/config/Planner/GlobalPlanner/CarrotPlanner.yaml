@@ -1,0 +1,4 @@
+CarrotPlanner:
+  min_dist_from_robot: 0.10
+  #step_size:  #(double, default: Resolution of the associated costmap)
+  visualize_potential: true # false 

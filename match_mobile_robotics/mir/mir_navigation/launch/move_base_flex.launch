@@ -1,0 +1,52 @@
+<launch>
+    <arg name="tf_prefix" default="" doc="Prefix used for robot tf frames" /> <!-- used in the config files -->
+    <arg name="global_planner" default="GlobalPlanner"  />
+    <arg name="global_planner_config" doc="Path to the global config file."/>
+    <arg name="local_planner" default="DWAPlannerROS" />
+    <arg name="local_planner_config" doc="Path to the local config file."/> 
+    
+    <arg name="start_move_base_simple" default="true" doc="If set to true this will launch the move_base_simple_relay node which controls the more complex move_base_flex action interface with a single goal topic" />
+
+    <arg name="tf_timeout" default="1.5" />
+    <arg name="planner_max_retries" default="3" />
+
+    <arg if="$(eval tf_prefix=='')" name="tf_prefix_slashed" value="" /> <!--Important for proper substitution (empty tf_prefix must not lead to leading slashes-->
+    <arg unless="$(eval tf_prefix=='')" name="tf_prefix_slashed" value="$(arg tf_prefix)/" /> <!--Important for proper substitution (empty tf_prefix must not lead to leading slashes-->
+
+    <node pkg="mbf_costmap_nav" type="mbf_costmap_nav" respawn="false" name="move_base_flex" output="screen">
+        <param name="tf_timeout" value="$(arg tf_timeout)"/>
+        <param name="planner_max_retries" value="$(arg planner_max_retries)"/>
+
+        <!-- general move_base param -->
+        <rosparam file="$(find mir_navigation)/config/Planner/move_base_flex_common_params.yaml" command="load" subst_value="true"/>
+        <rosparam file="$(find mir_navigation)/config/Planner/recovery_behaviors.yaml" command="load" />
+
+        <!-- planner params -->
+        <rosparam file="$(find mir_navigation)/config/Planner/GlobalPlanner/default_global_planners.yaml" command="load" />
+        <rosparam file="$(find mir_navigation)/config/Planner/LocalPlanner/default_local_planners.yaml" command="load" />
+        <!-- Load param file for the global path planner. User must define the path to the config file. -->
+        <rosparam file="$(arg global_planner_config)" command="load"/>
+        <!-- <rosparam file="$(find mir_navigation)/config/Planner/GlobalPlanner/SBPLatticePlanner.yaml" command="load" /> -->
+        <!-- <rosparam file="$(find mir_navigation)/config/Planner/LocalPlanner/$(arg local_planner).yaml" command="load" /> -->
+        <!-- Load param file for the local path planner. User must define the path to the config file. -->
+        <rosparam file="$(arg local_planner_config)" command="load"/>
+
+        <!-- global costmap params -->
+        <rosparam file="$(find mir_navigation)/config/Costmap/costmap_common_params.yaml" command="load" ns="global_costmap" subst_value="true" />
+        <rosparam file="$(find mir_navigation)/config/Costmap/costmap_global_params.yaml" command="load" />
+
+        <!-- local costmap params -->
+        <rosparam file="$(find mir_navigation)/config/Costmap/costmap_common_params.yaml" command="load" ns="local_costmap" subst_value="true" />
+        <rosparam file="$(find mir_navigation)/config/Costmap/costmap_local_params.yaml" command="load" subst_value="true" />
+
+        <!-- <remap from="cmd_vel" to="mobile_base_controller/cmd_vel"/>
+        <remap from="odom" to="mobile_base_controller/odom"/> -->
+        <remap from="map" to="/map" />
+    </node>
+
+    <!-- This relay allows the usage of the old simple_goal topic from move_base -->
+    <node if="$(eval start_move_base_simple)" pkg="mir_navigation" type="move_base_simple_relay.py" name="move_base_simple_relay" output="screen">
+        <param name="global_planner_name" value="$(arg global_planner)"/>
+        <param name="local_planner_name" value="$(arg local_planner)"/>
+    </node>
+</launch>

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+    <xacro:macro name="match_logo" params="parent locationprefix location_dx location_dy location_dz orientation:=0">
+		<link name="${locationprefix}_match_logo_background">
+			<visual>
+				<origin xyz="0 0 0" rpy="0 0 0" />
+				<geometry>
+					<mesh filename="package://mir_description/meshes/visual/match_background.dae" scale="0.001 0.001 0.001" />
+				</geometry>
+				<xacro:insert_block name="material_match_green" />
+			</visual>
+		</link>
+
+		<joint name="${locationprefix}_match_logo_joint" type="fixed">
+			<origin xyz="${location_dx} ${location_dy} ${location_dz}" rpy="0 0 ${orientation}" />
+			<parent link="${parent}" />
+			<child link="${locationprefix}_match_logo_background" />
+		</joint>
+
+		<link name="${locationprefix}_match_logo_font">
+			<visual>
+				<origin xyz="0 0 0 " rpy="${pi/2} 0 ${pi}" />
+				<geometry>
+					<mesh filename="package://mir_description/meshes/visual/match_font.stl" scale="0.01 0.01 0.01" />
+				</geometry>
+				<xacro:insert_block name="material_white" />
+			</visual>
+		</link>
+		<joint name="${locationprefix}_match_logo_font_joint" type="fixed">
+			<origin xyz="0.042 0.0 -0.013" rpy="0 0 0" />
+			<parent link="${locationprefix}_match_logo_background" />
+			<child link="${locationprefix}_match_logo_font" />
+		</joint>
+	</xacro:macro>
+</robot>

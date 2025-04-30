@@ -1,0 +1,29 @@
+<launch>
+	
+    <arg name="robot1_name"  default="mir1"/>
+    <arg name="robot2_name"  default="mir2"/>
+    <arg name="robot3_name"  default="mir3"/>
+        
+    <!-- Basic launch file for one robot in the match_world_common map-->
+	<include file="$(find match_gazebo)/launch/match_world_common.launch"/>
+
+    <include file="$(find miranda_launch_sim)/launch/miranda_200.launch" ns="$(arg robot1_name)">
+        <arg name="robot_x"     default="0.0" />
+        <arg name="robot_y"     default="0.5" />
+        <arg name="robot_yaw"   default="0.0" /> 
+        <arg name="tf_prefix"   default="$(arg robot1_name)" />       
+        <arg name="model_name"  default="$(arg robot1_name)"/>
+    </include>
+      
+    <include file="$(find miranda_launch_sim)/launch/miranda_200.launch" ns="$(arg robot2_name)">
+        <arg name="robot_x"     default="0.0" />
+        <arg name="robot_y"     default="-0.5" />
+        <arg name="robot_yaw"   default="0.0" /> 
+        <arg name="tf_prefix"   default="$(arg robot2_name)" />       
+        <arg name="model_name"  default="$(arg robot2_name)"/>
+    </include>
+
+	<node type="rviz" name="rviz" pkg="rviz" args="-d $(find miranda_examples)/rviz/multi_miranda_200_visualization.rviz" />
+    <node type="rviz" name="rviz_miranda1_moveit" pkg="rviz" args="-d $(find miranda_examples)/rviz/miranda1_moveit_visualization.rviz" />
+    <node type="rviz" name="rviz_miranda2_moveit" pkg="rviz" args="-d $(find miranda_examples)/rviz/miranda2_moveit_visualization.rviz" />
+</launch>

@@ -1,0 +1,17 @@
+<library path="lib/libur_controllers_extended">
+    <class name="ur_controllers_extended/CompliantAxisController" type="ur_controllers_extended::CompliantAxisController" base_class_type="controller_interface::ControllerBase">
+        <description>
+            A controller that controls a given joint complient
+        </description>
+    </class>
+    <class name="ur_controllers_extended/CartesianController" type="ur_controllers_extended::CartesianController" base_class_type="controller_interface::ControllerBase">
+        <description>
+            A controller that controls a given pose 
+        </description>
+    </class>
+    <class name="ur_controllers_extended/CompliantAxisVelController" type="ur_controllers_extended::CompliantAxisVelController" base_class_type="controller_interface::ControllerBase">
+        <description>
+            A controller that controls a given oint complient base on velocities 
+        </description>
+    </class>
+</library>

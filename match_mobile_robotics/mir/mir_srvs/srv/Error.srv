@@ -1,0 +1,6 @@
+string command 		# either error or cancel for now
+string error_msg	# The error message sent to the people who has to help the robot
+string token		# Token for cancelling a error command
+---
+string token 		# A token is return which can be used to cancel the error command
+bool success		# Was the command accepted?

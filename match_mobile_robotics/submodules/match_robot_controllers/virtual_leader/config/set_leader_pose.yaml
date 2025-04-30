@@ -1,0 +1,3 @@
+set_leader_pose:
+  #robot_pose_topic: /mur620d/mir_pose_stamped_simple # this arg is set in the launch file
+  leader_set_pose_topic: /virtual_leader/set_pose

@@ -1,0 +1,15 @@
+# This list is necessary for the move_base_flex node (not move_base!)
+# The listed planners must be loaded through a yaml and are then available for move_base_flex to use
+# If this list should be expanded with a default planner please provide a pull request
+# If you wish to add your own planner, please add a config file with the planners list in your package and load it in the correct namespace
+
+planners:
+  - name: 'GlobalPlanner'
+    type: 'global_planner/GlobalPlanner'
+  - name: 'NavfnROS'
+    type: 'navfn/NavfnROS'
+  - name: 'CarrotPlanner'
+    type: 'carrot_planner/CarrotPlanner'
+  # mprim file cannot be loaded
+  # - name: 'SBPLLatticePlanner'
+  #   type: 'SBPLLatticePlanner'

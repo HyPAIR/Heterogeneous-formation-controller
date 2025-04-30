@@ -1,0 +1,15 @@
+<launch>
+
+  <arg name="relative_pose"  default="[1.0, 0.0, 0.0]"/>
+  <arg name="tf_prefix"         default="mur620a" />
+
+  <group ns="virtual_leader">
+    <rosparam file="$(find virtual_leader)/config/move_to_leader_pose.yaml" command="load" />
+
+    <node name="move_to_leader_pose" pkg="virtual_leader" type="move_to_leader_pose.py" output="screen">
+      <rosparam param="relative_pose" subst_value="True">$(arg relative_pose) </rosparam>
+        <param name="tf_prefix" type="string" value="$(arg tf_prefix)"/>
+    </node>
+  </group>
+
+</launch>

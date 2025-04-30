@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<launch>
+
+    <!-- <node pkg = "trajectory_tracking" name = "cmd_vel_to_ackermann_drive" type = "cmd_vel_to_ackermann_drive.py">
+    </node> -->
+    <node pkg = "heterogeneous_formation_controller" name = "fg_test_r2" type = "fg_test_r2">
+    </node>
+
+</launch>

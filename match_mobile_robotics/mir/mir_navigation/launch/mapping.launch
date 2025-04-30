@@ -1,0 +1,10 @@
+<launch>
+  <!-- include run file from the buttom to top. So the first file will be excuted at the first-->
+  <include file="$(find mir_navigation)/launch/move_base.launch" />
+
+  <node pkg="gmapping" type="slam_gmapping" name="gmapping_thing" output="screen" >
+    <param name="odom_frame" value="odom" />
+    <param name="base_frame" value="base_footprint" />
+  </node>
+ 
+</launch>

@@ -1,0 +1,20 @@
+<launch>
+
+  <arg name="frame_id"         default="map" />
+  <arg name="follower_name"    default="mur620f" />
+
+
+  <group ns="virtual_follower">
+    <rosparam file="$(find virtual_follower)/config/virtual_follower.yaml" command="load" />
+
+    <node name="virtual_follower_node" pkg="virtual_follower" type="virtual_follower.py" output="screen">
+      <param name="frame_id" type="string" value="$(arg frame_id)"/>
+      <param name="follower_name" type="string" value="$(arg follower_name)"/>
+    </node>
+  </group>
+
+  <!-- publish static trafo from odom to base_footprint -->
+  <node pkg="tf" type="static_transform_publisher" name="odom_to_base_footprint" args="0 0 0 0 0 0 $(arg follower_name)/odom $(arg follower_name)/base_footprint 100" />
+
+
+</launch>

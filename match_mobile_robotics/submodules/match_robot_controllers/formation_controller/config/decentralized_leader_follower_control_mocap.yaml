@@ -1,0 +1,8 @@
+decentralized_leader_follower_control:
+  Kp_x : 0.8 # 0.4 #4.0
+  Kp_y : 0.5 #0.5 #10.5
+  Kp_phi : 0.2 # 0.575 #1.575
+  Ki_x: 0.01
+  e_x_integrated_max: 1.0
+  lin_vel_max : 0.4
+  ang_vel_max : 0.6

@@ -1,0 +1,5 @@
+---
+int32 resets_received
+int32 resets_completed
+int32 resets_ignored
+int32 resets_failed

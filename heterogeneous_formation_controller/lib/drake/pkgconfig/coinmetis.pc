@@ -1,0 +1,11 @@
+prefix=/home/criss/drake/build/install
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=/home/criss/drake/build/install/include/ipopt/coin/ThirdParty
+
+Name: Metis
+Description: Serial Graph Partitioning and Fill-reducing Matrix Ordering
+URL: https://projects.coin-or.org/BuildTools
+Version: 1.3
+Libs: -L${libdir} -lcoinmetis
+Cflags: -I${includedir}

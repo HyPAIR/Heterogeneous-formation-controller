@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <!-- Define arguments for the world file and number of robots -->
+  <!-- <arg name="world_file" default="/home/weijian/Heterogeneous_formation/src/heterogeneous_formation_controller/launch/test_1.world"/> -->
+  <arg name="robot_model" default="burger"/>
+  <param name="num_robots" value="4"/>
+  <arg name="robot1_name"  default="robot1"/>
+  <arg name="robot2_name"  default="robot2"/>
+  <arg name="robot3_name"  default="robot3"/>
+
+  <arg name="robot1_initial_pose_x" default="0.031999999999999917"/>
+  <arg name="robot1_initial_pose_y" default="-1.3839999999999999"/>
+  <arg name="robot1_initial_pose_a" default="1.5700000000000001"/>
+
+  <arg name="robot2_initial_pose_x" default="-0.82299999999999995"/>
+  <arg name="robot2_initial_pose_y" default="-0.89036551984286993"/>
+  <arg name="robot2_initial_pose_a" default="1.5700000000000001"/>
+
+  <arg name="robot3_initial_pose_x" default="-0.82300000000000029"/>
+  <arg name="robot3_initial_pose_y" default="-1.8776344801571296"/>
+  <arg name="robot3_initial_pose_a" default="1.5700000000000001"/>
+  <!-- Launch the Gazebo simulator with the specified world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <!-- <arg name="world_name" value="$(arg world_file)"/> -->
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+  <!-- Launch the PRM planner node -->
+  <!--node name="prm_planner" pkg="prm_planner" type="prm_planner_multi_node.py" output="screen"/-->
+
+  <!-- PRMToVRP Node for coordination -->
+  <!--node name="prm_to_vrp" pkg="prm_planner" type="VRP_multi.py" output="screen" /-->
+
+  <!-- Map Server to load the map -->
+  <node name="map_server" pkg="map_server" type="map_server" args="/home/weijian/CPDOT/src/heterogeneous_formation_controller/config/map/ICRA_1.yaml">
+    <param name="frame_id" type="string" value="map"/>  
+  </node>
+
+  <!-- Loop through the number of robots and set up each one -->
+  
+  <!-- Robot 1 -->
+  <include file="$(find heterogeneous_formation_controller)/launch/setup_robots.launch" ns="$(arg robot1_name)">
+    <arg name="tf_prefix" value="$(arg robot1_name)"/>
+    <arg name="robot_model" value="$(arg robot1_name)"/>
+    <arg name="initial_pose_x" value="$(arg robot1_initial_pose_x)"/>
+    <arg name="initial_pose_y" value="$(arg robot1_initial_pose_y)"/>
+    <arg name="initial_pose_a" value="$(arg robot1_initial_pose_a)"/>
+  </include>
+
+  <!-- Set robot1_description parameter -->
+  <group ns="$(arg robot1_name)">
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_burger.urdf.xacro namespace:=$(arg robot1_name)" />
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+    <param name="tf_prefix" type="string" value="$(arg robot1_name)"/>
+  </node>
+    <node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_state_publisher" output="screen">
+    <param name="tf_prefix" type="string" value="$(arg robot1_name)"/>
+  </node>
+  </group>
+  <node name="spawn_urdf_$(arg robot1_name)" pkg="gazebo_ros" type="spawn_model" args="-urdf -model $(arg robot1_name) -param /robot1/robot_description -x $(arg robot1_initial_pose_x) -y $(arg robot1_initial_pose_y) -z 0 -Y $(arg robot1_initial_pose_a)" />
+  <!-- <include file="$(find turtlebot3_navigation)/launch/move_base.launch" ns="$(arg robot1_name)"></include>
+  <include file="$(find turtlebot3_navigation)/launch/move_base.launch" ns="$(arg robot2_name)"></include> -->
+    <!-- Robot 2 -->
+  <include file="$(find heterogeneous_formation_controller)/launch/setup_robots.launch" ns="$(arg robot2_name)">
+    <arg name="tf_prefix" value="$(arg robot2_name)"/>
+    <arg name="robot_model" value="$(arg robot2_name)"/>
+    <arg name="initial_pose_x" value="$(arg robot2_initial_pose_x)"/>
+    <arg name="initial_pose_y" value="$(arg robot2_initial_pose_y)"/>
+    <arg name="initial_pose_a" value="$(arg robot2_initial_pose_a)"/>
+  </include>
+
+  <!-- Set robot2_description parameter -->
+  <group ns="$(arg robot2_name)">
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_burger.urdf.xacro namespace:=$(arg robot2_name)" />
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+    <param name="tf_prefix" type="string" value="$(arg robot2_name)"/>
+  </node>
+    <node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_state_publisher" output="screen">
+    <param name="tf_prefix" type="string" value="$(arg robot2_name)"/>
+  </node>
+  </group>
+  <node name="spawn_urdf_$(arg robot2_name)" pkg="gazebo_ros" type="spawn_model" args="-urdf -model $(arg robot2_name) -param /robot2/robot_description -x $(arg robot2_initial_pose_x) -y $(arg robot2_initial_pose_y) -z 0 -Y $(arg robot2_initial_pose_a)" />
+   <!-- Robot 3 -->
+  <include file="$(find heterogeneous_formation_controller)/launch/setup_robots.launch" ns="$(arg robot3_name)">
+    <arg name="tf_prefix" value="$(arg robot3_name)"/>
+    <arg name="robot_model" value="$(arg robot3_name)"/>
+    <arg name="initial_pose_x" value="$(arg robot3_initial_pose_x)"/>
+    <arg name="initial_pose_y" value="$(arg robot3_initial_pose_y)"/>
+    <arg name="initial_pose_a" value="$(arg robot3_initial_pose_a)"/>
+  </include>
+
+  <!-- Set robot3_descrition parameter -->
+  <group ns="$(arg robot3_name)">
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_burger.urdf.xacro namespace:=$(arg robot3_name)" />
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+    <param name="tf_prefix" type="string" value="$(arg robot3_name)"/>
+  </node>
+    <node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_state_publisher" output="screen">
+    <param name="tf_prefix" type="string" value="$(arg robot3_name)"/>
+  </node>
+  </group>
+  <node name="spawn_urdf_$(arg robot3_name)" pkg="gazebo_ros" type="spawn_model" args="-urdf -model $(arg robot3_name) -param /robot3/robot_description -x $(arg robot3_initial_pose_x) -y $(arg robot3_initial_pose_y) -z 0 -Y $(arg robot3_initial_pose_a)" />
+  <!-- RViz for visualization, showing all robots -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d /home/weijian/Heterogeneous_formation/src/heterogeneous_formation_controller/launch/prm_config.rviz" required="true"/>
+
+</launch>

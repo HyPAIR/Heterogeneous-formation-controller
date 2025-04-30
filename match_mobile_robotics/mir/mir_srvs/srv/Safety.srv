@@ -1,0 +1,31 @@
+# Defines for command
+uint8 GET_STATUS               = 0
+uint8 MUTE_SAFETY              = 1
+uint8 UNMUTE_SAFETY            = 2
+uint8 ENTER_SLEEP_MODE         = 3
+uint8 EXIT_SLEEP_MODE          = 4
+uint8 ENABLE_SW_JOYSTICK_MODE  = 5
+uint8 DISABLE_SW_JOYSTICK_MODE = 6
+uint8 ENABLE_SHELF_MODE        = 7
+uint8 DISABLE_SHELF_MODE       = 8
+
+uint8 command
+
+# Defines for token
+int32 DOCKING                  = 0
+int32 JOYSTICK                 = 1
+int32 RESTRICTED_SCOPE         = 2
+int32 TOTAL_TOKENS             = 3
+
+int32 token
+int32[] tokens
+
+# Mute selected zones - can only be used with command "MUTE_SAFETY"
+uint8 mute_mask
+uint8 partial_mute_mask
+uint8 next_mute_mask
+uint8 next_partial_mute_mask
+---
+bool success
+bool cleared_muting
+mirMsgs/SafetyStatus status

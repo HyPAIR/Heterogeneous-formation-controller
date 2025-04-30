@@ -1,0 +1,6 @@
+int32 iterations
+float64 cov_x
+float64 cov_y
+float64 cov_th
+---
+bool result

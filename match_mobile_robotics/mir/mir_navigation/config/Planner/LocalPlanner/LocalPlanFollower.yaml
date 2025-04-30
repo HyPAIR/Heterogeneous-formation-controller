@@ -1,0 +1,3 @@
+base_local_planner: local_plan_follower/LocalPlanFollower
+LocalPlanFollower:
+  dummy: 0.0

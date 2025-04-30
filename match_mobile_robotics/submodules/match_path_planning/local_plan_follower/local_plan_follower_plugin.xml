@@ -1,0 +1,5 @@
+<library path="lib/liblocal_plan_follower">
+    <class name="local_plan_follower/LocalPlanFollower" type="local_plan_follower::LocalPlanFollower" base_class_type="nav_core::BaseLocalPlanner">
+        <description>This is a local planner plugin which follows a given path.</description>
+    </class>
+</library>

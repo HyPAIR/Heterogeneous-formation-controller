@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <xacro:macro name="top_lift" params="">
+
+        <link name="left_lift_top">
+			<xacro:box_inertial mass="1.0" x="0.2" y="0.2" z="0.3">
+				<origin xyz="0 0 0.15" rpy="0 0 0" />
+			</xacro:box_inertial>
+			<visual>
+				<origin xyz="0 0 0" rpy="${pi * 0.5} 0 ${pi * 0.0}" />
+				<geometry>
+					<mesh filename="package://mir_description/meshes/visual/mir_600_lift_top.stl"/>
+				</geometry>
+				<xacro:insert_block name="material_white" />
+			</visual>
+			<collision>
+				<origin xyz="0 0 0" rpy="${pi * 0.5} 0 ${pi * 0.0}" />
+				<geometry>
+					<mesh filename="package://mir_description/meshes/collision/mir_600_lift_top.stl"/>
+				</geometry>
+			</collision>
+		</link>
+
+		<gazebo reference="left_lift_top">
+			<material>Gazebo/Grey</material>
+		</gazebo>
+
+		<joint name="left_lift_joint" type="prismatic">
+			<origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+			<parent link="left_lift_bottom" />
+			<child link="left_lift_top" />
+			<dynamics damping="1.0" friction="1.0"/>
+			<limit lower="0.0" upper="0.5" effort="1000000" velocity="1.0"/>
+			<axis xyz="0 0 1" />
+		</joint>
+
+        <link name="right_lift_top">
+			<xacro:box_inertial mass="1.0" x="0.2" y="0.2" z="0.3">
+				<origin xyz="0 0 0.15" rpy="0 0 0" />
+			</xacro:box_inertial>
+			<visual>
+				<origin xyz="0 0 0" rpy="${pi * 0.5} 0 ${pi * 0.0}" />
+				<geometry>
+					<mesh filename="package://mir_description/meshes/visual/mir_600_lift_top.stl"/>
+				</geometry>
+				<xacro:insert_block name="material_white" />
+			</visual>
+			<collision>
+				<origin xyz="0 0 0" rpy="${pi * 0.5} 0 ${pi * 0.0}" />
+				<geometry>
+					<mesh filename="package://mir_description/meshes/collision/mir_600_lift_top.stl"/>
+				</geometry>
+			</collision>
+		</link>
+
+		<gazebo reference="right_lift_top">
+			<material>Gazebo/Grey</material>
+		</gazebo>
+
+		<joint name="right_lift_joint" type="prismatic">
+			<origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+			<parent link="right_lift_bottom" />
+			<child link="right_lift_top" />
+			<dynamics damping="1.0" friction="1.0"/>
+			<limit lower="0.0" upper="0.5" effort="1000000" velocity="1.0"/>
+			<axis xyz="0 0 1" />
+		</joint>
+
+		<transmission name="left_lift_transmission">
+			<type>transmission_interface/SimpleTransmission</type>
+			<joint name="left_lift_joint">
+			  <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+			</joint>
+			<actuator name="left_lift_joint_motor">
+			  <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+			  <mechanicalReduction>1</mechanicalReduction>
+			</actuator>
+		</transmission>
+
+		<transmission name="right_lift_transmission">
+			<type>transmission_interface/SimpleTransmission</type>
+			<joint name="right_lift_joint">
+			  <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+			</joint>
+			<actuator name="right_lift_joint_motor">
+			  <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+			  <mechanicalReduction>1</mechanicalReduction>
+			</actuator>
+		</transmission>
+
+    </xacro:macro>
+
+
+</robot>

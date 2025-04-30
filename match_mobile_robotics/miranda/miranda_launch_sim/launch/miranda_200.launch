@@ -1,0 +1,102 @@
+<launch>
+	<arg name="tf_prefix"    default="" />
+	<arg name="robot_x"   default="0.0" />
+	<arg name="robot_y"   default="0.0" />
+	<arg name="robot_yaw" default="0.0" />
+	<arg name="model_name" default=""/>
+	<arg name="robot_urdf_path" value="$(find miranda_description)/urdf/miranda.gazebo.xacro"/>
+	<arg name="prefix" value="panda" doc="Prefix for the Panda links"/>
+
+	<!-- The model name of the robot_description cannot be empty when using no namespace. So use a default model name instead-->
+	<arg if="$(eval model_name=='')" name="robot_description_model_name" value="miranda" />
+	<arg unless="$(eval model_name=='')" name="robot_description_model_name" value="$(arg model_name)" /> 
+
+	<arg if="$(eval tf_prefix=='')" name="tf_prefix_slashed" value="" /> <!--Important for proper substitution (empty tf_prefix must not lead to leading slashes-->
+	<arg unless="$(eval tf_prefix=='')" name="tf_prefix_slashed" value="$(arg tf_prefix)/" /> <!--Important for proper substitution (empty tf_prefix must not lead to leading slashes-->
+
+	<!-- This argument sets the initial joint states -->
+	<arg name="initial_joint_states"
+	default=" -J panda_joint1 0.000
+			  -J panda_joint2 -0.785
+			  -J panda_joint3 0.0
+			  -J panda_joint4 -2.356
+			  -J panda_joint5 0.0
+			  -J panda_joint6 1.57
+			  -J panda_joint7 0.785"/>
+
+	<rosparam command="load" file="$(find miranda_launch_sim)/config/robot_details.yaml"/>
+
+	<!-- Load URDF -->
+	<param name="robot_description" command="$(find xacro)/xacro $(arg robot_urdf_path) robot_namespace:=$(arg model_name) tf_prefix:=$(arg tf_prefix)" />
+
+	<!-- Spawn the robot into Gazebo -->
+	<node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model $(arg robot_description_model_name)
+		-x $(arg robot_x) -y $(arg robot_y) -Y $(arg robot_yaw) $(arg initial_joint_states)" />
+	
+	<!-- Start the controllers -->
+	<rosparam file="$(find mir_launch_sim)/config/gazebo_joint_state_controller.yaml" command="load"/>
+	<rosparam file="$(find mir_launch_sim)/config/gazebo_diffdrive_controller.yaml" command="load" subst_value="true"/>
+
+	<!-- Config file for the panda robot arm which contains the controller that actuates the arm joints -->
+	<rosparam file="$(find miranda_launch_sim)/config/panda_sim_controllers.yaml" command="load" subst_value="true"/>
+
+	<node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen"
+		args="joint_state_controller mobile_base_controller position_joint_position_controller">
+	</node>
+
+	<!-- -->
+	
+	<!-- <node name="panda_controller_spawner" pkg="controller_manager" type="controller_manager" respawn="false"
+		output="screen" args="spawn " /> -->
+
+	<!-- <rosparam file="$(find miranda_launch_sim)/config/panda_gripper_controller.yaml" command="load" /> -->
+
+	<!-- <node name="panda_gripper_controller_spawner"
+		pkg="controller_manager" type="controller_manager" respawn="false" output="screen"
+		args="spawn panda_gripper_controller"/> -->
+		
+	<!-- Robot state publisher -->
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen">
+		<param name="tf_prefix" value="$(arg tf_prefix)"/>
+	</node>
+
+	<!-- Add passive + mimic joints to joint_states topic -->
+	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+		<rosparam param="source_list" subst_value="true">[joint_states]</rosparam>
+		<param name="rate" value="200.0" />
+		<param name="use_gui" value="false"/>
+	</node>
+
+	<include file="$(find mir_navigation)/launch/amcl.launch">
+		<arg name="tf_prefix" value="$(arg tf_prefix)"/>
+		<arg name="initial_pose_x"  value="$(arg robot_x)"/>
+		<arg name="initial_pose_y"  value="$(arg robot_y)"/>
+		<arg name="initial_pose_a"  value="$(arg robot_yaw)"/>
+	</include>
+	
+	<include file="$(find mir_navigation)/launch/move_base.launch" pass_all_args="true">
+		<arg name="global_planner" value="GlobalPlanner"/>
+		<arg name="local_planner" value="DWAPlannerROS"/>
+	</include>
+
+	<!-- Start all necessary moveit files -->
+	<include file="$(find miranda_moveit)/launch/move_group.launch">
+		<arg name="load_robot_description" value="false" />
+		<!-- <arg name="model_name" value="$(arg model_name)"/>-->
+		<!-- <arg name="prefix" value="$(arg prefix)"/> -->
+	</include>
+
+	<node pkg="topic_tools" type="relay" name="b_scan_relay" args="b_scan scan"/>
+	<node pkg="topic_tools" type="relay" name="f_scan_relay" args="f_scan scan"/>
+
+
+	<node name="b_rep117_laser_filter" pkg="mir_driver" type="rep117_filter.py" output="screen">
+		<remap from="scan" to="b_scan" />
+		<remap from="scan_filtered" to="b_scan_rep117" />
+	</node>
+
+	<node name="f_rep117_laser_filter" pkg="mir_driver" type="rep117_filter.py" output="screen">
+		<remap from="scan" to="f_scan" />
+		<remap from="scan_filtered" to="f_scan_rep117" />
+	</node>
+</launch>

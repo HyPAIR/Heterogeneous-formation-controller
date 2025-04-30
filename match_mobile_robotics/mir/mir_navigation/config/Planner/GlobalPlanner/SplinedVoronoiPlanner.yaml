@@ -1,0 +1,25 @@
+SplinedVoronoiPlanner:
+  free_cell_threshold: 0
+  angle_threshold: 0.0 # 0.3927 # PI / 8; 22,5°
+  min_distance_control_points: 1.25
+  plan_resolution: 20 # pt / m
+  max_curvature: 0.8  # value is used unless it is -1, then max curvature is calculated from formation radius.
+  curvature_safety_margin: 0.02
+  free_space_factor: 2.3
+  optimize_lengths: true
+  max_optimization_time: 15.0
+  perform_splining: true
+  fast_mode: false
+
+  formation_config:
+    robot_names: ["/mir1", "/mir2"]
+    mir1:
+      namespace: /mir1
+      rel_x_offset: 0.0
+      rel_y_offset: 4
+      rel_yaw_offset: 0.0
+    mir2:
+      namespace: /mir2
+      rel_x_offset: 0.0
+      rel_y_offset: -4
+      rel_yaw_offset: 0.0

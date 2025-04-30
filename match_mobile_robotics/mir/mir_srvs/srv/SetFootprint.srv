@@ -1,0 +1,5 @@
+string footprint_string
+string robot_height
+---
+bool success
+string return_message

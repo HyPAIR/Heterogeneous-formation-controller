@@ -1,0 +1,142 @@
+<launch>
+  <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+
+  <arg name="model1" default="$(env TURTLEBOT3_MODEL)" doc="model1 type [burger, waffle, waffle_pi]"/>
+  <arg name="x_pos1" default="8.5"/>
+  <arg name="y_pos1" default="8.4"/>
+  <arg name="YAW1" default="-0.171923090474347"/>
+
+  <arg name="model2" default="$(env TURTLEBOT3_MODEL)" doc="model2 type [burger, waffle, waffle_pi]"/>
+  <arg name="x_pos2" default="8.1999999999999993"/>
+  <arg name="y_pos2" default="7.5267949192431098"/>
+  <arg name="YAW2" default="-0.171923090474347"/>
+
+  <arg name="model3" default="$(env TURTLEBOT3_MODEL)" doc="model3 type [burger, waffle, waffle_pi]"/>
+  <arg name="x_pos3" default="8.8000000000000007"/>
+  <arg name="y_pos3" default="7.5267949192431098"/>
+  <arg name="YAW3" default="-0.171923090474347"/>
+
+  <arg name="model4" default="$(env TURTLEBOT3_MODEL)" doc="model4 type [burger, waffle, waffle_pi]"/>
+  <arg name="x_pos4" default="0.90000000000000002"/>
+  <arg name="y_pos4" default="8"/>
+  <arg name="YAW4" default="-0.164526301319951"/>
+
+  <arg name="model5" default="$(env TURTLEBOT3_MODEL)" doc="model5 type [burger, waffle, waffle_pi]"/>
+  <arg name="x_pos5" default="1.5"/>
+  <arg name="y_pos5" default="7.4000000000000004"/>
+  <arg name="YAW5" default="-0.164526301319951"/>
+
+  <arg name="model6" default="$(env TURTLEBOT3_MODEL)" doc="model6 type [burger, waffle, waffle_pi]"/>
+  <arg name="x_pos6" default="2.1"/>
+  <arg name="y_pos6" default="8"/>
+  <arg name="YAW6" default="-0.164526301319951"/>
+
+  <arg name="model7" default="$(env TURTLEBOT3_MODEL)" doc="model7 type [burger, waffle, waffle_pi]"/>
+  <arg name="x_pos7" default="1.5"/>
+  <arg name="y_pos7" default="8.5999999999999996"/>
+  <arg name="YAW7" default="-0.164526301319951"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <!-- <arg name="world_name" value="/home/weijian/traj_tracking/src/racebot_gazebo/worlds/ecmr"/> -->
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="true"/>
+  </include>
+  
+  <!-- <include file="$(find racebot_control)/launch/racebot_control.launch"/> -->
+  <!-- <node pkg="rviz" type="rviz" name="rviz" args="" />  -->
+  <!--car-like robot 1-->
+  <group ns = "robot1">
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro ns:=robot1" />
+    <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" output="screen" /> -->
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+      <param name="publish_frequency" type="double" value="50.0" />
+      <param name="tf_prefix" value="robot1"/>
+    </node>
+    
+    <!--transform odom to map-->
+    <node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster_robot1"
+     args="0 0 0 0 0 0 /odom /base_footprint 5" />
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf1"  args="-urdf -model turtlebot3_$(arg model)_1 -x $(arg x_pos1) -y $(arg y_pos1) -Y $(arg YAW1) -param robot_description" />
+  </group>
+
+    <group ns = "robot2">
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro ns:=robot2" />
+    <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" output="screen" /> -->
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+      <param name="publish_frequency" type="double" value="50.0" />
+      <param name="tf_prefix" value="robot2"/>
+    </node>
+    <!--transform odom to map-->
+    <node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster_robot2"
+     args="0 0 0 0 0 0 /odom /base_footprint 5" />
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf2"  args="-urdf -model turtlebot3_$(arg model)_2 -x $(arg x_pos2) -y $(arg y_pos2) -Y $(arg YAW2) -param robot_description" />
+  </group>
+
+    <group ns = "robot3">
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro ns:=robot3" />
+    <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" output="screen" /> -->
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+      <param name="publish_frequency" type="double" value="50.0" />
+      <param name="tf_prefix" value="robot3"/>
+    </node>
+    <!--transform odom to map-->
+    <node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster_robot3"
+     args="0 0 0 0 0 0 /odom /base_footprint 5" />
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf3"  args="-urdf -model turtlebot3_$(arg model)_3 -x $(arg x_pos3) -y $(arg y_pos3) -Y $(arg YAW3) -param robot_description" />
+  </group>
+
+    <group ns = "robot4">
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro ns:=robot4" />
+    <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" output="screen" /> -->
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+      <param name="publish_frequency" type="double" value="50.0" />
+      <param name="tf_prefix" value="robot4"/>
+    </node>
+    <!--transform odom to map-->
+    <node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster_robot4"
+     args="0 0 0 0 0 0 /odom /base_footprint 5" />
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf4"  args="-urdf -model turtlebot3_$(arg model)_4 -x $(arg x_pos4) -y $(arg y_pos4) -Y $(arg YAW4) -param robot_description" />
+  </group>
+
+    <group ns = "robot5">
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro ns:=robot5" />
+    <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" output="screen" /> -->
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+      <param name="publish_frequency" type="double" value="50.0" />
+      <param name="tf_prefix" value="robot5"/>
+    </node>
+    <!--transform odom to map-->
+    <node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster_robot5"
+     args="0 0 0 0 0 0 /odom /base_footprint 5" />
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf5"  args="-urdf -model turtlebot3_$(arg model)_5 -x $(arg x_pos5) -y $(arg y_pos5) -Y $(arg YAW5) -param robot_description" />
+  </group>
+
+    <group ns = "robot6">
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro ns:=robot6" />
+    <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" output="screen" /> -->
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+      <param name="publish_frequency" type="double" value="50.0" />
+      <param name="tf_prefix" value="robot6"/>
+    </node>
+    <!--transform odom to map-->
+    <node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster_robot6"
+     args="0 0 0 0 0 0 /odom /base_footprint 5" />
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf6"  args="-urdf -model turtlebot3_$(arg model)_6 -x $(arg x_pos6) -y $(arg y_pos6) -Y $(arg YAW6) -param robot_description" />
+  </group>
+
+    <group ns = "robot7">
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro ns:=robot7" />
+    <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" output="screen" /> -->
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+      <param name="publish_frequency" type="double" value="50.0" />
+      <param name="tf_prefix" value="robot7"/>
+    </node>
+    <!--transform odom to map-->
+    <node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster_robot7"
+     args="0 0 0 0 0 0 /odom /base_footprint 5" />
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf7"  args="-urdf -model turtlebot3_$(arg model)_7 -x $(arg x_pos7) -y $(arg y_pos7) -Y $(arg YAW7) -param robot_description" />
+  </group>
+</launch>

@@ -1,0 +1,11 @@
+prefix=/home/criss/drake/build/install
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: bot2-param-client
+Description: bot2-param-client
+Requires:  lcm bot2-core glib-2.0 lcmtypes_bot2-param
+Version: 0.0.1
+Libs: -L${libdir}  -lbot2-param-client
+Cflags: -I${includedir} 

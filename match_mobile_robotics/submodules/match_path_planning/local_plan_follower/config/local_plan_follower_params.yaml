@@ -1,0 +1,7 @@
+controllers:
+  - name: 'LocalPlanFollower'
+    type: 'local_plan_follower/LocalPlanFollower'
+
+# base_local_planner: local_plan_follower/LocalPlanFollower
+LocalPlanFollower:
+  myfirstparam: 0.0

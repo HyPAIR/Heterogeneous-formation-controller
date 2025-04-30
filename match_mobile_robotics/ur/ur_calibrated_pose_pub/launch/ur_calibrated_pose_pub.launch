@@ -1,0 +1,18 @@
+<launch>
+    <arg name="robot_ip" default="ur10_r"/>
+    <arg name="ur_joint_state_topic_name" default="/UR10_r/joint_states"/>
+    <!-- valid options are: 
+    calibrated: Uses the calibrated dh parameter of the UR control
+    ideal: Uses the ideal CAD parameter from the config file -->
+    <arg name="dh_parameter_switch" default="calibrated"/>
+    <arg name="joint_prefix" default="UR10_l"/>
+    
+    <!-- Interface for gripper abstraction -->
+    <node name="ur_calibrated_pose_pub_node" type="ur_calibrated_pose_pub_node" pkg="ur_calibrated_pose_pub" output="screen"> 
+        <rosparam file="$(find ur_calibrated_pose_pub)/config/ur10e_dh_params.yaml" command="load" subst_value="true"/>
+        <param name="robot_ip" value="$(arg robot_ip)"/>
+        <param name="ur_joint_state_topic_name" value="$(arg ur_joint_state_topic_name)"/>
+        <param name="dh_parameter_switch" value="$(arg dh_parameter_switch)"/>
+        <param name="joint_prefix" value="$(arg joint_prefix)"/>
+    </node>
+</launch>

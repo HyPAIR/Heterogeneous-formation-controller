@@ -1,0 +1,12 @@
+prefix=/home/criss/drake/build/install
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include/lcmtypes
+
+Name: robotlocomotion-lcmtypes-java
+Description: LCM type java bindings for robotlocomotion
+Requires:  lcm-java
+Version: 0.0.0
+Libs:
+Cflags:
+classpath=${prefix}/share/java/robotlocomotion-lcmtypes.jar

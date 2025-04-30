@@ -1,0 +1,10 @@
+SBPLLatticePlanner:
+  environment_type: XYThetaLattice
+  planner_type: ARAPlanner
+  allocated_time: 30.0
+  initial_epsilon: 50.0
+  forward_search: false
+  nominalvel_mpersecs: 0.8
+  timetoturn45degsinplace_secs: 1.31 # = 0.6 rad/s
+  visualize_potential: true # false
+  primitive_filename: $(find mir_navigation)/config/Planner/GlobalPlanner/mprim/unicycle_highcost_5cm.mprim

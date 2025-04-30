@@ -1,0 +1,11 @@
+prefix=/home/criss/drake/build/install
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: lcmtypes_bot2-procman
+Description: LCM types for bot2-procman
+Requires:  lcm
+Version: 0.0.0
+Libs: -L${libdir}  -llcmtypes_bot2-procman
+Cflags: -I${includedir} 

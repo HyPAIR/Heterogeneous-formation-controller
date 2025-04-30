@@ -1,0 +1,21 @@
+<launch>
+    <arg name="tf_prefix" default="mur"/>
+    <arg name="mir_type" doc="This variable selects the robot that is loaded. Default: mir_200. Options: mir_100, mir_200, mir_600" default="mir_200"/>
+    <arg name="tf_mir_ur" default="0.35 -0.15 0.35 0 0 1 0"/>
+    <arg name="external_localization" default="false"/>
+    <arg name="robot_description" default="$(find mir_description)/urdf/$(arg mir_type)/$(arg mir_type).urdf"/>
+    <arg name="localization_type" default="mocap" />
+
+    <!-- TODO: include robot_name in ns?  -->
+    <include file="$(find mir_launch_hardware)/launch/$(arg mir_type).launch">
+        <arg name="tf_prefix" value="$(arg tf_prefix)"/>   
+        <arg name="external_localization" value="$(arg external_localization)"/>
+        <arg name="mocap_frame_id" default="$(arg tf_prefix)"/>
+        <arg name="localization_topic" value="/qualisys/$(arg tf_prefix)/pose"/>
+        <arg name="robot_description" value="$(arg robot_description)"/>
+        <arg name="localization_type" value="$(arg localization_type)"/>        
+    </include>
+
+</launch>
+
+   

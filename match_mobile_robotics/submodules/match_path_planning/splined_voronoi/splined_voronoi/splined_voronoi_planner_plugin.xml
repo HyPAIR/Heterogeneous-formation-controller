@@ -1,0 +1,5 @@
+<library path="lib/libsplined_voronoi">
+    <class name="splined_voronoi/SplinedVoronoiPlanner" type="splined_voronoi::SplinedVoronoiPlanner" base_class_type="nav_core::BaseGlobalPlanner">
+        <description>This is a global planner plugin which utilizes voronoi diagrams and perfoms smoothing with splines.</description>
+    </class>
+</library>

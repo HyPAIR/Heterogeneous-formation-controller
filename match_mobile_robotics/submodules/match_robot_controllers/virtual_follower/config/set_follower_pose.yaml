@@ -1,0 +1,3 @@
+set_leader_pose:
+  leader_pose_topic: /virtual_leader/leader_pose
+  #follower_set_pose_topic: /virtual_leader/set_pose

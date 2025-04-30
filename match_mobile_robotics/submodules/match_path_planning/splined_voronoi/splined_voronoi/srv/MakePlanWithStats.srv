@@ -1,0 +1,11 @@
+geometry_msgs/PoseStamped start                     # start pose of the robot
+geometry_msgs/PoseStamped goal                      # goal pose of the robot
+float64 max_curvature                               # maximum allowed curvature of the path (1/formation_radius)
+---
+int64 plan_found                                    # 0 if a plan was found, -1 otherwise
+float64 time_taken                                  # total time taken for path planning
+geometry_msgs/PoseStamped[] astar_path              # path found by A* search on voronoi diagram
+geometry_msgs/PoseStamped[] sparse_path             # path of waypoints after selection
+geometry_msgs/PoseStamped[] optimized_sparse_path   # optimized waypoint path
+float64[] spline_tangent_lengths                    # optimized tangent lengths of the spline
+geometry_msgs/PoseStamped[] path                    # discretized optimized spline as resulting path

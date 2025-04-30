@@ -1,0 +1,11 @@
+prefix=/home/criss/drake/build/install
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: bot2-lcmgl-renderer
+Description: bot2-lcmgl-renderer
+Requires:  lcmtypes_bot2-lcmgl
+Version: 0.0.1
+Libs: -L${libdir}  -lbot2-lcmgl-renderer
+Cflags: -I${includedir} 

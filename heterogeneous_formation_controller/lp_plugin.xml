@@ -1,0 +1,7 @@
+<library path="lib/libheterogeneous_formation_controller">
+    <class name ="heterogeneous_formation_controller/hmfpcLocalPlannerROS" type="heterogeneous_formation_controller::hmfpcLocalPlannerROS" base_class_type= "nav_core::BaseGlobalPlanner">
+        <description>
+            Heterogeneous Multi-formation Planning and Coordination Framework
+        </description>
+    </class>
+</library>

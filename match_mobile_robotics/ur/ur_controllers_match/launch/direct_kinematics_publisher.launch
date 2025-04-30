@@ -1,0 +1,11 @@
+<launch>
+	<arg name="ur_prefix"    default="UR10_l/" />
+
+    <group ns="mur620">
+        <!-- <rosparam file="$(find ur_launch_hardware)/calibration/calibration_UR16e_13.yaml" command="load" subst_value="true"/>  -->
+		<node name="direct_kinematics_publisher" pkg="ur_controllers_match" type="direct_kinematics_publisher.py" output="screen">
+				<param name="ur_prefix" value="$(arg ur_prefix)" />
+		</node>
+	</group>
+
+</launch>

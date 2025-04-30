@@ -1,0 +1,15 @@
+<launch>
+
+  <arg name="relative_pose"  default="[1.0, 0.0, 0.0]"/>
+  <arg name="follower_name"  default="mur620f"/>
+
+  <group ns="virtual_follower">
+    <rosparam file="$(find virtual_follower)/config/set_follower_pose.yaml" command="load" />
+
+    <node name="set_follower_pose" pkg="virtual_follower" type="set_follower_pose.py" output="screen">
+      <rosparam param="relative_pose" subst_value="True">$(arg relative_pose) </rosparam>
+      <param name="follower_set_pose_topic" value="/$(arg follower_name)/set_pose" />
+    </node>
+  </group>
+
+</launch>

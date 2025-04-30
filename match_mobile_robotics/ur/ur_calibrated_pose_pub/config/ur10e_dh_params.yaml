@@ -1,0 +1,34 @@
+# Add the static theta value to the current joint_state. 
+# The active joint is not specified esplicitly
+# Angles are in ° because it is easier to convert to rad later (no long decimal numbers)
+dh_params:
+  joint1:
+    theta: 0.0
+    a: 0.0
+    d: 0.1807
+    alpha: 90.0
+  joint2:
+    theta: 0.0
+    a: -0.6127
+    d: 0.0
+    alpha: 0.0
+  joint3:
+    theta: 0.0
+    a: -0.57155
+    d: 0.0
+    alpha: 0.0
+  joint4:
+    theta: 0.0
+    a: 0.0
+    d: 0.17415
+    alpha: 90.0
+  joint5:
+    theta: 0.0
+    a: 0.0
+    d: 0.11985
+    alpha: -90.0
+  joint6:
+    theta: 0.0
+    a: 0.0
+    d: 0.11655
+    alpha: 0.0

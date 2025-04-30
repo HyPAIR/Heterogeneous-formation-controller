@@ -1,0 +1,10 @@
+uint8 GET_STATUS = 1
+uint8 ENABLE_LOW_SPEED_MODE = 2
+uint8 ENABLE_HIGH_SPEED_MODE = 3
+uint8 command
+---
+uint8 LOW_SPEED_MODE_ENABLED = 2
+uint8 HIGH_SPEED_MODE_ENABLED = 3
+uint8 mode
+string error_msg
+bool success

@@ -1,0 +1,6 @@
+string guid
+string user_guid
+string answer
+---
+string error
+bool success

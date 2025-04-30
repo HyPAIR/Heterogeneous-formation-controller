@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+	<xacro:macro name="controller_plugin_gazebo" params="robot_namespace">
+		<gazebo>
+			<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+				<xacro:unless value="${robot_namespace == ''}">
+					<robotNamespace>${robot_namespace}</robotNamespace>
+				</xacro:unless>
+				<controlPeriod>0.001</controlPeriod>
+				<legacyModeNS>true</legacyModeNS>
+			</plugin>
+		</gazebo>
+	</xacro:macro>
+
+	<!-- This controller is deprecated and forbidden in Noetic -->
+	<!-- This controller publishes the ground truth pose -->
+	<xacro:macro name="p3d_base_controller" params="robot_namespace">
+		<gazebo>
+			<plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
+				<robotNamespace>${robot_namespace}</robotNamespace>
+				<alwaysOn>true</alwaysOn>
+				<updateRate>50.0</updateRate>
+				<bodyName>base_footprint</bodyName>
+				<topicName>ground_truth</topicName>
+				<gaussianNoise>0.01</gaussianNoise>
+				<frameName>map</frameName>
+				<xyzOffsets>0 0 0</xyzOffsets>
+				<rpyOffsets>0 0 0</rpyOffsets>
+			</plugin>
+		</gazebo>
+	</xacro:macro>	
+</robot>

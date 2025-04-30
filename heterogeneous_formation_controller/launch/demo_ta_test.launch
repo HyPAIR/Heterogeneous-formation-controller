@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="mission"               default="formation_test.json"/>
+
+  <node pkg="heterogeneous_formation_controller" type="ta_test_node" name="ta_test_node" output="screen">   
+    <param name="mission"                    value="$(find heterogeneous_formation_controller)/missions/$(arg mission)" />
+  </node>
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find heterogeneous_formation_controller)/config/test.rviz" />
+
+<!-- Nodes End -->
+</launch>

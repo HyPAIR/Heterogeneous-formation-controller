@@ -1,0 +1,7 @@
+<launch>
+  <arg name="map_file" default="$(find scout_navigation)/maps/mymap.yaml" doc="Path to a map .yaml file (required)." />
+  
+  <node name="static_map_server" pkg="map_server" type="map_server" args="$(arg map_file)" ns="/" output="screen">
+    <param name="frame_id" type="string" value="map"/>
+  </node>
+</launch>

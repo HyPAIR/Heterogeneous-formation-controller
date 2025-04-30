@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: miranda_description
+    relative_path: urdf/miranda.gazebo.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/miranda.srdf
+  CONFIG:
+    author_name: Henrik Lurz
+    author_email: lurz@luis.uni-hannover.de
+    generated_timestamp: 1624366430

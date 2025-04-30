@@ -1,0 +1,29 @@
+<launch>
+    <!-- Basic launch file for one robot in the match_world_common map-->
+  
+    <include file="$(find match_gazebo)/launch/match_world_common.launch">
+    </include>
+  
+    <arg name="robot1_name"  default="mir1"/>
+    <arg name="robot2_name"  default="mir2"/>
+    
+    <include file="$(find mur_launch_sim)/launch/mur_205.launch" ns="$(arg robot1_name)" pass_all_args="true">
+        <arg name="robot_x"     default="0.0" />
+        <arg name="robot_y"     default="0.5" />
+        <arg name="robot_yaw"   default="0.0" /> 
+        <arg name="tf_prefix"   default="$(arg robot1_name)" />       
+        <arg name="model_name"  default="$(arg robot1_name)"/>
+    </include>
+      
+    <include file="$(find mur_launch_sim)/launch/mur_205.launch" ns="$(arg robot2_name)" pass_all_args="true">
+        <arg name="robot_x"     default="0.0" />
+        <arg name="robot_y"     default="-0.5" />
+        <arg name="robot_yaw"   default="0.0" /> 
+        <arg name="tf_prefix"   default="$(arg robot2_name)" />       
+        <arg name="model_name"  default="$(arg robot2_name)"/>
+    </include>
+    
+    <node type="rviz" name="rviz_multi_mir" pkg="rviz" args="-d $(find mur_examples)/rviz/multi_mur_205_visualization.rviz" />
+    <node type="rviz" name="rviz_mir1" pkg="rviz" args="-d $(find mur_examples)/rviz/mir1_moveit_visualization.rviz" />
+    <node type="rviz" name="rviz_mir2" pkg="rviz" args="-d $(find mur_examples)/rviz/mir2_moveit_visualization.rviz" />
+  </launch>

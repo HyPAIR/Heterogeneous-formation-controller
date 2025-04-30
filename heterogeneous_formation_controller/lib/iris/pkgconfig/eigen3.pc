@@ -1,0 +1,6 @@
+Name: Eigen3
+Description: A C++ template library for linear algebra: vectors, matrices, and related algorithms
+Requires:
+Version: 3.2.4
+Libs:
+Cflags: -I/home/criss/iris-distro/build/include/eigen3

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="heterogeneous_formation_controller" type="topologic_pp" name="topologic_pp" output="screen" >
+        <param name="topo_prm/sample_inflate_x" value="1.0" type="double"/>
+        <param name="topo_prm/sample_inflate_y" value="3.5" type="double"/>
+        <param name="topo_prm/sample_inflate_z" value="1.0" type="double"/>
+        <param name="topo_prm/clearance" value="0.3" type="double"/>
+        <param name="topo_prm/max_sample_time" value="0.005" type="double"/>
+        <param name="topo_prm/max_sample_num" value="2000" type="int"/>
+        <param name="topo_prm/max_raw_path" value="300" type="int"/>
+        <param name="topo_prm/max_raw_path2" value="25" type="int"/>
+        <param name="topo_prm/short_cut_num" value="1" type="int"/>
+        <param name="topo_prm/reserve_num" value="6" type="int"/>
+        <param name="topo_prm/ratio_to_short" value="5.5" type="double"/>
+        <param name="topo_prm/parallel_shortcut" value="true" type="bool"/>
+    </node>
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find heterogeneous_formation_controller)/config/test.rviz" />
+</launch>

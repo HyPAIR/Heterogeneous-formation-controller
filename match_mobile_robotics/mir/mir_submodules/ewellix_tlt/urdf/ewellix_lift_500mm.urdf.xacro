@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<robot name="ewellix_lift_500mm" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+<xacro:property name="M_PI" value="3.1415926535897931" />
+
+<xacro:include filename="$(find ewellix_tlt)/urdf/common_materials.xacro" />
+<!-- - - - - - - - - - - - - - EWELLIX LIFT - - - - - - - - - - - - - -->
+
+
+      <xacro:macro name="gazebo-joint" params="joint transmission:=hardware_interface/EffortJointInterface">
+       <gazebo reference="${joint}">
+         <!-- Needed for ODE to output external wrenches on joints -->
+         <provideFeedback>true</provideFeedback>
+       </gazebo>
+
+       <transmission name="${joint}_transmission">
+         <type>transmission_interface/SimpleTransmission</type>
+         <joint name="${joint}">
+           <hardwareInterface>${transmission}</hardwareInterface>
+         </joint>
+         <actuator name="${joint}_motor">
+           <hardwareInterface>${transmission}</hardwareInterface>
+         </actuator>
+       </transmission>
+      </xacro:macro>
+
+
+
+  <xacro:macro name="ewellix_lift_500mm" params="prefix parent cut_model:=false *origin">
+    
+    <!-- Lift base link -->
+    <link name="${prefix}ewellix_lift_base_link">
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 ${M_PI/2}"/>
+        <geometry>
+          <mesh filename="package://ewellix_tlt/meshes/ewellix_lift_base_500mm.stl"  scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="grey">
+          <color rgba="0.7 0.7 0.7 1"/>
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0.0 0 0.0" rpy="0 0 ${M_PI/2}"/>
+        <geometry>
+          <mesh filename="package://ewellix_tlt/meshes/ewellix_lift_base_500mm.stl"  scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <mass value="20" />
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="1e-1" ixy="0" ixz="0" iyy="1e-1" iyz="0" izz="1e-1" />
+      </inertial>
+
+    </link>
+
+    <!-- Lift base link joint -->
+    <joint name="${prefix}ewellix_lift_base_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}"/>
+      <child link="${prefix}ewellix_lift_base_link" /> 
+    </joint>
+
+
+
+    <!-- Lift top link -->
+    <link name="${prefix}ewellix_lift_top_link">
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 -${M_PI/2}"/>
+        <geometry>
+          <xacro:if value="${cut_model}">
+            <mesh filename="package://ewellix_tlt/meshes/ewellix_lift_top_500mm.stl"  scale="0.001 0.001 0.001"/>
+          </xacro:if>
+          <xacro:unless value="${cut_model}">
+            <mesh filename="package://ewellix_tlt/meshes/ewellix_lift_top_500mm.stl"  scale="0.001 0.001 0.001"/>
+          </xacro:unless>
+        </geometry>
+        <material name="grey">
+          <color rgba="0.7 0.7 0.7 1"/>
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0.0 0 0.0" rpy="0 0 -${M_PI/2}"/>
+        <geometry>
+          <xacro:if value="${cut_model}">
+            <mesh filename="package://ewellix_tlt/meshes/ewellix_lift_top_500mm.stl" scale="0.001 0.001 0.001"/>
+          </xacro:if>
+          <xacro:unless value="${cut_model}">
+            <mesh filename="package://ewellix_tlt/meshes/ewellix_lift_top_500mm.stl" scale="0.001 0.001 0.001"/>
+          </xacro:unless>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <mass value="2" />
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+         <inertia ixx="0.2e-1" ixy="0" ixz="0" iyy="0.2e-1" iyz="0" izz="0.2e-1" />
+      </inertial>
+
+    </link>
+
+
+        <!-- Lift top link joint -->
+    <joint name="${prefix}ewellix_lift_top_joint" type="prismatic">
+      <parent link="${prefix}ewellix_lift_base_link"/>
+      <child link="${prefix}ewellix_lift_top_link" />
+      <origin xyz="0 0 0.52" rpy="0 0 0" />
+      <limit effort="100000" lower="0.0" upper="0.5" velocity="0.088"/>
+      <axis xyz="0 0 1" /> 
+    </joint>
+
+
+    <!--
+        PositionJointInterface
+        VelocityJointInterface
+        EffortJointInterface
+    -->
+
+
+    <xacro:gazebo-joint joint="${prefix}ewellix_lift_top_joint" transmission="hardware_interface/EffortJointInterface" />
+
+    <gazebo reference="${prefix}ewellix_lift_base_link">
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <gazebo reference="${prefix}ewellix_lift_top_link">
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+
+  </xacro:macro>
+
+  
+</robot>

@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: heterogeneous_formation_controller
+Description: Description of heterogeneous_formation_controller
+Version: 0.0.1
+Cflags: -I${prefix}/include -I/opt/ros/noetic/include/ompl-1.6 -I/usr/include -I/usr/include/eigen3
+Libs: -L${prefix}/lib -lheterogeneous_formation_controller /opt/ros/noetic/lib/x86_64-linux-gnu/libompl.so /usr/lib/x86_64-linux-gnu/libboost_serialization.so /usr/lib/x86_64-linux-gnu/libboost_filesystem.so /usr/lib/x86_64-linux-gnu/libboost_system.so -lode
+Requires: gazebo_ros roscpp roslib message_runtime

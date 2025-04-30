@@ -1,0 +1,26 @@
+{
+  "robots": {
+    "robot": { "radius": 0.9, "speed": 1.0 },
+    "default": { "radius": 0.9, "speed": 1.0 },
+    "seed": {"seed": [0]}
+  },
+
+  "agents": [
+    {"name": "robot", "start": [-6.0, 6.0, 1.0], "goal": [ -9.0083668324999984, 23, 1.0], "radius": 0.9, "speed": 1.0, "type": 0 },
+    {"name": "robot", "start": [-6.0, 3.0, 1.0], "goal": [-26, 8.9916331675000016, 1.0], "radius": 0.9, "speed": 1.0, "type": 0  },
+    {"name": "robot", "start": [-6.0, 0.0, 1.0], "goal": [-26, -9.0083668324999984, 1.0], "radius": 0.9, "speed": 1.0, "type": 0  },
+    {"name": "robot", "start": [-6.0, -3.0, 1.0], "goal": [-18.991633167500002, -18, 1.0], "radius": 0.9, "speed": 1.0, "type": 0  },
+    {"name": "robot", "start": [-6.0, -6.0, 1.0], "goal": [ -6.9916331675000016, -23, 1.0], "radius": 0.9, "speed": 1.0, "type": 0  },
+    {"name": "robot", "start": [0.0, 6.0, 1.0], "goal": [-28.0, 10.0, 1.0], "radius": 0.9, "speed": 1.0, "type": 1  },
+    {"name": "robot", "start": [0.0, 3.0, 1.0], "goal": [-28, 7.9832663349999997, 1.0], "radius": 0.9, "speed": 1.0, "type": 1  },
+    {"name": "robot", "start": [0.0, 0.0, 1.0], "goal": [-28.0, -8.0, 1.0], "radius": 0.9, "speed": 1.0, "type": 1  },
+    {"name": "robot", "start": [0.0, -3.0, 1.0], "goal": [-28, -10.016733665, 1.0], "radius": 0.9, "speed": 1.0, "type": 1  },
+    {"name": "robot", "start": [0.0, -6.0, 1.0], "goal": [-17.983266335, -20, 1.0], "radius": 0.9, "speed": 1.0, "type": 1  },
+    {"name": "robot", "start": [6.0, 6.0, 1.0], "goal": [-8.0, 25.0, 1.0], "radius": 0.9, "speed": 1.0, "type": 1  },
+    {"name": "robot", "start": [6.0, 3.0, 1.0], "goal": [-10.016733665, 25, 1.0], "radius": 0.9, "speed": 1.0, "type": 1  },
+    {"name": "robot", "start": [6.0, 0.0, 1.0], "goal": [-20.0, -20.0, 1.0], "radius": 0.9, "speed": 1.0, "type": 1  },
+    {"name": "robot", "start": [6.0, -3.0, 1.0], "goal": [-8.0, -25.0, 1.0], "radius": 0.9, "speed": 1.0, "type": 1  },
+    {"name": "robot", "start": [6.0, -6.0, 1.0], "goal": [-5.9832663349999997, -25, 1.0], "radius": 0.9, "speed": 1.0, "type": 1  }
+  ]
+}
+

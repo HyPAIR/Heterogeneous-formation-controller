@@ -1,0 +1,34 @@
+<launch>
+    <arg name="robot_x"   default="0.0" />
+    <arg name="robot_y"   default="0.0" />
+    <arg name="robot_z"   default="0.10" />
+    <arg name="robot_yaw" default="0.0" />
+    <arg name="init_pose" default="-x $(arg robot_x) -y $(arg robot_y) -Y $(arg robot_yaw) -z $(arg robot_z) "/>
+    <arg name="robot_name" default="ur"/>
+    <arg name="tf_prefix"    default="" />    
+ 
+    <arg name="transmission_hw_interface" default="hardware_interface/PositionJointInterface" />
+
+    <arg if="$(eval tf_prefix=='')" name="tf_prefix_slashed" value="" /> <!--Important for proper substitution (empty tf_prefix must not lead to leading slashes-->
+    <arg unless="$(eval tf_prefix=='')" name="tf_prefix_slashed" value="$(arg tf_prefix)/" /> <!--Important for proper substitution (empty tf_prefix must not lead to leading slashes-->
+
+    <param name="robot_description" 
+        command="$(find xacro)/xacro $(find ur_description)/urdf/ur5.xacro transmission_hw_interface:=$(arg transmission_hw_interface)  tf_prefix:=$(arg tf_prefix)"/> 
+    
+    <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" 
+            args="-urdf -param robot_description -model $(arg robot_name) $(arg init_pose)" 
+            respawn="false" output="screen"/>          
+
+     <!-- Start the controllers -->
+    <rosparam file="$(find ur_launch_sim)/config/gazebo_joint_state_controller.yaml" command="load"/>
+    <node name="controller_spawner" pkg="controller_manager" type="controller_manager" output="screen"
+        args="spawn joint_state_controller">
+    </node>
+
+
+     <!-- Robot state publisher -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen">
+        <param name="tf_prefix" value="$(arg tf_prefix)"/>
+    </node>
+    
+</launch>

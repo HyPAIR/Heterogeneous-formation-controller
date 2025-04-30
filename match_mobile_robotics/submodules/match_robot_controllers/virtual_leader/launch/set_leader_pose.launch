@@ -1,0 +1,15 @@
+<launch>
+
+  <arg name="relative_pose"  default="[1.0, 0.0, 3.1415]"/>
+  <arg name="robot_pose_topic" default="/mur620b/mir_pose_stamped_simple"/>
+
+  <group ns="virtual_leader">
+    <rosparam file="$(find virtual_leader)/config/set_leader_pose.yaml" command="load" />
+
+    <node name="set_leader_pose" pkg="virtual_leader" type="set_leader_pose.py" output="screen">
+      <rosparam param="relative_pose" subst_value="True">$(arg relative_pose) </rosparam>
+      <param name="robot_pose_topic" value="$(arg robot_pose_topic)"/>
+    </node>
+  </group>
+
+</launch>

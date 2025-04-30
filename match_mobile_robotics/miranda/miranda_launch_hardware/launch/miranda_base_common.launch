@@ -1,0 +1,12 @@
+<launch>
+    <arg name="tf_prefix" default="miranda"/>
+    <include file="$(find mir_launch_hardware)/launch/mir.launch" ns="mir" pass_all_args="true">
+        <arg name="tf_prefix" value="$(arg tf_prefix)/mir"/>    
+    </include>
+
+    <!-- Add a Transformation from Mir to panda for closed tf tree -->
+    <node name="base_robot_broadcaster" type="static_tf_yaml_parser.py"  pkg="manipulate_topics">
+        <rosparam command="load" file="$(find miranda_hardware_helper)/config/$(arg tf_prefix)_base_robot_transform.yaml"/>
+    </node>    
+
+</launch>

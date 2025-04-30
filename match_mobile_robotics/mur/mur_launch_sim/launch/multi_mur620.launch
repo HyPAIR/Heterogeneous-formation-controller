@@ -1,0 +1,40 @@
+<launch>
+	<arg name="tf_prefix"    default="mur1" />
+	<arg name="robot_x"   default="-2.0" />
+	<arg name="robot_y"   default="0.0" />
+	<arg name="robot_yaw" default="0.0" />
+	<arg name="model_name" default="mur620"/>
+	<arg name="mur_ns" default="mur1"/>
+	<arg name="move_base_selector" default="move_base" />
+	<arg name="global_planner" default="GlobalPlanner" />
+	<arg name="local_planner" default="DWAPlannerROS" />
+	<arg name="prefix" value="UR10" doc="Prefix for the UR16 links"/>
+
+	<!-- <group ns = "$(arg mur_ns)"> -->
+    <include file="$(find mur_launch_sim)/launch/mur_620.launch">
+        <arg name="tf_prefix" value="$(arg tf_prefix)"/>
+        <arg name="robot_x"  value="$(arg robot_x)"/>
+        <arg name="robot_y"  value="$(arg robot_y)"/>
+        <arg name="robot_yaw"  value="$(arg robot_yaw)"/>
+        <arg name="model_name" value="$(arg model_name)"/>
+        <arg name="mur_ns" value="$(arg mur_ns)"/>
+        <arg name="move_base_selector" value="$(arg move_base_selector)"/>
+        <arg name="global_planner" value="$(arg global_planner)" />
+        <arg name="local_planner" value="$(arg local_planner)" />
+    </include>
+
+    <include file="$(find mur_launch_sim)/launch/mur_620.launch">
+        <arg name="tf_prefix" value="mur2"/>
+        <arg name="robot_x"  value="2.0"/>
+        <arg name="robot_y"  value="$(arg robot_y)"/>
+        <arg name="robot_yaw"  value="3.1415"/>
+        <arg name="model_name" value="$(arg model_name)"/>
+        <arg name="mur_ns" value="mur2"/>
+        <arg name="move_base_selector" value="$(arg move_base_selector)"/>
+        <arg name="global_planner" value="$(arg global_planner)" />
+        <arg name="local_planner" value="$(arg local_planner)" />
+    </include>
+	
+	<!-- </group>  -->
+
+</launch>

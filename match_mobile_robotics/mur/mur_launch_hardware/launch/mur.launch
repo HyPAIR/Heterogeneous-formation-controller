@@ -1,0 +1,24 @@
+<launch>
+    <!-- Defining arguments for the mur launch --> 
+    <arg name="controllers_started" default="joint_state_controller"/>
+    <arg name="controllers_stopped" default="empty"/>  <!--Must not be empty-->
+    <arg name="pose_filename" default="$(find mur_launch_hardware)/poses/my_poses.yaml"/>
+    <arg name="tf_prefix" default="mur"/>
+    <arg name="localization_type" default="mocap" />
+ 
+   
+    <!-- Bringup the base of the mur -->
+    <include file="$(find mur_launch_hardware)/launch/mur_base.launch" pass_all_args="true"/>      
+
+
+    <!-- Bringup the ur -->   
+    <param name="mur/ur/robot_state_publisher/tf_prefix" value="$(arg tf_prefix)/ur"/>   <!-- Fixing missing tf_prefix forwarding to the ur packages -->
+
+    <include file="$(find ur_launch_hardware)/launch/ur.launch" ns="mur/ur" pass_all_args="true">
+        <arg name="tf_prefix" value="$(arg tf_prefix)/ur/"/>
+        <arg name="ur_version" value="ur16e"/>
+    </include> 
+
+
+
+</launch>

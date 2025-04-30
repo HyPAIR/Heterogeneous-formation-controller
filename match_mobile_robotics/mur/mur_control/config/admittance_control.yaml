@@ -1,0 +1,14 @@
+admittance_control:
+  joint_names: ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint', 'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
+  propotional_gain_pose_x: 0.1
+  propotional_gain_pose_y: 0.1
+  propotional_gain_pose_z: 0.1
+  propotional_gain_pose_roll: 0.0
+  propotional_gain_pose_pitch: 0.0
+  propotional_gain_pose_yaw: 0.0
+  admittance_gain_force_x : 0.1
+  admittance_gain_force_y : 0.1
+  admittance_gain_force_z : 0.1
+  admittance_gain_torque_x : 0.1
+  admittance_gain_torque_y : 0.1
+  admittance_gain_torque_z : 0.1

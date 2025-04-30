@@ -1,0 +1,13 @@
+<launch>
+
+    <arg name="mur_ns" default="mur620"/>
+    <arg name="ur_prefix" default="UR10_l"/>
+
+
+    <node name="move_to_home_pose" pkg="mur_control" type="move_to_home_pose.py" output="screen"
+        args="arm_controller">
+        <remap to="/$(arg mur_ns)/joint_states" from="/$(arg mur_ns)/$(arg ur_prefix)/joint_states"/>
+    </node>
+
+
+</launch>

@@ -1,0 +1,8 @@
+prefix=/home/weijian/Heterogeneous_formation/src/heterogeneous_formation_controller/build/devel
+
+Name: ecbs
+Description: Description of ecbs
+Version: 0.0.1
+Cflags: -I/home/weijian/Heterogeneous_formation/src/heterogeneous_formation_controller/third_party/ecbs/include
+Libs: -L${prefix}/lib 
+Requires: rospy std_msgs sensor_msgs

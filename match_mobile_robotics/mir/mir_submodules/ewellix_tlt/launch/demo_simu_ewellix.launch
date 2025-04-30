@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<launch>
+
+    <group ns="ewellix">
+
+        <param name="robot_description" command="$(find xacro)/xacro '$(find ewellix_tlt)/urdf/ewellix_lift_std.urdf.xacro' --inorder cut_model:=true  ewellix_lift_model:=lift_500mm" />
+
+        <!-- Publish tfs -->
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+        <!-- Send fake joint values -->
+        <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui"/>
+
+        <!-- Show in Rviz   -->
+        <node name="rviz" pkg="rviz" type="rviz" args="-d $(find ewellix_tlt)/rviz/view_lift.rviz" />
+
+
+    </group>
+
+</launch>
+
