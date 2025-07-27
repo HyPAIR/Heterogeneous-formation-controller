@@ -1,4 +1,4 @@
-# [RAS2024] Heterogeneous Multi-formation Planning and Coordination Framework
+# [RAS 2024] Heterogeneous Multi-formation Planning and Coordination Framework
 
 A cooperative formation object transportation system for heterogeneous multi-robot systems that captures robot dynamics and avoids inter-formation collisions.
 <table style="width:100%; text-align:center;">
