@@ -3,7 +3,7 @@ project(heterogeneous_formation_controller)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Release)
 
 add_definitions(-DHAVE_CSTDDEF -D_USE_MATH_DEFINES)
 
