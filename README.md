@@ -1,5 +1,15 @@
-# [RAS 2024] Heterogeneous Multi-formation Planning and Coordination Framework
+<div align ="center">
+<h3> RAS 2024: A Decoupled Solution to Heterogeneous Multi-Formation Planning and Coordination for Object Transportation  </h3>
 
+Weijian Zhang, Charlie Street, Masoumeh Mansouri
+
+University of Birmingham
+
+<a href="https://doi.org/10.1016/j.robot.2024.104773"><img alt="Paper" src="https://img.shields.io/badge/Paper-Elsevier-pink"/></a>
+<a href="https://youtu.be/A_S-e0mkLGY"><img alt="Video" src="https://img.shields.io/badge/Video-Youtube-red"/></a>
+</div>
+
+## Overview
 A cooperative formation object transportation system for heterogeneous multi-robot systems that captures robot dynamics and avoids inter-formation collisions.
 <table style="width:100%; text-align:center;">
   <tr>
