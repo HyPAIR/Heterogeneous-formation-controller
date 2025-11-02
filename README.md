@@ -12,6 +12,9 @@ University of Birmingham
 ## Overview
 A cooperative formation object transportation system for heterogeneous multi-robot systems that captures robot dynamics and avoids inter-formation collisions.
 Our paper has been selected as the **Best Poster Award at The 7th IEEE UK & Ireland RAS Conference**. 
+<p align="center">
+  <img src="https://github.com/HyPAIR/CPDOT/blob/main/formation_planner/fig/video.gif" alt="A Decoupled Solution to Heterogeneous Multi-Formation Planning and Coordination for Object Transportation" width="600">
+</p>
 <table style="width:100%; text-align:center;">
   <tr>
     <td><img src="https://github.com/HyPAIR/Heterogeneous-formation-controller/blob/main/Figures/gazebo1%20(1).png" alt="Image 1" width="352" height="200"></td>
