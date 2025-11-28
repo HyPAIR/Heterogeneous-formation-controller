@@ -7,6 +7,7 @@
  * @copyright Copyroght(c) 2023
 */
 #include <ros/ros.h>
+#include <ros/package.h>
 #include <memory>
 #include "heterogeneous_formation_controller/heterogeneous_formation_controller.h"
 #include "heterogeneous_formation_controller/visualization/plot.h"
@@ -834,7 +835,7 @@ void GenerateOptimalTrajectory(std::vector<std::vector<Trajectory_temp>>& traj_s
   success.resize(traj_set.size());
   int count = 0;
   // while (!std::all_of(success.begin(), success.end(), [](bool value) {return value;})) {
-  while (count != 30) {
+  while (count == 0) {
     // if (count != 0) {
     //   for (int i = 0; i < traj_set.size(); i++) {
     //     dt_set[i] = 1.3 * dt_set[i];
@@ -1143,7 +1144,11 @@ int main(int argc, char **argv) {
   // std::string file_front = "/home/weijian/Heterogeneous_formation/src/heterogeneous_formation_controller/traj_result/five_robtos_goal_oppositting/";
   // std::string file_front = "/home/weijian/Heterogeneous_formation/src/heterogeneous_formation_controller/traj_result/two_robots_following/";
   // std::string file_front = "/home/weijian/Heterogeneous_formation/src/heterogeneous_formation_controller/traj_result/gazebo_demo/";
-  std::string file_front = "/home/weijian/Heterogeneous_formation/src/heterogeneous_formation_controller/traj_result/complete_demo_2/";
+
+  std::string package_path = ros::package::getPath("heterogeneous_formation_controller");
+  std::string file_front = package_path + "/traj_result/complete_demo_2/";
+
+  ROS_INFO("Using file_front = %s", file_front.c_str());
   std::string file_back = ".yaml";
   auto traj_1 = generate_traj(file_front + "trl_1.yaml");
   traj_set[0][0] = traj_1; 
@@ -1184,9 +1189,10 @@ int main(int argc, char **argv) {
   // dt_set[5] = traj_set[5][0][1].t - traj_set[5][0][0].t;
   traj_set_orig = traj_set;
   // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-  auto traj_1_ori = generate_traj("/home/weijian/Heterogeneous_formation/src/heterogeneous_formation_controller/traj_result/ras_demo/formation_coordination/H_environment/formation1/trl_1.yaml");
+  std::string package_path_ = ros::package::getPath("heterogeneous_formation_controller");
+  auto traj_1_ori = generate_traj(package_path_ + "/traj_result/ras_demo/formation_coordination/H_environment/formation1/trl_1.yaml");
   auto sol_1_ori = traj2fullstates(traj_1_ori);
-  auto traj_2_ori = generate_traj("/home/weijian/Heterogeneous_formation/src/heterogeneous_formation_controller/traj_result/two_robots_oppositing/trl_2.yaml");
+  auto traj_2_ori = generate_traj(package_path_ + "/traj_result/two_robots_oppositing/trl_2.yaml");
   auto sol_2_ori = traj2fullstates(traj_2_ori);
   std::vector<FullStates> solution_ori;
   solution_ori.push_back(sol_1_ori); solution_ori.push_back(sol_2_ori);
@@ -1303,7 +1309,7 @@ int main(int argc, char **argv) {
   // write trajectories to yaml
   std::string robot_type;
   for (int i = 0; i < traj_set.size(); i++) { 
-    file_front = "/home/weijian/Heterogeneous_formation/src/heterogeneous_formation_controller/traj_result/complete_demo_2/";
+    file_front = package_path_ + "/traj_result/complete_demo_2/";
     robot_type = "leader";
     std::string traj_leader = file_front + "result/" + robot_type + std::to_string(i) + file_back;
     writeTrajectoryToYAML(traj2fullstates(traj_set[i][0]), traj_leader);
