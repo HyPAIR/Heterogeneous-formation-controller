@@ -68,7 +68,7 @@ $ git clone https://github.com/HyPAIR/Heterogeneous-formation-controller.git
 3. Install dependencies:
 ```shell
 $ cd ~/hmfpc_ws
-$ rosdep install --from-paths src --ignore-src -r -y
+$ rosdep install --from-paths src --ignore-src -r -y --skip-keys=ecbs
 ```
 
 3. Build the workspace:
