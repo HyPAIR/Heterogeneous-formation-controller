@@ -551,8 +551,8 @@ if (count_exp == -1) {
 count_exp++;
 }
 }
-auto traj_1 = generate_traj("/home/weijian/Heterogeneous_formation/src/heterogeneous_formation_controller/traj_result/gazebo_demo/trl_2.yaml");
-auto solution1 = traj2fullstates(traj_1);
+// auto traj_1 = generate_traj("/home/weijian/Heterogeneous_formation/src/heterogeneous_formation_controller/traj_result/gazebo_demo/trl_2.yaml");
+// auto solution1 = traj2fullstates(traj_1);
 // DrawTrajectoryRvizSE(solution1, config_, 3, path_pub_car2);
 
 for (int i = 0; i < polys.size(); i++) {
@@ -564,7 +564,7 @@ const std::vector<heterogeneous_formation_controller::visualization::Vector> cor
 // if (count_factor > 5)
 // config_->opti_w_diff_drive *= 5;
 if (count_factor == 1) {
-show_cr = true;
+show_cr = false;
 }
 else {
 show_cr = false;
