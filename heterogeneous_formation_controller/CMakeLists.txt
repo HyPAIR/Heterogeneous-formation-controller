@@ -31,8 +31,8 @@ include_directories(${DYNAMICEDT3D_INCLUDE_DIRS})
 link_libraries(${DYNAMICEDT3D_LIBRARIES})
 
 #Decomp
-find_package(decomp_util REQUIRED)
-include_directories(${DECOMP_UTIL_INCLUDE_DIRS})
+# find_package(decomp_util REQUIRED)
+# include_directories(${DECOMP_UTIL_INCLUDE_DIRS})
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
@@ -281,30 +281,30 @@ target_link_libraries(animation
   ipopt
 )
 
-add_executable(test_decomp src/decomp_util/test_decomp.cpp)
-target_link_libraries(test_decomp ${Boost_LIBRARIES})
-target_link_libraries(test_decomp ${catkin_LIBRARIES} heterogeneous_formation_controller)
-target_link_libraries(test_decomp /usr/local/lib/libyaml-cpp.so.0.8)
-target_link_libraries(test_decomp
-  ${OCTOMAP_INCLUDE_DIRS}
-  ${SIPP_LINK_LIBS}
-  ${PYTHON_LIBRARIES}
-  m
-  ipopt
-)
-add_test(test_seed_decomp test_seed_decomp)
+# add_executable(test_decomp src/decomp_util/test_decomp.cpp)
+# target_link_libraries(test_decomp ${Boost_LIBRARIES})
+# target_link_libraries(test_decomp ${catkin_LIBRARIES} heterogeneous_formation_controller)
+# target_link_libraries(test_decomp /usr/local/lib/libyaml-cpp.so.0.8)
+# target_link_libraries(test_decomp
+#   ${OCTOMAP_INCLUDE_DIRS}
+#   ${SIPP_LINK_LIBS}
+#   ${PYTHON_LIBRARIES}
+#   m
+#   ipopt
+# )
+# add_test(test_seed_decomp test_seed_decomp)
 
-add_executable(generate_decomp src/decomp_util/generate_decomp.cpp)
-target_link_libraries(generate_decomp ${Boost_LIBRARIES})
-target_link_libraries(generate_decomp ${catkin_LIBRARIES} heterogeneous_formation_controller)
-target_link_libraries(generate_decomp /usr/local/lib/libyaml-cpp.so.0.8)
-target_link_libraries(generate_decomp
-  ${OCTOMAP_INCLUDE_DIRS}
-  ${SIPP_LINK_LIBS}
-  ${PYTHON_LIBRARIES}
-  m
-  ipopt
-)
+# add_executable(generate_decomp src/decomp_util/generate_decomp.cpp)
+# target_link_libraries(generate_decomp ${Boost_LIBRARIES})
+# target_link_libraries(generate_decomp ${catkin_LIBRARIES} heterogeneous_formation_controller)
+# target_link_libraries(generate_decomp /usr/local/lib/libyaml-cpp.so.0.8)
+# target_link_libraries(generate_decomp
+#   ${OCTOMAP_INCLUDE_DIRS}
+#   ${SIPP_LINK_LIBS}
+#   ${PYTHON_LIBRARIES}
+#   m
+#   ipopt
+# )
 
 add_executable(control_triangular_formation src/trajectory_tracking/fc_tracking_controller/control_triangular_formation.cpp src/math/vec2d.cpp src/trajectory_tracking/plot.cpp)
 target_link_libraries(control_triangular_formation ${catkin_LIBRARIES})
